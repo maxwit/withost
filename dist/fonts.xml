@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package>
+	<distri name="ubuntu">
+		<release version="any">
+			<app group="mythes">mythes-en-us libreoffice-l10n-en-za mythes-en-au hunspell-en-ca thunderbird-locale-en myspell-en-za libreoffice-help-en-gb wbritish libreoffice-l10n-en-gb openoffice.org-hyphenation myspell-en-gb thunderbird-locale-en-gb hyphen-en-us myspell-en-au thunderbird-locale-en-us kde-l10n-engb</app>
+			<app group="fonts">fonts-arphic-uming fonts-arphic-ukai language-pack-gnome-zh-hans-base language-pack-gnome-zh-hans language-pack-zh-hans-base language-pack-zh-hans libsunpinyin3 sunpinyin-data firefox-locale-zh-hans ibus-sunpinyin ibus-table-wubi libreoffice-help-zh-cn libreoffice-l10n-zh-cn thunderbird-locale-zh-hans thunderbird-locale-zh-cn ttf-wqy-zenhei ttf-arphic-ukai kde-l10n-zhcn </app>
+		</release>
+	</distri>
+	<distri name="debian">
+		<release version="squeeze">
+		</release>
+	</distri>
+	<distri name="fedora">
+		<release version="19">
+		</release>
+	</distri>
+	<distri name="redhat">
+		<release version="any">
+			<app group="fonts">ibus-sunpinyin ibus-table-wubi</app>
+		</release>
+	</distri>
+</package>

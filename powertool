@@ -1,0 +1,50 @@
+#!/bin/bash
+
+usage()
+{
+	echo "usage:"
+	echo "    $0 -s: system setup"
+	echo "    $0 -u: user configure"
+	echo
+}
+
+cd $PWD/`dirname $0`
+
+sys=0
+user=0
+
+while getopts "suh" opt
+do
+	case $opt in
+	s)
+		sys=1
+		;;
+	u)
+		user=1
+		;;
+	*)
+		usage
+		exit 1
+		;;
+	esac
+done
+
+if [ ! -e .config ]; then
+	cp -v configs/desktop.config .config
+fi
+
+if [ $sys == 0 -a $user == 0 ]; then
+	sys=1
+	user=1
+fi
+
+if [ $sys == 1 ]; then
+	sudo python system-setup.py
+	python populate.py -t pub
+	echo
+fi
+
+if [ $user == 1 ]; then
+	python user-config.py
+	python populate.py -t home
+fi

@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<package>
+	<distri name="redhat">
+		<release version="any">
+			<app group="pkg">redhat-lsb rpm-build yum-utils</app>
+			<app group="libzip">zlib zlib-devel libzip lzo-devel</app>
+			<app group="uart">minicom</app>
+			<app group="reader">evince poppler-data</app>
+			<app group="mount">cifs-utils fuse</app>
+			<app group="gcc">gcc gcc-c++ gcc-objc gcc-objc++ glibc-devel</app>
+			<app group="essential">ncurses-devel ncurses-libs patch autoconf automake bison flex gawk gettext libtool m4 sed texinfo</app>
+			<app group="libmm">SDL SDL-devel alsa-lib alsa-lib-devel</app>
+			<app group="mpfr">mpfr mpfr-devel libmpcdec libmpcdec-devel</app>
+			<app group="kvm">libvirt python-virtualenv virt-manager virt-viewer bridge-utils</app>
+			<app group="vim">vim ctags dos2unix</app>
+			<app group="git">git git-email</app>
+			<app group="svn">subversion</app>
+			<app group="openssh">openssh</app>
+			<app group="nfs">nfs-utils portmap</app>
+			<app group="samba" service="smb">samba samba-client samba-common</app>
+			<app group="cups" service="cups">cups cups-pdf xsane</app>
+			<app group="hplip">hplip hplip-gui</app>
+			<app group="vsftpd">vsftpd</app>
+			<app group="lamp">httpd python mod_wsgi mariadb mariadb-server MySQL-python</app>
+			<app group="tomcat" dep="gcc">gcc tomcat tomcat-jsp-2.2-api tomcat-servlet-3.0-api tomcat-lib tomcat-el-2.2-api</app>
+			<app group="postfix">dovecot postfix</app>
+			<app group="gitolite" dep="git incron">git incron git-daemon gitweb</app>
+			<app group="latex">texlive-xetex texlive-xetex-def texlive-xecjk texlive-euenc texlive-beamer texlive-collection-fontsrecommended</app>
+			<app group="player">totem</app>
+			<app group="dhcp">dhcp</app>
+			<app group="libgui">qt-devel</app>
+			<app group="incron">incron</app>
+		</release>
+		<release version="7.0">
+			<app group="nfs" service="rpcbind nfs-server">nfs-utils portmap</app>
+			<app group="libgui">gtk3-devel</app>
+			<app group="dns">bind9</app>
+		</release>
+		<release version="6.5">
+			<app group="nfs" service="rpcbind nfs">nfs-utils portmap</app>
+			<app group="libgui">gtk2-devel</app>
+			<app group="dns">bind9</app>
+		</release>
+	</distri>
+
+	<distri name="fedora">
+		<release version="any">
+			<app group="pkg">redhat-lsb rpm-build yum-utils</app>
+			<app group="libzip">zlib zlib-devel lzo lzo-devel</app>
+			<app group="uart">minicom</app>
+			<app group="reader">evince poppler-data</app>
+			<app group="mount">cifs-utils fuse</app>
+			<app group="gcc">gcc gcc-c++ gcc-objc gcc-objc++ glibc-devel</app>
+			<app group="essential">ncurses-devel ncurses-libs patch autoconf automake bison flex gawk gettext libtool m4 sed texinfo</app>
+			<app group="mpfr">mpfr mpfr-devel libmpcdec libmpcdec-devel</app>
+			<app group="libmm">SDL SDL-devel alsa-lib alsa-lib-devel</app>
+			<app group="kvm">libvirt python-virtualenv virt-manager virt-viewer bridge-utils</app>
+			<app group="vim">vim ctags dos2unix</app>
+			<app group="git">git git-email</app>
+			<app group="svn">subversion</app>
+			<app group="openssh">openssh</app>
+			<app group="samba" service="smb">samba samba-client samba-common</app>
+			<app group="cups" service="cups">cups cups-pdf xsane</app>
+			<app group="hplip">hplip hplip-gui</app>
+			<app group="vsftpd">vsftpd</app>
+			<app group="lamp">httpd python mod_wsgi mariadb mariadb-server MySQL-python</app>
+			<app group="tomcat" dep="gcc">gcc tomcat tomcat-jsp-2.2-api tomcat-servlet-3.0-api tomcat-lib tomcat-el-2.2-api</app>
+			<app group="postfix">dovecot postfix</app>
+			<app group="gitolite" dep="git incron">git incron git-daemon gitweb</app>
+			<app group="latex">texlive-xetex texlive-xetex-def texlive-xecjk texlive-euenc texlive-beamer texlive-collection-fontsrecommended</app>
+			<app group="player">totem</app>
+			<app group="dhcp">dhcp</app>
+			<app group="incron">incron</app>
+			<app group="libgui">qt-devel</app>
+		</release>
+		<release version="19">
+			<app group="nfs" service="rpcbind nfs-server">nfs-utils portmap</app>
+			<app group="libgui">gtk3-devel</app>
+			<app group="dns">bind10</app>
+		</release>
+		<release version="17">
+			<app group="nfs" service="rpcbind nfs">nfs-utils portmap</app>
+			<app group="libgui">gtk2-devel</app>
+			<app group="dns">bind9</app>
+		</release>
+	</distri>
+</package>
