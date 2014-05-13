@@ -27,7 +27,7 @@
 			<app group="vsftpd">vsftpd</app>
 			<app group="gitolite" dep="git incron">git incron git-daemon-run gitweb</app>
 			<app group="uart">ckermit minicom</app>
-			<app group="reader">evince poppler-data chmsee xchm chm2pdf</app>
+			<app group="reader">evince poppler-data xchm chm2pdf</app>
 			<app group="mount">nfs-common cifs-utils ntfs-3g</app>
 			<app group="mesa">mesa-utils</app>
 			<app group="qemu">qemu qemu-kvm</app>
@@ -38,14 +38,18 @@
 			<app group="dhcp">isc-dhcp-server</app>
 			<app group="incron">incron</app>
 			<app group="dropbox">nautilus-dropbox</app>
+			<app group="fonts">xfonts-wqy ttf-wqy-microhei ttf-wqy-zenhei</app>
+			<app group="ibus">ibus-sunpinyin ibus-table-wubi</app>
 		</release>
 		<release version="14.04">
 			<app group="postfix">mail-stack-delivery</app>
 		</release>
 		<release version="13.10">
+			<app group="reader">chmsee</app>
 			<app group="postfix">dovecot-postfix</app>
 		</release>
 		<release version="13.04">
+			<app group="reader">chmsee</app>
 			<app group="libstdc">libstdc++6-4.7-dev</app>
 			<app group="libc6" arch="x86_64">libc6-dev-i386 ia32-libs</app>
 			<app group="postfix">dovecot-postfix</app>
