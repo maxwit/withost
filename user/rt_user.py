@@ -37,6 +37,10 @@ class rt_user(object):
 		if not os.path.exists(self.home + '/.ssh/id_rsa.pub'):
 			os.system("echo | ssh-keygen -N ''")
 
+		fd_config = open(self.home + '/.ssh/config', 'w')
+		fd_config.write("StrictHostKeyChecking no")
+		fd_config.close()
+
 		if not conf.has_key('apps'):
 			return
 
