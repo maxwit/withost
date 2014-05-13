@@ -38,7 +38,7 @@
 			<app group="dhcp">isc-dhcp-server</app>
 			<app group="incron">incron</app>
 			<app group="dropbox">nautilus-dropbox</app>
-			<app group="fonts">xfonts-wqy ttf-wqy-microhei ttf-wqy-zenhei</app>
+			<app group="fonts">fonts-arphic-uming fonts-arphic-ukai xfonts-wqy ttf-wqy-microhei ttf-wqy-zenhei</app>
 			<app group="ibus">ibus-sunpinyin ibus-table-wubi</app>
 		</release>
 		<release version="14.04">

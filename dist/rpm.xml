@@ -30,8 +30,8 @@
 			<app group="dhcp">dhcp</app>
 			<app group="libgui">qt-devel</app>
 			<app group="incron">incron</app>
+			<app group="fonts">fonts-arphic-uming fonts-arphic-ukai xfonts-wqy ttf-wqy-microhei ttf-wqy-zenhei</app>
 			<app group="ibus">ibus-sunpinyin ibus-table-wubi</app>
-			<app group="fonts">xfonts-wqy ttf-wqy-microhei ttf-wqy-zenhei</app>
 		</release>
 		<release version="7.0">
 			<app group="nfs" service="rpcbind nfs-server">nfs-utils portmap</app>
@@ -72,10 +72,10 @@
 			<app group="latex">texlive-xetex texlive-xetex-def texlive-xecjk texlive-euenc texlive-beamer texlive-collection-fontsrecommended</app>
 			<app group="player">totem</app>
 			<app group="dhcp">dhcp</app>
-			<app group="incron">incron</app>
 			<app group="libgui">qt-devel</app>
+			<app group="incron">incron</app>
+			<app group="fonts">fonts-arphic-uming fonts-arphic-ukai xfonts-wqy ttf-wqy-microhei ttf-wqy-zenhei</app>
 			<app group="ibus">ibus-sunpinyin ibus-table-wubi</app>
-			<app group="fonts">xfonts-wqy ttf-wqy-microhei ttf-wqy-zenhei</app>
 		</release>
 		<release version="19">
 			<app group="nfs" service="rpcbind nfs-server">nfs-utils portmap</app>
