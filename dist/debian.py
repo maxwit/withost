@@ -13,6 +13,9 @@ class debian(distrib):
 	def app_install(self, install_list):
 		os.system('apt-get install -y ' + install_list)
 
+	def app_remove(self, install_list):
+		os.system('apt-get remove --purge -y ' + install_list)
+
 	def service_start(self, service):
 		os.system('service %s restart' % service)
 

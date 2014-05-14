@@ -28,11 +28,14 @@ def setup(dist, apps):
 	#exist['anon_root'] = dist.pub
 	exist['anonymous_enable'] = 'NO'
 	exist['write_enable'] = 'YES'
+	exist['local_umask'] = '022'
 
 	for line in fsrc:
 		entry = line.split('=')
 		#if len(entry) > 0:
 		key = entry[0].strip()
+		if key[0] == '#':
+			key = key[1:]
 		if key in exist:
 			fdst.write('%s=%s\n' % (key, exist[key]))
 			exist.pop(key)
