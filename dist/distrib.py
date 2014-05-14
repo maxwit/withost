@@ -21,6 +21,7 @@ class distrib(object):
 		print 'service_start: %s not supported' % self.name
 
 	def set_hostname(self, host):
+		# open('/etc/hostname', 'w+').write(host)
 		os.system('echo %s > /etc/hostname' % host)
 		os.system('hostname ' + host)
 
