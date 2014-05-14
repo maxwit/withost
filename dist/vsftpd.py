@@ -31,14 +31,15 @@ def setup(dist, apps):
 
 	for line in fsrc:
 		entry = line.split('=')
-		if len(entry) > 0:
-			for (key, value) in exist.items():
-				if entry[0].strip() == key:
-					fdst.write('%s=%s\n' % (key, value))
-					exist.pop(key)
-					break
+		#if len(entry) > 0:
+		key = entry[0].strip()
+		if key in exist:
+			fdst.write('%s=%s\n' % (key, exist[key]))
+			exist.pop(key)
 		else:
 			fdst.write(line)
+		#else:
+		#	fdst.write(line)
 
 	for (key, value) in exist.items():
 		fdst.write('%s=%s\n' % (key, value))
