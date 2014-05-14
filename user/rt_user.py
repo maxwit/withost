@@ -40,6 +40,7 @@ class rt_user(object):
 		fd_config = open(self.home + '/.ssh/config', 'w')
 		fd_config.write("StrictHostKeyChecking no")
 		fd_config.close()
+		os.chmod(self.home + '/.ssh/config', 0600)
 
 		if not conf.has_key('apps'):
 			return
