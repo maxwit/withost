@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import os
+import shutil
 
 def setup(dist, apps):
 	src = '/etc/samba/smb.conf'
@@ -11,17 +12,19 @@ def setup(dist, apps):
 
 	for line in fsrc:
 		entry = line.split('=')
-		if len(entry) > 0 and entry[0].strip() == '[pub]':
+		if entry[0].strip() == '[pub]':
+			print src + ' leave unchanged'
 			fsrc.close()
 			fdst.close()
 			return
 
 		fdst.write(line)
 
+	fdst.write('\n[pub]\n')
 	for (key, value) in [('comment', 'Public Stuff'), ('path', dist.pub), ('public', 'yes'), ('writable', 'no'), ('browseable', 'yes')]:
 		fdst.write('\t%s = %s\n' % (key, value))
 
 	fsrc.close()
 	fdst.close()
 
-	os.system("cp %s %s" % (dst, src))
+	shutil.copyfile(dst, src)
