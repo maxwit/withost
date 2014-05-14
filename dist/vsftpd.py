@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import os
+import shutil
 
 def setup(dist, apps):
 	if os.path.exists('/etc/vsftpd.conf'):
@@ -11,12 +12,16 @@ def setup(dist, apps):
 		print 'vsftpd.conf does not exist!'
 		return
 
-	os.system('chmod +r ' + src)
+	#os.system('chmod +r ' + src)
 
 	dst = '/tmp/vsftpd.conf'
 
-	fsrc = open(src)
-	fdst = open(dst, 'w+')
+	try:
+		fsrc = open(src)
+		fdst = open(dst, 'w+')
+	except Exception, e:
+		print e
+		return
 
 	exist = {}
 	exist['local_root'] = dist.pub
@@ -41,4 +46,4 @@ def setup(dist, apps):
 	fsrc.close()
 	fdst.close()
 
-	os.system("cp %s %s" % (dst, src))
+	shutil.copyfile(dst, src)
