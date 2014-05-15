@@ -29,7 +29,7 @@
 			<app group="player">totem</app>
 			<app group="dhcp">dhcp</app>
 			<app group="libgui">qt-devel</app>
-			<app group="incron">incron</app>
+			<app group="incron" service="incrond">incron</app>
 			<app group="fonts">fonts-arphic-uming fonts-arphic-ukai xfonts-wqy ttf-wqy-microhei ttf-wqy-zenhei</app>
 			<app group="ibus">ibus-sunpinyin ibus-table-wubi</app>
 		</release>
@@ -73,7 +73,7 @@
 			<app group="player">totem</app>
 			<app group="dhcp">dhcp</app>
 			<app group="libgui">qt-devel</app>
-			<app group="incron">incron</app>
+			<app group="incron" service="incrond">incron</app>
 			<app group="fonts">fonts-arphic-uming fonts-arphic-ukai xfonts-wqy ttf-wqy-microhei ttf-wqy-zenhei</app>
 			<app group="ibus">ibus-sunpinyin ibus-table-wubi</app>
 		</release>
