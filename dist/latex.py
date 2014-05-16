@@ -18,7 +18,9 @@ def setup(dist, conf, apps):
 			print pkg + ' has already been installed!'
 			continue
 
-		os.rmdir(dst + pkg)
+		if os.path.exists(dst + pkg):
+			os.rmdir(dst + pkg)
+
 		pkg_file = pkg + '.zip'
 		if not os.path.exists(pkg):
 			if not os.path.exists(pkg_file):
