@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import os
+import string
 import ConfigParser
 from optparse import OptionParser
 from tree import dir_tree
@@ -65,8 +66,8 @@ if __name__ == '__main__':
 			exit()
 
 		group = cfg_parser.get(opt.tree, 'group')
-		mode = cfg_parser.getint(opt.tree, 'mode')
-		tree = dir_tree.dir_tree(path, opt.tree, group, mode)
+		mode = cfg_parser.get(opt.tree, 'mode')
+		tree = dir_tree.dir_tree(path, opt.tree, group, string.atoi(mode, 8))
 
 	tree.populate()
 

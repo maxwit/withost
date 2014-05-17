@@ -16,4 +16,5 @@
 		<dir name="qemu"/>
 		<dir name="iso"/>
 	</dir>
+	<dir name="ssh-key"/>
 </dir>
