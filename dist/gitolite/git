@@ -9,6 +9,6 @@ service git
         wait            = no
         user            = git
         server          = /usr/libexec/git-core/git-daemon
-        server_args     = --base-path=/home/git/repositories --export-all --user-path=public_git --syslog --inetd --verbose
+        server_args     = --base-path=/home/git/repositories --user-path=public_git --syslog --inetd --verbose
         log_on_failure  += USERID
 }

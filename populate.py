@@ -61,7 +61,7 @@ if __name__ == '__main__':
 			exit()
 
 		parent = os.path.dirname(path)
-		if not os.access(parent, 7):
+		if not os.access(parent, 5):
 			print 'fail to access path "%s"!\n' % parent
 			exit()
 

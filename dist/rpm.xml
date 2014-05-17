@@ -64,10 +64,10 @@
 			<app group="openssh">openssh</app>
 			<app group="samba" service="smb">samba samba-client samba-common</app>
 			<app group="cups" service="cups">cups cups-pdf xsane</app>
-			<app group="hplip">hplip hplip-gui</app>
+			<app group="hplip" dep="cups">hplip hplip-gui</app>
 			<app group="vsftpd" service="vsftpd">vsftpd</app>
-			<app group="lamp">httpd python mod_wsgi mariadb mariadb-server MySQL-python</app>
-			<app group="tomcat" dep="gcc">gcc tomcat tomcat-jsp-2.2-api tomcat-servlet-3.0-api tomcat-lib tomcat-el-2.2-api</app>
+			<app group="lamp" dep="httpd">httpd python mod_wsgi mariadb mariadb-server MySQL-python</app>
+			<app group="tomcat" dep="httpd gcc">gcc tomcat tomcat-jsp-2.2-api tomcat-servlet-3.0-api tomcat-lib tomcat-el-2.2-api</app>
 			<app group="postfix">dovecot postfix</app>
 			<app group="xinetd" service="xinetd">xinetd</app>
 			<app group="gitolite" dep="git incron xinetd">git incron git-daemon gitweb</app>
