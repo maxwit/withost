@@ -3,7 +3,7 @@
 import os, urllib, zipfile, shutil
 
 
-def setup(dist, apps):
+def setup(conf, apps):
     url = "http://mirrors.ctan.org/macros/latex/contrib"
     pkgs = "draftwatermark everypage multirow"
 
