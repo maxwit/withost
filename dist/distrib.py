@@ -75,9 +75,6 @@ class distrib(object):
 							print '%r\n' % e
 							continue
 
-						#mod = __import__('dist.' + group, fromlist = ['setup'])
-						#mod.setup(self, app_node.text.split())
-
 					service_list = app_node.get('service', '')
 					for service in service_list.split():
 						self.service_start(service)

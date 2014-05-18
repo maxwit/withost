@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import os
+import shutil
 
 def setup(conf, apps):
 	git_path = '/usr/share/gitolite'
