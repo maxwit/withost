@@ -34,17 +34,17 @@ def setup(conf, apps):
 
 	for line in fsrc:
 		entry = line.split('=')
-		#if len(entry) > 0:
-		key = entry[0].strip()
-		if key[0] == '#':
-			key = key[1:]
-		if key in exist:
-			fdst.write('%s=%s\n' % (key, exist[key]))
-			exist.pop(key)
+		if len(entry) > 1:
+			key = entry[0].strip()
+			if key[0] == '#':
+				key = key[1:]
+			if key in exist:
+				fdst.write('%s=%s\n' % (key, exist[key]))
+				exist.pop(key)
+			else:
+				fdst.write(line)
 		else:
 			fdst.write(line)
-		#else:
-		#	fdst.write(line)
 
 	for (key, value) in exist.items():
 		fdst.write('%s=%s\n' % (key, value))
