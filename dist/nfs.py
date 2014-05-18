@@ -1,10 +1,12 @@
 #!/usr/bin/python
 
 import os
+import shutil
 
-def setup(dist, apps):
+def setup(conf, apps):
 	src = '/etc/exports'
 	dst = '/tmp/nfs_exports'
+	pub = conf['path']
 
 	fsrc = open(src)
 	fdst = open(dst, 'w+')
@@ -12,16 +14,16 @@ def setup(dist, apps):
 	exist = False
 	for line in fsrc:
 		entry = line.split()
-		if len(entry) > 0 and entry[0] == dist.pub:
-			fdst.write(dist.pub + ' *(insecure,ro,async,no_subtree_check)\n')
+		if len(entry) > 0 and entry[0] == pub:
+			fdst.write(pub + ' *(insecure,ro,async,no_subtree_check)\n')
 			exist = True
 		else:
 			fdst.write(line)
 
 	if not exist:
-		fdst.write(dist.pub + ' *(insecure,ro,async,no_subtree_check)\n')
+		fdst.write(pub + ' *(insecure,ro,async,no_subtree_check)\n')
 
 	fsrc.close()
 	fdst.close()
 
-	os.system("cp %s %s" % (dst, src))
+	shutil.copyfile(dst, src)

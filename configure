@@ -1,0 +1,43 @@
+#!/bin/bash
+
+usage()
+{
+	list=`ls configs | sed 's/.config/ /g'`
+
+	echo "usage:"
+	echo "    $0 -s <system>: system type (" $list")"
+	echo
+}
+
+echo
+echo "###########################################"
+echo "#             WitPower v1.0              #"
+echo "###########################################"
+echo
+
+while getopts "s:h" opt
+do
+	case $opt in
+	s)
+		system=$OPTARG
+		;;
+	*)
+		usage
+		exit 1
+		;;
+	esac
+done
+
+echo "Generating .config ..."
+
+if [ -e configs/${system}.config ]; then
+	echo "System type: $system"
+	cp configs/${system}.config .config
+	sed -i "/apps/a admin = $USER" .config
+	echo
+else
+	echo "${OPTARG}.config does not exist!"
+	echo
+	usage
+	exit 1
+fi

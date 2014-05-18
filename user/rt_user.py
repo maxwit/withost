@@ -9,12 +9,11 @@ class rt_user(object):
 		self.login = os.getenv('USER')
 		self.home = os.getenv('HOME')
 		self.fname = self.get_user_info()
-
 		mail_user = self.fname.lower().replace(' ', '.')
-		# FIXME: detect the Windows domain
-		self.email = mail_user + '@maxwit.com'
 		if self.fname == mail_user:
 			print 'Please make sure your mail account (%s) is correct!' % self.email
+		# FIXME: detect the Windows domain
+		self.email = mail_user + '@maxwit.com'
 
 	def get_user_info(self):
 		fd_rept = open('/etc/passwd', 'r')
@@ -37,10 +36,10 @@ class rt_user(object):
 		if not os.path.exists(self.home + '/.ssh/id_rsa.pub'):
 			os.system("echo | ssh-keygen -N ''")
 
-		fd_config = open(self.home + '/.ssh/config', 'w')
-		fd_config.write("StrictHostKeyChecking no")
-		fd_config.close()
-		os.chmod(self.home + '/.ssh/config', 0600)
+			fd_config = open(self.home + '/.ssh/config', 'w')
+			fd_config.write("StrictHostKeyChecking no")
+			fd_config.close()
+			os.chmod(self.home + '/.ssh/config', 0600)
 
 		if not conf.has_key('apps'):
 			return

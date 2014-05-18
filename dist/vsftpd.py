@@ -3,7 +3,9 @@
 import os
 import shutil
 
-def setup(dist, apps):
+def setup(conf, apps):
+	pub = conf['path']
+
 	if os.path.exists('/etc/vsftpd.conf'):
 		src = '/etc/vsftpd.conf'
 	elif os.path.exists('/etc/vsftpd/vsftpd.conf'):
@@ -24,8 +26,8 @@ def setup(dist, apps):
 		return
 
 	exist = {}
-	exist['local_root'] = dist.pub
-	#exist['anon_root'] = dist.pub
+	exist['local_root'] = pub
+	#exist['anon_root'] = pub
 	exist['anonymous_enable'] = 'NO'
 	exist['write_enable'] = 'YES'
 	exist['local_umask'] = '022'

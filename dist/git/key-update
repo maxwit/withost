@@ -1,0 +1,53 @@
+#!/bin/sh
+
+src=$1
+log="$HOME/.log/gitolite"
+# FIXME
+server="127.0.0.1"
+
+cd
+
+mkdir -p `dirname $log`
+
+echo "[$src]" >> $log
+
+if [ -d gitolite-admin ]; then
+	cd gitolite-admin
+	git pull
+else
+	git clone git@${server}:gitolite-admin.git
+	cd gitolite-admin
+fi
+
+sig=`awk '{print $1}' $src`
+if [ "$sig" != "ssh-rsa" ]; then
+	echo "invalid $src:" >> $log
+	cat $src >> $log
+	echo >> $log
+	exit
+fi
+
+key=`awk '{print $3}' $src | sed 's/@/-/g' | tr 'A-Z' 'a-z'`
+dst=${key}.pub
+
+if [ -e keydir/$dst ]; then
+	cp -f $src keydir/$dst
+	git commit -asm "update $dst"
+
+	echo "update $dst" >> $log
+else
+	cp $src keydir/$dst
+	if grep "^@devel\s*=" conf/gitolite.conf; then
+		sed -i "s/\(^@devel\s*=.*\)/\1 $key/" conf/gitolite.conf
+	else
+		sed -i "1i @devel = $key" conf/gitolite.conf
+	fi
+
+	git add keydir/$dst
+	git commit -asm "add $dst"
+
+	echo "add $dst" >> $log
+fi
+
+git push
+echo >> $log

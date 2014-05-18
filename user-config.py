@@ -4,6 +4,7 @@ import os, platform
 import ConfigParser
 from optparse import OptionParser
 from user import rt_user
+from tree import dir_tree
 
 version = '4.2'
 
@@ -38,3 +39,7 @@ if __name__ == '__main__':
 	user = rt_user.rt_user()
 	print "User config: %s (%s)\n" % (user.fname, user.login)
 	user.config(conf)
+
+	tree = dir_tree.dir_tree(os.getenv('HOME'), 'home.xml')
+	tree.populate()
+	print

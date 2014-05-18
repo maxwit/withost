@@ -7,10 +7,9 @@ from xml.etree import ElementTree
 version = '4.2'
 
 class dir_tree(object):
-	def __init__(self, top, xml, group = None, mode = None):
-		self.xml = 'tree/%s.xml' % xml
+	def __init__(self, top, xml, mode = None):
 		self.top = top
-		self.group = group
+		self.xml = 'tree/' + xml
 		self.mode = mode
 
 	def populate(self):
@@ -46,11 +45,6 @@ class dir_tree(object):
 
 			if self.mode is not None:
 				os.chmod(path, self.mode)
-
-			if self.group is not None:
-				user = os.getenv('USER')
-				# FIXME
-				os.system("sudo chown %s.%s %s" % (user, self.group, path))
 		else:
 			print "skipping \"%s\"" % path
 

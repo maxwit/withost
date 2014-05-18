@@ -1,9 +1,11 @@
 #!/usr/bin/python
 
 import os
+import string
 import ConfigParser
 from optparse import OptionParser
 from dist import distrib
+from tree import dir_tree
 
 version = '4.2'
 
@@ -53,6 +55,26 @@ if __name__ == '__main__':
 
 	dist.sys_init()
 	print
-
 	dist.setup(conf)
+	print
+
+	path = cfg_parser.get('pub', 'path')
+	if path == None:
+		print 'path path not configured!\n'
+		exit()
+
+	parent = os.path.dirname(path)
+	if not os.access(parent, 5):
+		print 'fail to access path "%s"!\n' % parent
+		exit()
+
+	mode = cfg_parser.get('pub', 'mode')
+	tree = dir_tree.dir_tree(path, 'pub.xml', string.atoi(mode, 8))
+	tree.populate()
+	print
+
+	# if pub.owner is None:
+	user = cfg_parser.get('sys', 'admin')
+	group = cfg_parser.get('sys', 'group')
+	os.system('chown %s.%s -R %s' % (user, group, path))
 	print

@@ -25,7 +25,8 @@
 			<app group="cups" service="cups">cups cups-pdf sane xsane</app>
 			<app group="hplip">hplip hplip-gui</app>
 			<app group="vsftpd" service="vsftpd">vsftpd</app>
-			<app group="gitolite" dep="git incron">git incron git-daemon-run gitweb</app>
+			<app group="git-daemon" dep="git">git git-daemon-run</app>
+			<app group="gitolite" dep="git incron">git incron</app>
 			<app group="uart">ckermit minicom</app>
 			<app group="reader">evince poppler-data xchm chm2pdf</app>
 			<app group="mount">nfs-common cifs-utils ntfs-3g</app>

@@ -25,7 +25,8 @@
 			<app group="tomcat" dep="gcc">gcc tomcat tomcat-jsp-2.2-api tomcat-servlet-3.0-api tomcat-lib tomcat-el-2.2-api</app>
 			<app group="postfix">dovecot postfix</app>
 			<app group="xinetd" service="xinetd">xinetd</app>
-			<app group="gitolite" dep="git incron xinetd">git incron git-daemon gitweb</app>
+			<app group="git-daemon" dep="git xinetd">git xinetd git-daemon</app>
+			<app group="gitolite" dep="git incron">git incron gitolite3</app>
 			<app group="latex">texlive-xetex texlive-xetex-def texlive-xecjk texlive-euenc texlive-beamer texlive-collection-fontsrecommended</app>
 			<app group="player">totem</app>
 			<app group="dhcp">dhcp</app>
@@ -70,7 +71,8 @@
 			<app group="tomcat" dep="httpd gcc">gcc tomcat tomcat-jsp-2.2-api tomcat-servlet-3.0-api tomcat-lib tomcat-el-2.2-api</app>
 			<app group="postfix">dovecot postfix</app>
 			<app group="xinetd" service="xinetd">xinetd</app>
-			<app group="gitolite" dep="git incron xinetd">git incron git-daemon gitweb</app>
+			<app group="git-daemon" dep="git xinetd">git xinetd git-daemon</app>
+			<app group="gitolite" dep="git incron">git incron gitolite3</app>
 			<app group="latex">texlive-xetex texlive-xetex-def texlive-xecjk texlive-euenc texlive-beamer texlive-collection-fontsrecommended</app>
 			<app group="player">totem</app>
 			<app group="dhcp">dhcp</app>
