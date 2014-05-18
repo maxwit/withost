@@ -1,16 +1,9 @@
 <?xml version="1.0"?>
 <dir>
+	<dir name="bin"/>
 	<dir name="build">
-		<dir name="c-like"/>
-		<dir name="shell"/>
 		<dir name="python"/>
+		<dir name="c-like"/>
 	</dir>
-	<dir name="Documents">
-		<dir name="book"/>
-		<dir name="slide"/>
-		<dir name="testing"/>
-		<dir name="resume"/>
-	</dir>
-	<dir name="project">
-	</dir>
+	<dir name=".log"/>
 </dir>

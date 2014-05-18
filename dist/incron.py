@@ -1,8 +1,13 @@
 #!/usr/bin/python
 
-import os
+def setup(conf, apps):
+	admin = conf['admin']
 
-def setup(dist, apps):
-	fn = '/etc/incron.allow'
-	if not os.path.exists(fn):
-		os.system('touch ' + fn)
+	allow = open('/etc/incron.allow', 'r+')
+	for line in allow:
+		if line.strip() == admin:
+			allow.close()
+			return
+
+	allow.write(admin + '\n')
+	allow.close()

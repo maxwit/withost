@@ -4,6 +4,7 @@ import os, platform
 import ConfigParser
 from optparse import OptionParser
 from user import rt_user
+from tree import dir_tree
 
 version = '4.2'
 
@@ -15,12 +16,12 @@ if __name__ == '__main__':
 	opt_parser = OptionParser()
 	opt_parser.add_option('-v', '--version', dest='version',
 					  default=False, action='store_true',
-					  help='show PowerTool version')
+					  help='show WitPowser version')
 
 	(opt, args) = opt_parser.parse_args()
 
 	if opt.version:
-		print 'PowerTool v%s\nby MaxWit Software (http://www.maxwit.com)\n' % version
+		print 'WitPowser v%s\nby MaxWit Software (http://www.maxwit.com)\n' % version
 		exit()
 
 	cfg_parser = ConfigParser.ConfigParser();
@@ -38,3 +39,7 @@ if __name__ == '__main__':
 	user = rt_user.rt_user()
 	print "User config: %s (%s)\n" % (user.fname, user.login)
 	user.config(conf)
+
+	tree = dir_tree.dir_tree(os.getenv('HOME'), 'home.xml')
+	tree.populate()
+	print

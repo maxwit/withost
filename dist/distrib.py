@@ -42,7 +42,6 @@ class distrib(object):
 		self.app_setup(config)
 
 	def app_setup(self, config):
-		self.pub = config['path'] # FIXME: to be removed
 		install_list = config['apps'].split()
 
 		tree = ElementTree.parse('dist/%s' % self.repo)
@@ -71,9 +70,9 @@ class distrib(object):
 						print 'Setup %s ...' % group
 						try:
 							mod = __import__('dist.' + group, fromlist = ['setup'])
-							mod.setup(self, app_node.text.split())
+							mod.setup(config, app_node.text.split())
 						except Exception, e:
-							print e
+							print '%r\n' % e
 							continue
 
 						#mod = __import__('dist.' + group, fromlist = ['setup'])

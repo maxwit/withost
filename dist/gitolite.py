@@ -2,11 +2,12 @@
 
 import os
 
-# FIXME
-def setup(dist, apps):
-	if dist.name in ['Ubuntu']:
-		os.system("cp dist/gitolite/run /etc/service/git-daemon/")
-		#os.system("killall git-daemon")
-	else:
-		os.system("cp dist/gitolite/git /etc/xinetd.d/")
-		#os.system("systemctl restart xinetd")
+def setup(conf, apps):
+	git_path = '/usr/share/gitolite'
+
+	if not os.path.exists(git_path):
+		#git clone git://github.com/sitaramc/gitolite.git $git_path
+		#git clone git://github.com/maxwit/gitolite.git $git_path
+		os.system('git clone git://192.168.1.1/project/gitolite.git ' + git_path)
+
+	os.system(git_path + '/install -ln /usr/bin')
