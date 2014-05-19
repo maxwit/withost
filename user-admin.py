@@ -1,5 +1,9 @@
 #!/usr/bin/python
 
+# user-admin add -n 'Conke Hu' -m conke.hu@maxwit.com conke
+# user-admin del conke
+# user-admin set -m conke@maxwit.com conke
+
 import os
 from optparse import OptionParser
 from ConfigParser import ConfigParser
@@ -57,7 +61,10 @@ def add_user(user_name, full_name, password, mail, group):
 
 	os.system('useradd -g %s -m -s /bin/bash %s' % (user_group,user_name))
 	os.system('echo -e "%s\n%s" | passwd %s' % (password, password, user_name))
+
 	os.system('usermod -c "%s" %s' % (full_name, user_name))
+
+	# run user-config.py -m mail (optional)
 
 	apps = []
 	if conf.has_key('sys.apps'):
@@ -106,7 +113,7 @@ if __name__ == '__main__':
 	opt_parser.add_option('-v', '--version', dest='version',
 					  default=False, action='store_true',
 					  help='show WitPowser version')
-	opt_parser.version = version
+	opt_parser.version = 'user-admin ' + version
 
 	(opt, args) = opt_parser.parse_args()
 
