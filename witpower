@@ -1,8 +1,1 @@
-#!/bin/bash
-
-cd `dirname $0`
-
-./configure -s desktop
-
-sudo python system-setup.py
-python user-config.py
+configure
