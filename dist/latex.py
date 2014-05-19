@@ -1,6 +1,9 @@
 #!/usr/bin/python
 
-import os, urllib, zipfile, shutil
+import os
+import urllib
+import zipfile
+import shutil
 
 def setup(conf, apps):
 	url = 'http://mirrors.ctan.org/macros/latex/contrib'
@@ -41,7 +44,7 @@ def setup(conf, apps):
 				print 'error: can not generate ' + pkg + '.sty'
 
 		os.chdir('/tmp')
-                shutil.copytree(pkg, dst + pkg)
+		shutil.copytree(pkg, dst + pkg)
 
 	os.chdir(cur_path)
 	os.system('texhash')
