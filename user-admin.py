@@ -5,6 +5,7 @@ from optparse import OptionParser
 from ConfigParser import ConfigParser
 
 version = 'v4.2'
+conf = {}
 
 def group_exits(group_name):
 	fp_group = open('/etc/group', 'r')
@@ -32,7 +33,7 @@ def user_exits(user_name):
 
 	return False
 
-def add_user(user_name, conf):
+def add_user(user_name, full_name, password, mail, group):
 	print 'Adding user %s ...\n' % user_name
 
 	login = os.getlogin()
@@ -54,10 +55,9 @@ def add_user(user_name, conf):
 		print "Invalid configuration\n"
 		exit()
 
-	password = 'wit%s' % user_name
 	os.system('useradd -g %s -m -s /bin/bash %s' % (user_group,user_name))
 	os.system('echo -e "%s\n%s" | passwd %s' % (password, password, user_name))
-	os.system('usermod -c "%s" %s' % (user_name, user_name))
+	os.system('usermod -c "%s" %s' % (full_name, user_name))
 
 	apps = []
 	if conf.has_key('sys.apps'):
@@ -69,7 +69,7 @@ def add_user(user_name, conf):
 
 	print 'User %s Added!\n' % user_name
 
-def del_user(user_name, conf):
+def del_user(user_name):
 	print "Delete user %s ..." % user_name
 
 	login = os.getlogin()
@@ -121,19 +121,21 @@ if __name__ == '__main__':
 		print '".config" dose not exist!\n'
 		exit()
 
-	conf = {}
 	for sect in cfg_parser.sections():
 		for (key, value) in cfg_parser.items(sect):
 			conf[sect + '.' + key] = value
 
 	if opt.new_user:
 		user_name = opt.new_user
-		add_user(user_name, conf)
+		full_name = opt.new_user
+		password = 'wit%s' % user_name
+		mail = user_name + '@maxwit.com'
+		group = conf['sys.group']
+		add_user(user_name, full_name, password, mail, group)
 
 	elif opt.del_user:
 		user_name = opt.del_user
 		del_user(user_name, conf)
-
 	else:
 		opt_parser.print_help()
 		exit()
