@@ -18,7 +18,7 @@ def group_exits(group_name):
 	fp_group.close()
 
 	return False
-			
+
 def user_exits(user_name):
 	fp_user = open('/etc/passwd', 'r')
 
@@ -31,12 +31,11 @@ def user_exits(user_name):
 	fp_user.close()
 
 	return False
-			
 
 def add_user(user_name, conf):
 	print 'Adding user %s ...\n' % user_name
 
-	login = conf['login']
+	login = os.getlogin()
 	if user_name == login:
 		print "skipping current user!\n"
 		exit()
@@ -45,8 +44,8 @@ def add_user(user_name, conf):
 		print 'user %s exists!' % user_name
 		exit()
 
-	if conf.has_key('group'):
-		user_group = conf['group']
+	if conf.has_key('sys.group'):
+		user_group = conf['sys.group']
 
 		if not group_exits(user_group):
 			print 'group %s does not exist!\n' % user_group
@@ -56,26 +55,25 @@ def add_user(user_name, conf):
 		exit()
 
 	password = 'wit%s' % user_name
-	os.system('sudo useradd -g %s -m -s /bin/bash %s' % (user_group,user_name))
-	os.system('echo -e "%s\n%s" | sudo passwd %s' % (password, password, user_name))
-	os.system('sudo usermod -c "%s" %s' % (user_name, user_name))
+	os.system('useradd -g %s -m -s /bin/bash %s' % (user_group,user_name))
+	os.system('echo -e "%s\n%s" | passwd %s' % (password, password, user_name))
+	os.system('usermod -c "%s" %s' % (user_name, user_name))
 
 	apps = []
-	if conf.has_key('apps'):
-		apps = conf['apps'].split()
+	if conf.has_key('sys.apps'):
+		apps = conf['sys.apps'].split()
 
-	if apps:
-		if 'samba' in apps:
-			os.system('echo -e "%s\n%s" | sudo smbpasswd -s -a %s' % (password, password, user_name))
-
-			print '\nadd samba account\n'
+	if apps and 'samba' in apps:
+		print '\nadd samba account\n'
+		os.system('echo -e "%s\n%s" | smbpasswd -s -a %s' % (password, password, user_name))
 
 	print 'User %s Added!\n' % user_name
 
 def del_user(user_name, conf):
 	print "Delete user %s ..." % user_name
 
-	if user_name == conf['login']:
+	login = os.getlogin()
+	if user_name == login:
 		print 'cannot delete current user!\n'
 		exit()
 
@@ -83,26 +81,28 @@ def del_user(user_name, conf):
 		print 'user %s does not exist!\n'
 		exit()
 
-	apps = conf['apps'].split()
-	if 'samba' in apps:
-		print 'delete samba user %s ...' % user_name
-		os.system('sudo smbpasswd -d %s' % user_name)
+	apps = []
+	if conf.has_key('sys.apps'):
+		apps = conf['sys.apps'].split()
 
-	os.system('sudo userdel -r %s' % user_name)
+	if apps and 'samba' in apps:
+		print 'Delete samba user %s ...' % user_name
+		os.system('smbpasswd -d %s' % user_name)
+
+	os.system('userdel -r %s' % user_name)
 
 	print
 
-
 if __name__ == '__main__':
-	if os.getuid() == 0:
-		print 'pls do NOT run as root!'
+	if os.getuid() != 0:
+		print 'pls run as root!'
 		exit()
 
 	opt_parser = OptionParser()
 	opt_parser.add_option('-a', '--add', dest='new_user',
 							help = 'add a new user')
 	opt_parser.add_option('-d', '--del', dest='del_user',
-							help = 'del user')
+							help = 'delete user')
 	opt_parser.add_option('-v', '--version', dest='version',
 					  default=False, action='store_true',
 					  help='show WitPowser version')
@@ -115,7 +115,7 @@ if __name__ == '__main__':
 		exit()
 
 	cfg_parser = ConfigParser()
-	
+
 	ret = cfg_parser.read('.config')
 	if not ret:
 		print '".config" dose not exist!\n'
@@ -124,8 +124,7 @@ if __name__ == '__main__':
 	conf = {}
 	for sect in cfg_parser.sections():
 		for (key, value) in cfg_parser.items(sect):
-			conf[key] = value
-	conf['login'] = os.getlogin()
+			conf[sect + '.' + key] = value
 
 	if opt.new_user:
 		user_name = opt.new_user
