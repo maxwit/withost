@@ -41,7 +41,7 @@ def setup(conf, apps):
 				print 'error: can not generate ' + pkg + '.sty'
 
 		os.chdir('/tmp')
-		os.system('cp -rvf ' + pkg + ' ' + dst)
+                shutil.copytree(pkg, dst + pkg)
 
 	os.chdir(cur_path)
 	os.system('texhash')
