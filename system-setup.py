@@ -47,9 +47,9 @@ if __name__ == '__main__':
 	conf = {}
 	for sect in cfg_parser.sections():	
 		for (key, value) in cfg_parser.items(sect):
-			conf[key] = value
+			conf[sect + '.' + key] = value
 	
-	if not conf.has_key('apps'):
+	if not conf.has_key('sys.apps'):
 		print 'Invalid confuration'
 		exit()
 

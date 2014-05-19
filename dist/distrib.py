@@ -21,14 +21,15 @@ class distrib(object):
 		print 'service_start: %s not supported' % self.name
 
 	def set_hostname(self, host):
+		# TODO
 		# open('/etc/hostname', 'w+').write(host)
 		os.system('echo %s > /etc/hostname' % host)
 		os.system('hostname ' + host)
 
 	def setup(self, config):
 		# TODO: move to sys_init()
-		if config.has_key('host'):
-			host = config['host']
+		if config.has_key('sys.host'):
+			host = config['sys.host']
 		else:
 			# TODO: use a better name?
 			host = self.name
@@ -42,7 +43,7 @@ class distrib(object):
 		self.app_setup(config)
 
 	def app_setup(self, config):
-		install_list = config['apps'].split()
+		install_list = config['sys.apps'].split()
 
 		tree = ElementTree.parse('dist/%s' % self.repo)
 		root = tree.getroot()

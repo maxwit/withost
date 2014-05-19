@@ -4,7 +4,7 @@ import os
 import shutil
 
 def setup(dist, conf, apps):
-	pub = conf['path']
+	pub = conf['pub.path']
 
 	if os.path.exists('/etc/vsftpd.conf'):
 		src = '/etc/vsftpd.conf'

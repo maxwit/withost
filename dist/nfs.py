@@ -6,7 +6,7 @@ import shutil
 def setup(dist, conf, apps):
 	src = '/etc/exports'
 	dst = '/tmp/nfs_exports'
-	pub = conf['path']
+	pub = conf['pub.path']
 
 	fsrc = open(src)
 	fdst = open(dst, 'w+')

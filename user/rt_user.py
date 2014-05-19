@@ -41,10 +41,10 @@ class rt_user(object):
 			fd_config.close()
 			os.chmod(self.home + '/.ssh/config', 0600)
 
-		if not conf.has_key('apps'):
+		if not conf.has_key('sys.apps'):
 			return
 
-		for app in conf['apps'].split():
+		for app in conf['sys.apps'].split():
 			if not os.path.exists('user/%s.py' % app):
 				continue
 

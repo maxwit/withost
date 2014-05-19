@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 def setup(dist, conf, apps):
-	admin = conf['admin']
+	admin = conf['sys.admin']
 
 	allow = open('/etc/incron.allow', 'r+')
 	for line in allow:

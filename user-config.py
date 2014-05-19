@@ -34,7 +34,7 @@ if __name__ == '__main__':
 	conf = {}
 	for sect in cfg_parser.sections():
 		for (key, value) in cfg_parser.items(sect):
-			conf[key] = value
+			conf[sect + '.' + key] = value
 
 	user = rt_user.rt_user()
 	print "User config: %s (%s)\n" % (user.fname, user.login)
