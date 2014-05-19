@@ -14,7 +14,7 @@ def setup(dist, conf, apps):
 	for line in fsrc:
 		entry = line.split('=')
 		if entry[0].strip() == '[pub]':
-			print src + ' leave unchanged'
+			#print src + ' leave unchanged'
 			fsrc.close()
 			fdst.close()
 			return
