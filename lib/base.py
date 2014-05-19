@@ -7,6 +7,5 @@ def process(a,b,c):
 	if per >= 100:
 		per = 100
 
-	print '%d%%]\r' % per,
+	print '%d%%\r' % per,
 	sys.stdout.flush();
-
