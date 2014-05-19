@@ -76,5 +76,10 @@ if __name__ == '__main__':
 	# if pub.owner is None:
 	user = cfg_parser.get('sys', 'admin')
 	group = cfg_parser.get('sys', 'group')
+	# FIXME
+	try:
+		os.system('groupadd ' + group)
+	except Exception, e:
+		print e
 	os.system('chown %s.%s -R %s' % (user, group, path))
 	print

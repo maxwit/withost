@@ -3,7 +3,9 @@
 	<dir name="bin"/>
 	<dir name="build">
 		<dir name="python"/>
+		<dir name="u-like"/>
 		<dir name="c-like"/>
 	</dir>
+	<dir name="project"/>
 	<dir name=".log"/>
 </dir>
