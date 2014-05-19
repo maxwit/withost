@@ -37,7 +37,7 @@ def install_django(dver):
 	django = '/usr/bin/django-admin'
 	os.rename(django + '.py', django)
 
-def setup(conf, apps):
+def setup(dist, conf, apps):
 	if 'python-django' not in apps:
 		# FIXME
 		install_django('1.6.2')

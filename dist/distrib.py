@@ -70,7 +70,7 @@ class distrib(object):
 						print 'Setup %s ...' % group
 						try:
 							mod = __import__('dist.' + group, fromlist = ['setup'])
-							mod.setup(config, app_node.text.split())
+							mod.setup((self.name, self.version), config, app_node.text.split())
 						except Exception, e:
 							print '%r\n' % e
 							continue

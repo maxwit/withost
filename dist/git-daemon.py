@@ -3,7 +3,7 @@
 import os
 
 # FIXME
-def setup(conf, apps):
+def setup(dist, conf, apps):
 	if os.path.exists('/etc/service/git-daemon/'):
 		os.system("cp dist/git/run /etc/service/git-daemon/")
 		os.system("killall git-daemon")
