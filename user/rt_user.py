@@ -3,34 +3,18 @@
 import os, re, sys
 import platform
 from xml.etree import ElementTree
+from lib import base
 
 class rt_user(object):
 	def __init__(self):
 		self.login = os.getenv('USER')
 		self.home = os.getenv('HOME')
-		self.fname = self.get_user_info()
+		self.fname = base.get_full_name(self.login)
 		mail_user = self.fname.lower().replace(' ', '.')
+		# FIXME: detect the Windows domain
 		self.email = mail_user + '@maxwit.com'
 		if self.fname == mail_user:
 			print 'Please make sure your mail account (%s) is correct!' % self.email
-		# FIXME: detect the Windows domain
-
-	def get_user_info(self):
-		fd_rept = open('/etc/passwd', 'r')
-		full_name = ''
-
-		for line in fd_rept:
-			account = line.split(':')
-			user_name = account[0]
-			if user_name == self.login:
-				full_name = account[4].split(',')[0]
-				break
-
-		fd_rept.close()
-
-		if full_name != '':
-			return full_name
-		return self.login
 
 	def config(self, conf):
 		if not os.path.exists(self.home + '/.ssh/id_rsa.pub'):
