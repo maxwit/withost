@@ -38,7 +38,7 @@ def user_exits(user):
 def add_user(user, full_name, password, mail, group):
 	print 'Adding user %s ...\n' % user
 
-	login = os.getlogin()
+	login = os.getenv('USER')
 	if user == login:
 		print "skipping current user!\n"
 		exit()
@@ -77,7 +77,7 @@ def add_user(user, full_name, password, mail, group):
 def del_user(user):
 	print "Delete user %s ..." % user
 
-	login = os.getlogin()
+	login = os.getenv('USER')
 	if user == login:
 		print 'cannot delete current user!\n'
 		exit()
