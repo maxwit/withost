@@ -4,10 +4,11 @@ import os
 import urllib
 import zipfile
 import shutil
+from lib import base
 
 def setup(dist, conf, apps):
 	url = 'http://mirrors.ctan.org/macros/latex/contrib'
-	pkgs = ['draftwatermark', 'everypage', 'multirow']
+	pkgs = ['draftwatermark', 'everypage', 'multirow', 'makecell']
 	dst = '/usr/share/texlive/texmf-dist/tex/latex/'
 
 	cur_path = os.path.abspath('.')
@@ -21,7 +22,7 @@ def setup(dist, conf, apps):
 		if not os.path.exists(pkg):
 			if not os.path.exists(pkg_file):
 				print 'Download ' + pkg_file + ' start.'
-				urllib.urlretrieve('%s/%s.zip' % (url, pkg), filename = pkg_file)
+				urllib.urlretrieve('%s/%s.zip' % (url, pkg), pkg_file, base.process)
 				print 'Download ' + pkg_file + ' finish.'
 
 			z = zipfile.ZipFile(pkg_file)

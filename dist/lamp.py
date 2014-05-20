@@ -1,16 +1,9 @@
 #!/usr/bin/python
 
-import os, sys
+import os
 import tarfile
 import urllib
-
-def process(a,b,c):
-	per = 100 * a * b / c
-	if per >= 100:
-		per = 100
-
-	print '[Downloading...\t\t\t\t%.2f%%]\r' % per,
-	sys.stdout.flush();
+from lib import base
 
 def install_django(dver):
 	dmaj = dver[:-2]
@@ -20,7 +13,7 @@ def install_django(dver):
 	url = 'https://www.djangoproject.com/m/releases/%s/%s' % (dmaj, fn)
 	if not os.path.exists(filepath):
 		print '%s -> %s:' % (url, filepath)
-		urllib.urlretrieve(url, filepath, process)
+		urllib.urlretrieve(url, filepath, base.process)
 		print
 
 	if not os.path.exists(filepath[:-7]):
