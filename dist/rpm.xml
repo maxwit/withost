@@ -34,6 +34,7 @@
 			<app group="incron" service="incrond">incron</app>
 			<app group="fonts">fonts-arphic-uming fonts-arphic-ukai xfonts-wqy ttf-wqy-microhei ttf-wqy-zenhei</app>
 			<app group="ibus">ibus-sunpinyin ibus-table-wubi</app>
+			<app group="mail">msmtp fetchmail procmail</app>
 		</release>
 		<release version="7.0">
 			<app group="nfs" service="rpcbind nfs-server">nfs-utils portmap</app>
@@ -80,6 +81,7 @@
 			<app group="incron" service="incrond">incron</app>
 			<app group="fonts">fonts-arphic-uming fonts-arphic-ukai xfonts-wqy ttf-wqy-microhei ttf-wqy-zenhei</app>
 			<app group="ibus">ibus-sunpinyin ibus-table-wubi</app>
+			<app group="mail">msmtp fetchmail procmail</app>
 		</release>
 		<release version="19">
 			<app group="nfs" service="rpcbind nfs-server">nfs-utils portmap</app>

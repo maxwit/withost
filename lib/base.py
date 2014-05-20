@@ -9,3 +9,6 @@ def process(a,b,c):
 
 	print '%d%%\r' % per,
 	sys.stdout.flush();
+
+def name_to_mail(name):
+	return name.lower().replace(' ', '.') + '@maxwit.com'
