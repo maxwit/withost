@@ -28,3 +28,29 @@ def get_full_name(user):
 
 	fd_rept.close()
 	raise Exception('User %s not found!' % user)
+
+def group_exits(group):
+	fp_group = open('/etc/group', 'r')
+
+	for line in fp_group:
+		group = line.split(':')[0]
+		if group == group:
+			fp_group.close()
+			return True
+
+	fp_group.close()
+
+	return False
+
+def user_exits(user):
+	fp_user = open('/etc/passwd', 'r')
+
+	for line in fp_user:
+		account = line.split(':')
+		if user == account[0]:
+			fp_user.close()
+			return True
+
+	fp_user.close()
+
+	return False
