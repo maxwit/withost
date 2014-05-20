@@ -5,7 +5,7 @@ import urllib
 import zipfile
 import shutil
 
-def setup(conf, apps):
+def setup(dist, conf, apps):
 	url = 'http://mirrors.ctan.org/macros/latex/contrib'
 	pkgs = ['draftwatermark', 'everypage', 'multirow']
 	dst = '/usr/share/texlive/texmf-dist/tex/latex/'
