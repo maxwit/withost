@@ -18,7 +18,7 @@ def get_full_name():
 
 	return full_name
 
-def config(dist, apps):
+def config(user, conf):
 	conf = {}
 	name = get_full_name()
 	group = ['msmtp', 'fetchmail', 'procmail']

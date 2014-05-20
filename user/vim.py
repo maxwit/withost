@@ -1,5 +1,5 @@
-def config(dist, apps):
-	rc = dist.home + '/.vimrc'
+def config(user, conf):
+	rc = user.home + '/.vimrc'
 	dst = open(rc, 'w+')
 	src = open('user/vim/vimrc')
 	for line in src:

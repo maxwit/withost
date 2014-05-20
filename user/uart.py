@@ -1,5 +1,5 @@
-def config(dist, apps):
-	rc = dist.home + '/.kermrc'
+def config(user, conf):
+	rc = user.home + '/.kermrc'
 	dst = open(rc, 'w+')
 	src = open('user/uart/kermrc')
 	for line in src:

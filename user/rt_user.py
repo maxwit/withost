@@ -10,6 +10,7 @@ class rt_user(object):
 		self.login = os.getenv('USER')
 		self.home = os.getenv('HOME')
 		self.fname = base.get_full_name(self.login)
+		# to be removed!
 		mail_user = self.fname.lower().replace(' ', '.')
 		# FIXME: detect the Windows domain
 		self.email = mail_user + '@maxwit.com'
@@ -36,7 +37,7 @@ class rt_user(object):
 
 			try:
 				mod = __import__('user.%s' % app, fromlist = ['config'])
-				rc = mod.config(self, app)
+				rc = mod.config(self, conf)
 			except Exception, e:
 				print "%r\n" % e
 				continue
