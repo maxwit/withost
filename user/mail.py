@@ -2,54 +2,72 @@
 
 import os, sys
 from datetime import date
+from lib.base import name_to_mail
 
-def setup(dist, conf, apps):
-	name = self.conf['name']
-	# host = 'smtp.' + domain
-	now = date.today()
-	term = "cs%d%d" % (now.year % 100, (now.month + 1) / 2)
+def get_full_name():
+	login = os.getenv('USER')
+	full_name = ''
 
-	if self.conf.has_key('email'):
-		email = self.conf['email']
-	else:
-		email = self.name_to_mail(name)
+	fp_user = open('/etc/passwd', 'r')
+	for line in fp_user:
+		account = line.split(':')
+		if login == account[0]:
+			full_name = account[4]
 
-	if self.conf.has_key('epass'):
-		epass = self.conf['epass']
-	else:
-		epass = 'MW%s' % term
+	fp_user.close()
 
+	return full_name
+
+def config(dist, apps):
+	conf = {}
+	name = get_full_name()
+	group = ['msmtp', 'fetchmail', 'procmail']
+	home = os.getenv('HOME')
+
+	email = name_to_mail(name)
 	domain = email.split('@')[1]
 
-	maildir = 'Mail/Inbox/cur'
-	if not os.path.exists(self.home + '/' + maildir):
-		os.makedirs(self.home + '/' + maildir)
+	now = date.today()
+	term = "cs%d%d" % (now.year % 100, (now.month + 1) / 2)
+	epass = 'MW%s' % term
 
+	maildir = 'Mail/Inbox/cur'
+	if not os.path.exists(home + '/' + maildir):
+		os.makedirs(home + '/' + maildir)
+
+	rc_list = []
 	for pkg in group:
-		rc = '%s/.%src' % (self.home, pkg)
+		rc = '%s/.%src' % (home, pkg)
 
 		if os.path.exists(rc):
-			if not self.conf.has_key('email') and not self.conf.has_key('epass'):
+			if not conf.has_key('email') and not conf.has_key('epass'):
 				continue
 			print 'updating %src ...' % pkg
 		else:
 			print 'generating %src ...' % pkg
 
 		if pkg == 'msmtp':
+			rc_list.append(rc)
+
 			if os.path.exists(rc):
 				for line in fileinput.input(rc, 1):
 					s = line.split()
-					if len(s) > 0 and (s[0] == 'user' or s[0] == 'from'):
-						if self.conf.has_key('email'):
+
+					if len(s) == 0:
+						print line,
+						continue
+
+					if s[0] == 'user' or s[0] == 'from':
+						if conf.has_key('email'):
 							print line.replace(s[1], email),
 						else:
 							print line,
-					elif len(s) > 0 and (s[0] == 'password'):
-						if self.conf.has_key('epass'):
+					elif s[0] == 'password':
+						if conf.has_key('epass'):
 							print line.replace(s[1], epass),
 						else:
 							print line,
-					elif len(s) > 0 and (s[0] == 'host'):
+					elif s[0] == 'host':
 						print line.replace(s[1], 'smtp.%s' % domain),
 					else:
 						print line,
@@ -67,21 +85,23 @@ def setup(dist, conf, apps):
 			fd.write('account default: %s' % domain)
 			fd.close()
 		elif pkg == 'fetchmail':
+			rc_list.append(rc)
+
 			if os.path.exists(rc):
 				for line in fileinput.input(rc, 1):
 					s = line.split()
 					if len(s) > 0 and (s[0] == 'user'):
-						if self.conf.has_key('email'):
+						if conf.has_key('email'):
 							print line.replace(s[1], email),
 						else:
 							print line,
 					elif len(s) > 0 and (s[0] == 'poll'):
-						if self.conf.has_key('email'):
+						if conf.has_key('email'):
 							print line.replace(s[1], 'pop.%s' % domain),
 						else:
 							print line,
 					elif len(s) > 0 and (s[0] == 'password'):
-						if self.conf.has_key('epass'):
+						if conf.has_key('epass'):
 							print line.replace(s[1], epass),
 						else:
 							print line,
@@ -100,6 +120,8 @@ def setup(dist, conf, apps):
 			fd.write('mda "/usr/bin/procmail -d %T"\n')
 			fd.close()
 		elif pkg == 'procmail':
+			rc_list.append(rc)
+
 			if os.path.exists(rc):
 				continue
 
@@ -109,3 +131,5 @@ def setup(dist, conf, apps):
 			fd.close()
 
 		os.chmod(rc, 0600)
+
+	return rc_list
