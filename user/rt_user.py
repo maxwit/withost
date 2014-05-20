@@ -10,10 +10,10 @@ class rt_user(object):
 		self.home = os.getenv('HOME')
 		self.fname = self.get_user_info()
 		mail_user = self.fname.lower().replace(' ', '.')
+		self.email = mail_user + '@maxwit.com'
 		if self.fname == mail_user:
 			print 'Please make sure your mail account (%s) is correct!' % self.email
 		# FIXME: detect the Windows domain
-		self.email = mail_user + '@maxwit.com'
 
 	def get_user_info(self):
 		fd_rept = open('/etc/passwd', 'r')
