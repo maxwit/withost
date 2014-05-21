@@ -23,10 +23,8 @@ def add_user(user, fname, password, mail, pgroup, apps):
 		print 'group %s does not exist!\n' % pgroup
 		exit()
 
-	os.system('useradd -g %s -m -s /bin/bash %s' % (pgroup,user))
+	os.system('useradd -g %s -c "%s" -m -s /bin/bash %s' % (pgroup, fname, user))
 	os.system('echo -e "%s\n%s" | passwd %s' % (password, password, user))
-
-	os.system('usermod -c "%s" %s' % (fname, user))
 
 	# run user-config.py -m mail (optional)
 
