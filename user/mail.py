@@ -111,7 +111,7 @@ def config(user, conf):
 				continue
 
 			fd = open(rc, 'w+')
-			fd.write('set daemon 600\n')
+			#fd.write('set daemon 600\n')
 			fd.write('poll pop.%s with protocol pop3\n' % domain)
 			fd.write('uidl\n')
 			fd.write('user "%s"\n' % email)
@@ -125,9 +125,30 @@ def config(user, conf):
 			if os.path.exists(rc):
 				continue
 
+			# FIXME
 			fd = open(rc, 'w+')
+
 			fd.write('MAILDIR=$HOME/Mail\n')
 			fd.write('DEFAULT=$MAILDIR/Inbox/\n')
+			fd.write('STAFF=$MAILDIR/Staff/\n')
+			fd.write('PATCH=$MAILDIR/Patch/\n')
+			fd.write('CS=$MAILDIR/CS/\n')
+			fd.write('\n')
+
+			fd.write(':0\n')
+			fd.write('* ^From: .*(conke.hu@maxwit.com|emily.qin@maxwit.com|sandy.zhou@maxwit.com|tina.hu@maxwit.com)\n')
+			fd.write('$STAFF\n')
+			fd.write('\n')
+
+			fd.write(':0 E\n')
+			fd.write('* ^From: .*@maxwit.com\n')
+			fd.write('$CS\n')
+			fd.write('\n')
+
+			fd.write(':0\n')
+			fd.write('* ^Subject: .*PATCH\n')
+			fd.write('$PATCH\n')
+
 			fd.close()
 
 		os.chmod(rc, 0600)
