@@ -7,7 +7,7 @@ from ConfigParser import ConfigParser
 from argparse import ArgumentParser
 from lib import base
 
-def add_user(user, fname, password, mail, pgroup, apps):
+def add_user(user, fname, password, mail, group, apps):
 	print 'Adding user %s ...\n' % user
 
 	login = os.getenv('USER')
@@ -19,11 +19,11 @@ def add_user(user, fname, password, mail, pgroup, apps):
 		print 'user %s exists!' % user
 		exit()
 
-	if not base.group_exits(pgroup):
-		print 'group %s does not exist!\n' % pgroup
+	if not base.group_exits(group):
+		print 'group %s does not exist!\n' % group
 		exit()
 
-	os.system('useradd -g %s -c "%s" -m -s /bin/bash %s' % (pgroup, fname, user))
+	os.system('useradd -g %s -c "%s" -m -s /bin/bash %s' % (group, fname, user))
 	os.system('echo %s | passwd --stdin %s' % (password, user))
 
 	# run user-config.py -m mail (optional)
@@ -97,12 +97,12 @@ if __name__ == '__main__':
 		mail = args.email or base.name_to_mail(fname)
 
 		if conf.has_key('sys.group'):
-			pgroup = conf['sys.group']
+			group = conf['sys.group']
 		else:
 			print "Invalid configuration\n"
 			exit()
 
-		add_user(user, fname, password, mail, pgroup, apps)
+		add_user(user, fname, password, mail, group, apps)
 
 	elif args.operation == 'del':
 		user = args.user
