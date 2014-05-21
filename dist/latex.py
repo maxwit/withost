@@ -14,9 +14,12 @@ def setup(dist, conf, apps):
 	cur_path = os.path.abspath('.')
 	os.chdir('/tmp')
 	for pkg in pkgs:
-		if os.path.exists(dst + pkg):
-			print pkg + ' has already be installed!'
+		if os.path.exists(dst + pkg) and os.path.exists(dst + pkg + '/' + pkg + '.sty'):
+			print pkg + ' has already been installed!'
 			continue
+
+		if os.path.exists(dst + pkg):
+			os.rmdir(dst + pkg)
 
 		pkg_file = pkg + '.zip'
 		if not os.path.exists(pkg):
