@@ -25,11 +25,12 @@ def add_user(user, fname, password, mail, group, apps):
 
 	os.system('useradd -g %s -c "%s" -m -s /bin/bash %s' % (group, fname, user))
 	os.system('echo %s | passwd --stdin %s' % (password, user))
+	print
 
-	# run user-config.py -m mail (optional)
+	# sudo -H -u user-config.py [-m mail] user
 
 	if 'samba' in apps:
-		print '\nadd samba account\n'
+		print 'add samba account\n'
 		os.system('echo -e "%s\n%s" | smbpasswd -s -a %s' % (password, password, user))
 
 	print 'User %s Added!\n' % user
