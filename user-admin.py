@@ -24,7 +24,7 @@ def add_user(user, fname, password, mail, pgroup, apps):
 		exit()
 
 	os.system('useradd -g %s -c "%s" -m -s /bin/bash %s' % (pgroup, fname, user))
-	os.system('echo -e "%s\n%s" | passwd %s' % (password, password, user))
+	os.system('echo %s | passwd --stdin %s' % (password, user))
 
 	# run user-config.py -m mail (optional)
 
