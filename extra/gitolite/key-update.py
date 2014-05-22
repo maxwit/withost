@@ -3,6 +3,7 @@
 import os, sys
 import shutil
 import fileinput
+import pwd
 
 def key_update(src):
 	home = os.getenv('HOME')
@@ -68,27 +69,24 @@ def key_update(src):
 
 	else:
 		shutil.copyfile(src, keydir + '/' + dst)
+		user = '@' + pwd.getpwuid(os.stat(src).st_uid).pw_name
 
-		devel_exist = False
-		for line in fileinput.input(conf, inplace = 1):
-			user = line.split()
+		with open(conf) as f:
+			lines = f.readlines()
 
-			if user and user[0] == '@devel':
-				print line[:-1] + ' ' + key + '\n',
-				devel_exist = True
-			else:
-				print line,
-		fileinput.close()
+		flag = False
+		for i in range(len(lines)):
+			s = lines[i].split()
 
-		if not devel_exist:
-		    for line in fileinput.input(conf, inplace = 1):
-		        if not devel_exist:
-		            print '@devel = %s\n' % key + line,
-		            devel_exist = True
-		        else:
-		            print line,
-		    fileinput.close()
+			if s and s[0] == user:
+				lines[i] = user + ' = ' + key + '\n'
+				flag = True
+				break
 
+		if not flag:
+			lines.insert(0, user + ' = ' + key + '\n');
+
+		open(conf, 'w').writelines(lines);
 
 		os.system('git add %s/%s' % (keydir, dst))
 		os.system('git commit -asm "add %s"' % dst)
