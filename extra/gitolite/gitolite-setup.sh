@@ -7,14 +7,15 @@ gitolite_setup()
 	fi
 
 	if grep -w ^git /etc/group > /dev/null; then
-		sudo useradd -g git -s /bin/bash -m git
+		sudo useradd -g git -s /bin/bash -m git || exit 1
 	else
-		sudo useradd -s /bin/bash -m git
+		sudo useradd -s /bin/bash -m git || exit 1
 	fi
 
 	gl=(`groups`)
 	gl[0]='git'
-	sudo usermod -G ${gl// /,} $USER
+	sg=${gl[@]}
+	sudo usermod -G ${sg// /,} $USER
 
 	tmpd=`mktemp -d`
 	chmod 755 $tmpd
@@ -35,12 +36,12 @@ gitolite_setup()
 	echo
 
 	mkdir -p $HOME/bin
-	cp -v key-update.py $HOME/bin
-	cp -v repo-admin.py $HOME/bin
+	cp -v key-update.py repo-admin.py $HOME/bin
 }
 
 gitolite_remove()
 {
+	rm -v $HOME/bin/{key-update.py,repo-admin.py}
 	rm -rf $HOME/gitolite-admin
 	echo
 
@@ -53,3 +54,5 @@ if [ $# == 0 ]; then
 else
 	gitolite_remove
 fi
+
+echo
