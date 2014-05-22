@@ -35,7 +35,7 @@ gitolite_setup()
 	echo
 
 	mkdir -p $HOME/bin
-	#cp -v key-update.py $HOME/bin
+	cp -v key-update.py $HOME/bin
 	cp -v repo-admin.py $HOME/bin
 }
 
