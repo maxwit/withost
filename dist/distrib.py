@@ -29,16 +29,13 @@ class distrib(object):
 	def setup(self, config):
 		# TODO: move to sys_init()
 		if config.has_key('sys.host'):
-			host = config['sys.host']
-		else:
-			# TODO: use a better name?
-			host = self.name
+			host = config['sys.host'].strip().replace(' ', '-')
 
-		if host != self.host:
-			self.set_hostname(host)
-			self.host = host
+			if host != self.host:
+				self.set_hostname(host)
+				self.host = host
 
-		print 'HostName = "%s"\n' % self.host
+		print 'Host name = "%s"\n' % self.host
 
 		self.app_setup(config)
 

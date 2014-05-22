@@ -3,16 +3,17 @@
 import os
 
 def setup(dist, conf, apps):
-	admin = conf['sys.admin']
+	fn = '/etc/incron.allow'
+	admin = os.getlogin()
 
-	if os.path.exists('/etc/incron.allow'):
-		allow = open('/etc/incron.allow', 'r+')
+	if os.path.exists(fn):
+		allow = open(fn, 'r+')
 		for line in allow:
 			if line.strip() == admin:
 				allow.close()
 				return
 	else:
-		allow = open('/etc/incron.allow', 'w+')
+		allow = open(fn, 'w+')
 
 	allow.write(admin + '\n')
 	allow.close()

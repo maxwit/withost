@@ -37,7 +37,6 @@ echo "Generating .config ..."
 
 if [ -e configs/${system}.config ]; then
 	cp configs/${system}.config .config
-	sed -i "/apps/a admin = $USER" .config
 	echo
 else
 	echo "${system}.config does not exist!"
