@@ -74,7 +74,7 @@ if __name__ == '__main__':
 	print
 
 	# if pub.owner is None:
-	user = cfg_parser.get('sys', 'admin')
+	user = os.getlogin()
 	group = cfg_parser.get('sys', 'group')
 	# FIXME
 	try:
