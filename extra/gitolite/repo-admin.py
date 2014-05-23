@@ -5,7 +5,7 @@ from argparse import ArgumentParser
 
 version = '4.2'
 
-server = '192.168.1.1'
+server = '192.168.2.3'
 
 def __repo_add(user, repo):
 	print 'add %s for %s' % (repo, user)
@@ -20,6 +20,11 @@ def __repo_add(user, repo):
 	conf_fd.write('    RW+     =   @%s\n' % user)
 	conf_fd.write('    R       =   @all\n')
 	conf_fd.close()
+	pwd = os.getcwd()
+	os.chdir(home + '/gitolite-admin')
+	os.system("git commit -asm 'add repo: %s/%s '" % (user,repo))
+	os.system("git push")
+	os.chdir(pwd)
 
 def repo_add(user, repo):
 	print '/home/git/repositories/%s/%s.git' % (user, repo)
