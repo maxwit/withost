@@ -2,7 +2,7 @@
 
 gitolite_setup()
 {
-	if [ ! -d $HOME/.ssh ]; then
+	if [ ! -d $HOME/.ssh/id_rsa.pub ]; then
 		echo | ssh-keygen -N ''
 	fi
 
@@ -29,7 +29,7 @@ gitolite_setup()
 	git clone git@127.0.0.1:gitolite-admin $HOME/gitolite-admin
 	cd $HOME/gitolite-admin
 	sed -i "1i @$USER = $key\n" conf/gitolite.conf
-	sed -i "s/\(=\s\+\)$key/\1@$USER/" conf/gitolite.conf
+#	sed -i "s/\(=\s\+\)$key/\1@$USER/" conf/gitolite.conf
 	git commit -asm "update gitolite.conf"
 	git push
 	cd -
