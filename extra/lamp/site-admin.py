@@ -173,3 +173,5 @@ if __name__ == "__main__":
 			add_site(args.servername, args.sitename, os.getlogin())
 	else:
 		del_site(args.sitename)
+
+	os.system('sudo systemctl restart httpd.service')
