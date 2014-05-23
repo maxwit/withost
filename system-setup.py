@@ -79,6 +79,7 @@ if __name__ == '__main__':
 	# FIXME
 	try:
 		os.system('groupadd ' + group)
+		os.system('usermod -a -G %s %s' % (group, user))
 	except Exception, e:
 		print e
 	os.system('chown %s.%s -R %s' % (user, group, path))
