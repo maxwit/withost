@@ -17,8 +17,8 @@ def __repo_add(user, repo):
 	conf_fd = open(home + '/gitolite-admin/conf/gitolite.conf', 'a+')
 	conf_fd.write('\n')
 	conf_fd.write('repo %s/%s\n' % (user, repo))
-    conf_fd.write('    RW+     =   @%s\n' % user)
-    conf_fd.write('    R       =   @all\n')
+	conf_fd.write('    RW+     =   @%s\n' % user)
+	conf_fd.write('    R       =   @all\n')
 	conf_fd.close()
 
 def repo_add(user, repo):
