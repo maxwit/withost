@@ -70,7 +70,7 @@ def add_site(servername, sitename,owner):
 	pwd = os.getcwd()
 	os.chdir('/var/www')
 	os.system("%s startproject %s" % (dcmd, sitename))
-	os.chown(docroot, getpwnam(owner).pw_uid, getgrnam(owner).gr_gid)
+	os.system("sudo chown %s.%s -R %s" % (owner, owner, docroot))
 	os.chdir(pwd)
 
 def del_site(sitename):
