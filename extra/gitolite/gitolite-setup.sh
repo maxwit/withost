@@ -12,10 +12,11 @@ gitolite_setup()
 		sudo useradd -s /bin/bash -m git || exit 1
 	fi
 
-	gl=(`groups`)
-	gl[0]='git'
-	sg=${gl[@]}
-	sudo usermod -G ${sg// /,} $USER
+#	gl=(`groups`)
+#	gl[0]='git'
+#	sg=${gl[@]}
+#	sudo usermod -G ${sg// /,} $USER
+	sudo usermod -a -G git $USER
 
 	tmpd=`mktemp -d`
 	chmod 755 $tmpd
