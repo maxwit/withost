@@ -2,7 +2,11 @@
 
 import os, sys
 from datetime import date
-from lib.base import name_to_mail
+import platform
+#from lib.base import name_to_mail
+
+def name_to_mail(name):
+	return name.lower().replace(' ', '.') + '@maxwit.com'
 
 def get_full_name():
 	login = os.getenv('USER')
@@ -18,10 +22,10 @@ def get_full_name():
 
 	return full_name
 
-def config(user, conf):
+def config(user = '', conf = ''):
 	conf = {}
 	name = get_full_name()
-	group = ['msmtp', 'fetchmail', 'procmail']
+	group = ['msmtp', 'fetchmail', 'procmail', 'mutt']
 	home = os.getenv('HOME')
 
 	email = name_to_mail(name)
@@ -150,7 +154,50 @@ def config(user, conf):
 			fd.write('$PATCH\n')
 
 			fd.close()
+		elif pkg == 'mutt':
+			rc_list.append(rc)
+
+			if os.path.exists(rc):
+				for line in fileinput.input(rc, 1):
+					s = line.split()
+					if len(s) > 0 and (s[0] == 'my_hdr'):
+						if conf.has_key('email'):
+							print line.replace(s[2], email),
+						else:
+							print line,
+					else:
+						print line,
+				continue
+
+			fd = open(rc, 'w+')
+			fd.write('# smtp setting\n')
+			fd.write('set sendmail = /usr/bin/msmtp\n')
+			fd.write('# set use_from = yes\n')
+			fd.write('# set envelope_from = yes\n')
+			fd.write('\n')
+			fd.write('# general setting\n')
+			fd.write('my_hdr From: %s\n' % email)
+			fd.write('\n')
+
+			fd_rc = open('muttrc.common')
+			for line in fd_rc:
+				fd.write(line)
+			fd_rc.close()
+
+			fd.close()
+
+			fd = open(home + '/Mail/signature', 'w+')
+			fd.write('Regards,\n%s\n' % name)
+			fd.close()
 
 		os.chmod(rc, 0600)
 
 	return rc_list
+
+if __name__ == '__main__':
+	dist_name = platform.dist()[0]
+	if dist_name in ['Ubuntu', 'Debain', 'Mint']:
+		os.system('sudo apt-get install msmtp mutt fetchmail procmail -y')
+	elif dist_name in ['redhat', 'fedora', 'centos']:
+		os.system('sudo yum install msmtp mutt fetchmail procmail -y')
+	config()
