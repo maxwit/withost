@@ -3,9 +3,9 @@
 import os, re, sys
 import platform
 from xml.etree import ElementTree
-from distrib import distrib
+from distrib import unix
 
-class debian(distrib):
+class debian(unix):
 	def __init__(self, ostype):
 		super(debian, self).__init__(ostype)
 		self.repo = 'deb.xml'
