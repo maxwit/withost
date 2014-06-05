@@ -3,9 +3,9 @@
 import os, re, sys
 import platform
 from xml.etree import ElementTree
-from distrib import distrib
+from distrib import unix
 
-class osx(distrib):
+class osx(unix):
 	def __init__(self, ostype):
 		super(osx, self).__init__(ostype)
 		self.repo = 'osx.xml'

@@ -4,7 +4,7 @@ import os
 import platform
 from xml.etree import ElementTree
 
-class distrib(object):
+class unix(object):
 	def __init__(self, ostype):
 		self.name = ostype[0]
 		self.version = ostype[1]

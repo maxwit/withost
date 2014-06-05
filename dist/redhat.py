@@ -3,9 +3,9 @@
 import os, re, sys
 import platform
 from xml.etree import ElementTree
-from distrib import distrib
+from distrib import unix
 
-class redhat(distrib):
+class redhat(unix):
 	def __init__(self, ostype):
 		super(redhat, self).__init__(ostype)
 		self.repo = 'rpm.xml'
