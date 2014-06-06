@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import os
+from dist import gitolite_setup
 
 def install_gitolite():
 	git_path = '/usr/share/gitolite'
@@ -15,6 +16,10 @@ def install_gitolite():
 	link = os.readlink('/usr/bin/gitolite')
 	print '/usr/bin/gitolite -> ' + link
 
+
+
 def setup(dist, conf, apps):
 	if 'gitolite' not in apps:
 		install_gitolite()
+
+	gitolite_setup.gitolite_add()
