@@ -42,7 +42,7 @@ class unix(object):
 	def app_setup(self, config):
 		install_list = config['sys.apps'].split()
 
-		tree = ElementTree.parse('dist/%s' % self.repo)
+		tree = ElementTree.parse('dist/' + self.repo)
 		root = tree.getroot()
 
 		for dist_node in root.getchildren():
@@ -91,12 +91,11 @@ def get_dist():
 	os_type = platform.system()
 
 	if os_type == 'Linux':
-		dist_name = platform.dist()[0]
+		(dist_name, version) = platform.dist()[0:2]
 
-		version = platform.dist()[1]
 		ver = version.split('.')
 		if len(ver) > 2:
-			version = '%s.%s' % (ver[0], ver[1])
+			version = '.'.join([ver[0], ver[1]])
 
 		if dist_name in ['Debain', 'Ubuntu', 'Mint']:
 			from debian import debian

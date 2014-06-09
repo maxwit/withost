@@ -19,6 +19,7 @@
 			<app group="openssh">openssh-server</app>
 			<app group="python">idle idle3</app>
 			<app group="lamp">apache2 libapache2-mod-wsgi python-django mysql-server python-mysqldb</app>
+			<app group="lemp" service="ngnix">ngnix python uwsgi-plugin-python mariadb mariadb-server MySQL-python</app>
 			<app group="tomcat">tomcat7 tomcat7-common libapache2-mod-jk</app>
 			<app group="nfs" service="nfs-kernel-server">nfs-kernel-server</app>
 			<app group="samba" service="smbd">samba</app>

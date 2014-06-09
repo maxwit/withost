@@ -38,6 +38,7 @@ def setup(dist, conf, apps):
 			import django
 		except ImportError:
 			install_django('1.6.2')
+
 	site = conf['web.site'].split()
 	sitename = [site[0].replace('.', '_'), site[1].replace('.', '_')]
 	print sitename
