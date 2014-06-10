@@ -22,8 +22,8 @@
 			<app group="hplip">hplip hplip-gui</app>
 			<app group="vsftpd" service="vsftpd">vsftpd</app>
 			<app group="python">python-devel python-pip</app>
-			<app group="lamp" service="httpd mysqld" dep="python">httpd mod_wsgi mariadb mariadb-server MySQL-python</app>
-			<app group="lemp" service="nginx mysqld" dep="python">nginx mariadb mariadb-server MySQL-python</app>
+			<app group="lamp" service="httpd mysqld" dep="python">httpd mod_wsgi mariadb mariadb-server</app>
+			<app group="lemp" service="nginx mysqld" dep="python">nginx mariadb mariadb-server</app>
 			<app group="tomcat" dep="gcc">gcc tomcat tomcat-jsp-2.2-api tomcat-servlet-3.0-api tomcat-lib tomcat-el-2.2-api</app>
 			<app group="postfix">dovecot postfix</app>
 			<app group="xinetd" service="xinetd">xinetd</app>
@@ -71,8 +71,8 @@
 			<app group="hplip" dep="cups">hplip hplip-gui</app>
 			<app group="vsftpd" service="vsftpd">vsftpd</app>
 			<app group="python">python-devel python-pip</app>
-			<app group="lamp" service="httpd mysqld">httpd mod_wsgi mariadb mariadb-server MySQL-python</app>
-			<app group="lemp" service="nginx mysqld">nginx mariadb mariadb-server MySQL-python</app>
+			<app group="lamp" service="httpd mysqld">httpd mod_wsgi mariadb mariadb-server</app>
+			<app group="lemp" service="nginx mysqld">nginx mariadb mariadb-server</app>
 			<app group="tomcat" dep="httpd gcc">gcc tomcat tomcat-jsp-2.2-api tomcat-servlet-3.0-api tomcat-lib tomcat-el-2.2-api</app>
 			<app group="postfix">dovecot postfix</app>
 			<app group="xinetd" service="xinetd">xinetd</app>
