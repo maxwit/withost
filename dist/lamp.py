@@ -32,12 +32,11 @@ def install_django(dver):
 	os.rename(django + '.py', django)
 
 def setup(dist, conf, apps):
-	if 'python-django' not in apps:
-		# FIXME
-		try:
-			import django
-		except ImportError:
-			install_django('1.6.2')
+	if 'python-pip' not in apps:
+		print 'TODO: install pip'
+		return
+
+	os.system('pip install django')
 
 	site = conf['web.site'].split()
 	sitename = [site[0].replace('.', '_'), site[1].replace('.', '_')]

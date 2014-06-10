@@ -49,6 +49,7 @@ def setup(dist, conf, apps):
 
 		os.chdir('/tmp')
 		shutil.copytree(pkg, dst + pkg)
+		print
 
 	os.chdir(cur_path)
 	os.system('texhash')

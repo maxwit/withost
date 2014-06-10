@@ -69,8 +69,8 @@
 			<app group="cups" service="cups">cups cups-pdf xsane</app>
 			<app group="hplip" dep="cups">hplip hplip-gui</app>
 			<app group="vsftpd" service="vsftpd">vsftpd</app>
-			<app group="lamp" service="httpd mysqld">httpd mod_wsgi python-django mariadb mariadb-server MySQL-python</app>
-			<app group="lemp" service="nginx mysqld">nginx uwsgi uwsgi-plugin-python python-django mariadb mariadb-server MySQL-python</app>
+			<app group="lamp" service="httpd mysqld">httpd mod_wsgi python-pip mariadb mariadb-server MySQL-python</app>
+			<app group="lemp" service="nginx mysqld">nginx uwsgi uwsgi-plugin-python python-pip mariadb mariadb-server MySQL-python</app>
 			<app group="tomcat" dep="httpd gcc">gcc tomcat tomcat-jsp-2.2-api tomcat-servlet-3.0-api tomcat-lib tomcat-el-2.2-api</app>
 			<app group="postfix">dovecot postfix</app>
 			<app group="xinetd" service="xinetd">xinetd</app>
