@@ -7,7 +7,7 @@ def process(a,b,c):
 	if per >= 100:
 		per = 100
 
-	print '%d%%\r' % per,
+	print '\r%d%%' % per,
 	sys.stdout.flush();
 
 def name_to_mail(name):

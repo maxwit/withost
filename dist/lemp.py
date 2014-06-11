@@ -6,7 +6,6 @@ from argparse import ArgumentParser
 
 # FIXME
 http_root = '/usr/share/nginx/'
-a2_site = False
 
 def multiple_replace(text, sdict):
 	rx = re.compile('|'.join(map(re.escape, sdict)))
@@ -49,17 +48,17 @@ def add_site(server_name, owner):
 	os.chdir(pwd)
 
 	# FIXME
-	group = 'apache'
+	group = 'nginx'
 	os.system('chown %s.%s -R %s' % (owner, group, site_root))
 	os.system('chmod g+w -R ' + site_root)
 
 	pattern = {'__DOCROOT__':site_root, '__MAINDIR__':main_dir, '__SERVERNAME__':server_name}
 
-	fsrc = open('dist/apache/site.conf')
+	fsrc = open('dist/site/nginx.conf')
 	fdst = open(site_conf, 'w+')
 
 	# FIXME
-	fdst.write('WSGIPythonPath %s\n\n' % site_root)
+	#fdst.write('WSGIPythonPath %s\n\n' % site_root)
 
 	for line in fsrc:
 		line = multiple_replace(line, pattern)
@@ -68,8 +67,8 @@ def add_site(server_name, owner):
 	fsrc.close()
 	fdst.close()
 
-	if a2_site:
-		os.system('a2ensite ' + os.path.basename(site_conf))
+	if os.path.dirname(site_conf) == 'sites-available':
+		os.symlink(site_conf, site_conf.replace('available', 'enable'))
 
 def del_site(server_name):
 	print 'removing %s ...' % server_name
@@ -80,8 +79,8 @@ def del_site(server_name):
 		print 'The site "%s" does not exist!' % server_name
 		return
 
-	if a2_site:
-		os.system('a2dissite ' + os.path.basename(site_conf))
+	if os.path.dirname(site_conf) == 'sites-available':
+		os.remove(site_conf.replace('available', 'enable'))
 	os.remove(site_conf)
 
 	shutil.rmtree(site_root)

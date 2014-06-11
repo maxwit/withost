@@ -60,7 +60,7 @@ def add_site(server_name, owner):
 
 	pattern = {'__DOCROOT__':site_root, '__MAINDIR__':main_dir, '__SERVERNAME__':server_name}
 
-	fsrc = open('dist/apache/site.conf')
+	fsrc = open('dist/site/apache.conf')
 	fdst = open(site_conf, 'w+')
 
 	# FIXME
