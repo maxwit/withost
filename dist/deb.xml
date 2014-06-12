@@ -21,6 +21,7 @@
 			<app group="mysql" service="mysqld">mysql-server</app>
 			<app group="apache" service="apache2">apache2 libapache2-mod-wsgi</app>
 			<app group="nginx" service="nginx">nginx mysql-server</app>
+			<app group="uwsgi" dep="python"/>
 			<app group="tomcat">tomcat7 tomcat7-common libapache2-mod-jk</app>
 			<app group="nfs" service="nfs-kernel-server">nfs-kernel-server</app>
 			<app group="samba" service="smbd">samba</app>

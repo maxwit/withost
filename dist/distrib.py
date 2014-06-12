@@ -61,14 +61,20 @@ class unix(object):
 						continue
 					install_list.remove(group)
 
-					print '[%s]\n%s' % (group, app_node.text)
-					self.app_install(app_node.text)
+					if app_node.text is None:
+						print '[%s]' % group
+						app_list = []
+					else:
+						print '[%s]\n%s' % (group, app_node.text)
+						app_list = app_node.text.split()
+						self.app_install(app_node.text)
 
 					if os.path.exists('dist/%s.py' % group):
 						print 'Setup %s ...' % group
 						try:
 							mod = __import__('dist.' + group, fromlist = ['setup'])
-							mod.setup((self.name, self.version), config, app_node.text.split())
+							mod.setup((self.name, self.version), config, app_list)
+							#mod.setup((self.name, self.version), config, (group, app_list))
 						except Exception, e:
 							print '%r\n' % e
 							continue

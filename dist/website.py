@@ -77,6 +77,7 @@ def add_site(dist, server_type, server_name, owner, backend):
 			if server_type == 'apache':
 				pattern['__PYTHONPATH__'] = site_root
 		elif backend == 'uwsgi':
+			#pattern['__PORT__'] = site_port
 			pass
 
 	if not os.path.exists(template):
