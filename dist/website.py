@@ -10,7 +10,7 @@ def multiple_replace(text, sdict):
 		return sdict[match.group(0)]
 	return rx.sub(one_xlat, text)
 
-def render_to_file(dst, src, pattern)
+def render_to_file(dst, src, pattern):
 	fsrc = open(src)
 	fdst = open(dst, 'w+')
 	for line in fsrc:
@@ -64,9 +64,9 @@ def add_site(dist, server_type, server_name, owner, backend):
 	pattern = {'__DOCROOT__':site_root, '__SERVERNAME__':server_name}
 
 	if backend is None:
-		template = 'dist/site/%s.conf' %s server_type)
+		template = 'dist/site/%s.conf' % server_type
 	else:
-		template = 'dist/site/%s-%s.conf' %s (server_type, backend)
+		template = 'dist/site/%s-%s.conf' % (server_type, backend)
 
 		if backend == 'wsgi':
 			main = 'main'
@@ -97,7 +97,7 @@ def add_site(dist, server_type, server_name, owner, backend):
 			os.chdir(pwd)
 		else:
 			os.mkdir(site_root)
-			render_to_file(site_root + '/index.html', 'dist/site/index.html', pattern).
+			render_to_file(site_root + '/index.html', 'dist/site/index.html', pattern)
 
 		if dist[0].lower in ['ubuntu', 'mint']:
 			group = 'www-data'
