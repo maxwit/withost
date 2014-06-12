@@ -29,17 +29,15 @@ def getbackend(dist, conf, apps):
 
 def generate_path(server_type, server_name):
 	if server_type == 'apache':
-		site_root = '/var/www'
-
 		if os.path.isdir('/etc/httpd/conf.d'):
 			site_conf = '/etc/httpd/conf.d'
 		elif os.path.isdir('/etc/apache2/sites-available'):
 			site_conf = '/etc/apache2/sites-available'
 		else:
 			raise Exception('OS not supported!')
-	else:
-		site_root = '/usr/share/nginx'
 
+		site_root = '/var/www'
+	else:
 		if os.path.isdir('/etc/nginx/sites-available'):
 			site_conf = '/etc/nginx/sites-available'
 		elif os.path.isdir('/etc/nginx/conf.d'):
@@ -47,14 +45,17 @@ def generate_path(server_type, server_name):
 		else:
 			raise Exception('OS not supported!')
 
+		site_root = '/usr/share/nginx'
+
 	site_name = server_name.replace('.', '_')
-	site_root += '/' + site_name
+	#site_name = server_name
 	site_conf += '/' + site_name + '.conf'
+	site_root += '/' + site_name
 
 	return (site_conf, site_root)
 
 def add_site(dist, server_type, server_name, owner, backend):
-	print 'creating %s for %s ...' % (server_name, owner)
+	print '%s: creating %s for %s ...' % (server_type.capitalize(), server_name, owner)
 
 	(site_conf, site_root) = generate_path(server_type, server_name)
 	if os.path.exists(site_conf):
@@ -131,7 +132,7 @@ if __name__ == '__main__':
 
 	opt_parser = ArgumentParser(description='Add site or delete site')
 	opt_parser.add_argument('operation', action='store',
-						choices=('add','del'),help='add or delete a site')
+						choices=('add','del'), help='add or delete a site')
 	opt_parser.add_argument('-t', '--type', action='store',
 						dest='type', help='server type')
 	opt_parser.add_argument('-b', '--back', action='store',
@@ -139,7 +140,7 @@ if __name__ == '__main__':
 	opt_parser.add_argument('-o', '--owner', action='store',
 						dest='owner', help='site owner')
 	opt_parser.add_argument('server_name', action='store',
-							help='server name')
+						help='server name')
 	args = opt_parser.parse_args()
 
 	if args.type:
