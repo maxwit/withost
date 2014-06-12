@@ -1,23 +1,8 @@
 #!/usr/bin/python
 
-import os, re
+import os
 import shutil
-from argparse import ArgumentParser
-
-def multiple_replace(text, sdict):
-	rx = re.compile('|'.join(map(re.escape, sdict)))
-	def one_xlat(match):
-		return sdict[match.group(0)]
-	return rx.sub(one_xlat, text)
-
-def render_to_file(dst, src, pattern):
-	fsrc = open(src)
-	fdst = open(dst, 'w+')
-	for line in fsrc:
-		line = multiple_replace(line, pattern)
-		fdst.write(line)
-	fsrc.close()
-	fdst.close()
+from lib import base
 
 def getbackend(dist, conf, apps):
 	if conf.has_key('web.backend'):
@@ -84,7 +69,7 @@ def add_site(dist, server_type, server_name, owner, backend):
 		raise Exception(template + ' dost NOT exist!')
 
 	print 'generating %s ...' % site_conf
-	render_to_file(site_conf, template, pattern)
+	base.render_to_file(site_conf, template, pattern)
 
 	if os.path.dirname(site_conf) == 'sites-available':
 		os.symlink(site_conf, site_conf.replace('sites-available', 'sites-enable'))
@@ -99,7 +84,7 @@ def add_site(dist, server_type, server_name, owner, backend):
 			os.chdir(pwd)
 		else:
 			os.mkdir(site_root)
-			render_to_file(site_root + '/index.html', 'dist/site/index.html', pattern)
+			base.render_to_file(site_root + '/index.html', 'dist/site/index.html', pattern)
 
 		if dist[0].lower in ['ubuntu', 'mint']:
 			group = 'www-data'
@@ -125,39 +110,3 @@ def del_site(dist, server_type, server_name):
 
 	if os.path.exists(site_root):
 		shutil.rmtree(site_root)
-
-if __name__ == '__main__':
-	if os.getuid() != 0:
-		print 'pls run as root or with sudo!'
-		exit()
-
-	opt_parser = ArgumentParser(description='Add site or delete site')
-	opt_parser.add_argument('operation', action='store',
-						choices=('add','del'), help='add or delete a site')
-	opt_parser.add_argument('-t', '--type', action='store',
-						dest='type', help='server type')
-	opt_parser.add_argument('-b', '--back', action='store',
-						dest='back', help='backend')
-	opt_parser.add_argument('-o', '--owner', action='store',
-						dest='owner', help='site owner')
-	opt_parser.add_argument('server_name', action='store',
-						help='server name')
-	args = opt_parser.parse_args()
-
-	if args.type:
-		server_type = args.type
-	else:
-		server_type = 'nginx'
-
-	if args.back:
-		backend = args.back
-	else:
-		backend = None
-
-	if args.operation == 'add':
-		owner = args.owner or os.getlogin()
-		add_site(('Fedora',), server_type, args.server_name, owner, backend)
-	else: #if args.operation == 'del':
-		del_site(('Fedora',), server_type, args.server_name)
-
-	print

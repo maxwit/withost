@@ -17,6 +17,15 @@ class unix(object):
 	def app_install(self, app_list):
 		pass
 
+	def app_remove(self, app_list):
+		pass
+
+	def pip_install(self, app_list):
+		os.system('pip install ' + app_list)
+
+	def pip_remove(self, app_list):
+		os.system('pip uninstall -y ' + app_list)
+
 	def service_start(self, service):
 		print 'service_start: %s not supported' % self.name
 
@@ -42,7 +51,7 @@ class unix(object):
 	def app_setup(self, config):
 		install_list = config['sys.apps'].split()
 
-		tree = ElementTree.parse('dist/' + self.repo)
+		tree = ElementTree.parse('dist/app.xml')
 		root = tree.getroot()
 
 		for dist_node in root.getchildren():
@@ -61,19 +70,20 @@ class unix(object):
 						continue
 					install_list.remove(group)
 
-					if app_node.text is None:
-						print '[%s]' % group
-						app_list = []
-					else:
-						print '[%s]\n%s' % (group, app_node.text)
-						app_list = app_node.text.split()
+					print '[%s]\n%s' % (group, app_node.text)
+					install = app_node.get('install', None)
+					if install is None:
 						self.app_install(app_node.text)
+					elif install == 'pip':
+						self.pip_install(app_node.text)
+					else:
+						raise Exception('Bug!')
 
 					if os.path.exists('dist/%s.py' % group):
 						print 'Setup %s ...' % group
 						try:
 							mod = __import__('dist.' + group, fromlist = ['setup'])
-							mod.setup((self.name, self.version), config, app_list)
+							mod.setup((self.name, self.version), config,  app_node.text)
 							#mod.setup((self.name, self.version), config, (group, app_list))
 						except Exception, e:
 							print '%r\n' % e

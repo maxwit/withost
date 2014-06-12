@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import sys
+import re
 
 def process(a,b,c):
 	per = 100 * a * b / c
@@ -54,3 +55,18 @@ def user_exits(user):
 	fp_user.close()
 
 	return False
+
+def multiple_replace(text, sdict):
+	rx = re.compile('|'.join(map(re.escape, sdict)))
+	def one_xlat(match):
+		return sdict[match.group(0)]
+	return rx.sub(one_xlat, text)
+
+def render_to_file(dst, src, pattern):
+	fsrc = open(src)
+	fdst = open(dst, 'w+')
+	for line in fsrc:
+		line = multiple_replace(line, pattern)
+		fdst.write(line)
+	fsrc.close()
+	fdst.close()

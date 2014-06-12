@@ -8,7 +8,6 @@ from distrib import unix
 class debian(unix):
 	def __init__(self, ostype):
 		super(debian, self).__init__(ostype)
-		self.repo = 'deb.xml'
 
 	def app_install(self, install_list):
 		os.system('apt-get install -y ' + install_list)

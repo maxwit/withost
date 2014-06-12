@@ -8,10 +8,12 @@ from distrib import unix
 class redhat(unix):
 	def __init__(self, ostype):
 		super(redhat, self).__init__(ostype)
-		self.repo = 'rpm.xml'
 
 	def app_install(self, install_list):
 		os.system('yum install -y ' + install_list)
+
+	def app_remove(self, install_list):
+		os.system('yum remove -y ' + install_list)
 
 	def service_start(self, service):
 		os.system('systemctl enable ' + service)
