@@ -4,7 +4,7 @@ import os
 import shutil
 from lib import base
 
-def getbackend(dist, conf, apps):
+def get_backend(dist, conf, apps):
 	if conf.has_key('web.backend'):
 		backend = conf['web.backend']
 		if backend.lower() == 'none':
@@ -19,7 +19,37 @@ def getbackend(dist, conf, apps):
 
 	return backend
 
-def generate_path(server_type, server_name):
+def get_plugin(dist, conf, apps):
+	if conf.has_key('web.plugin'):
+		plugin = conf['web.plugin']
+		if plugin.lower() == 'none':
+			plugin = None
+	else:
+		_plugin = {'python':'python', 'django':'python', 'ruby':'ruby'}
+		for be in apps:
+			if be in _plugin:
+				plugin = _plugin[be]
+				break
+		else:
+			plugin = None
+
+	return plugin
+
+def get_site_root(server_type, server_name):
+	#if conf.has_key('web.root'):
+	#	site_root = conf['web.root']
+	if server_type == 'nginx':
+		site_root = '/usr/share/nginx'
+	else: #if server_type == 'apache':
+		site_root = '/var/www'
+
+	site_name = server_name.replace('.', '_')
+	#site_name = server_name
+	site_root += '/' + site_name
+
+	return site_root
+
+def get_site_conf(server_type, server_name):
 	if server_type == 'apache':
 		if os.path.isdir('/etc/httpd/conf.d'):
 			site_conf = '/etc/httpd/conf.d'
@@ -27,8 +57,6 @@ def generate_path(server_type, server_name):
 			site_conf = '/etc/apache2/sites-available'
 		else:
 			raise Exception('OS not supported!')
-
-		site_root = '/var/www'
 	else:
 		if os.path.isdir('/etc/nginx/sites-available'):
 			site_conf = '/etc/nginx/sites-available'
@@ -37,23 +65,21 @@ def generate_path(server_type, server_name):
 		else:
 			raise Exception('OS not supported!')
 
-		site_root = '/usr/share/nginx'
-
 	site_name = server_name.replace('.', '_')
 	#site_name = server_name
 	site_conf += '/' + site_name + '.conf'
-	site_root += '/' + site_name
 
-	return (site_conf, site_root)
+	return site_conf
 
 def add_site(dist, server_type, server_name, owner, backend):
 	print '%s: creating %s for %s ...' % (server_type.capitalize(), server_name, owner)
 
-	(site_conf, site_root) = generate_path(server_type, server_name)
+	site_conf = get_site_conf(server_type, server_name)
 	if os.path.exists(site_conf):
 		print 'The site "%s" already exists! (skipped)' % server_name
 		return
 
+	site_root = get_site_root(server_type, server_name)
 	pattern = {'__DOCROOT__':site_root, '__SERVERNAME__':server_name}
 
 	if backend is None:
@@ -105,8 +131,7 @@ def add_site(dist, server_type, server_name, owner, backend):
 def del_site(dist, server_type, server_name):
 	print 'removing %s ...' % server_name
 
-	(site_conf, site_root) = generate_path(server_type, server_name)
-
+	site_conf = get_site_conf(server_type, server_name)
 	if not os.path.exists(site_conf):
 		print 'The site "%s" does not exist!' % server_name
 		return
@@ -115,5 +140,6 @@ def del_site(dist, server_type, server_name):
 		os.remove(site_conf.replace('sites-available', 'sites-enable'))
 	os.remove(site_conf)
 
+	site_root = get_site_root(server_type, server_name)
 	if os.path.exists(site_root):
 		shutil.rmtree(site_root)

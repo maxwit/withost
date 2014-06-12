@@ -81,6 +81,8 @@ class unix(object):
 
 					if os.path.exists('dist/%s.py' % group):
 						print 'Setup %s ...' % group
+						mod = __import__('dist.' + group, fromlist = ['setup'])
+						mod.setup((self.name, self.version), config,  app_node.text)
 						try:
 							mod = __import__('dist.' + group, fromlist = ['setup'])
 							mod.setup((self.name, self.version), config,  app_node.text)
