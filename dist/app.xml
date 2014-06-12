@@ -22,8 +22,9 @@
 			<app group="hplip">hplip hplip-gui</app>
 			<app group="vsftpd" service="vsftpd">vsftpd</app>
 			<app group="python">python-devel python-pip</app>
-			<app group="apache" service="httpd">httpd mod_wsgi</app>
+			<app group="apache" service="httpd">httpd</app>
 			<app group="nginx" service="nginx">nginx</app>
+			<app group="wsgi">mod_wsgi</app>
 			<app group="uwsgi" dep="python" install="pip">uwsgi</app>
 			<app group="django" dep="python" install="pip">django</app>
 			<app group="tomcat" dep="gcc">gcc tomcat tomcat-jsp-2.2-api tomcat-servlet-3.0-api tomcat-lib tomcat-el-2.2-api</app>
@@ -75,9 +76,11 @@
 			<app group="vsftpd" service="vsftpd">vsftpd</app>
 			<app group="python">python-devel python-pip</app>
 			<app group="mysql" service="mysqld">mariadb mariadb-server</app>
-			<app group="apache" service="httpd">httpd mod_wsgi</app>
+			<app group="apache" service="httpd">httpd</app>
 			<app group="nginx" service="nginx">nginx</app>
+			<app group="wsgi">mod_wsgi</app>
 			<app group="uwsgi" dep="python" install="pip">uwsgi</app>
+			<app group="django" dep="python" install="pip">django</app>
 			<app group="tomcat" dep="gcc">gcc tomcat tomcat-jsp-2.2-api tomcat-servlet-3.0-api tomcat-lib tomcat-el-2.2-api</app>
 			<app group="postfix">dovecot postfix</app>
 			<app group="xinetd" service="xinetd">xinetd</app>
@@ -123,9 +126,11 @@
 			<app group="openssh">openssh-server</app>
 			<app group="python">libpython-dev python-pip idle idle3</app>
 			<app group="mysql" service="mysqld">mysql-server</app>
-			<app group="apache" service="apache2">apache2 libapache2-mod-wsgi</app>
+			<app group="apache" service="apache2">apache2</app>
 			<app group="nginx" service="nginx">nginx mysql-server</app>
+			<app group="wsgi">libapache2-mod-wsgi</app>
 			<app group="uwsgi" dep="python" install="pip">uwsgi</app>
+			<app group="django" dep="python" install="pip">django</app>
 			<app group="tomcat">tomcat7 tomcat7-common libapache2-mod-jk</app>
 			<app group="nfs" service="nfs-kernel-server">nfs-kernel-server</app>
 			<app group="samba" service="smbd">samba</app>

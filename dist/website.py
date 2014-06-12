@@ -7,8 +7,15 @@ from lib import base
 def getbackend(dist, conf, apps):
 	if conf.has_key('web.backend'):
 		backend = conf['web.backend']
+		if backend.lower() == 'none':
+			backend = None
 	else:
-		backend = None
+		for be in ['wsgi', 'uwsgi', 'tomcat']:
+			if be in apps:
+				backend = be
+				break
+		else:
+			backend = None
 
 	return backend
 
