@@ -131,7 +131,7 @@
 			<app group="wsgi">libapache2-mod-wsgi</app>
 			<app group="uwsgi" dep="python" install="pip">uwsgi</app>
 			<app group="django" dep="python" install="pip">django</app>
-			<app group="tomcat">tomcat7 tomcat7-common libapache2-mod-jk</app>
+			<app group="tomcat" service="tomcat7">tomcat7 tomcat7-common libapache2-mod-jk</app>
 			<app group="nfs" service="nfs-kernel-server">nfs-kernel-server</app>
 			<app group="samba" service="smbd">samba</app>
 			<app group="cups" service="cups">cups cups-pdf sane xsane</app>
