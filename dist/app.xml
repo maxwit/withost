@@ -22,6 +22,7 @@
 			<app group="hplip">hplip hplip-gui</app>
 			<app group="vsftpd" service="vsftpd">vsftpd</app>
 			<app group="python">python-devel python-pip</app>
+			<app group="openstack">openstack-nova python-novaclient openstack-glance python-glanceclient</app>
 			<app group="apache" service="httpd">httpd</app>
 			<app group="nginx" service="nginx">nginx</app>
 			<app group="wsgi">mod_wsgi</app>
@@ -76,6 +77,7 @@
 			<app group="hplip" dep="cups">hplip hplip-gui</app>
 			<app group="vsftpd" service="vsftpd">vsftpd</app>
 			<app group="python">python-devel python-pip</app>
+			<app group="openstack">openstack-nova python-novaclient openstack-glance python-glanceclient</app>
 			<app group="mysql" service="mysqld">mariadb mariadb-server</app>
 			<app group="apache" service="httpd">httpd</app>
 			<app group="nginx" service="nginx">nginx</app>
@@ -126,6 +128,7 @@
 			<app group="vim">vim ctags dos2unix</app>
 			<app group="openssh">openssh-server</app>
 			<app group="python">libpython-dev python-pip idle idle3</app>
+			<app group="openstack">openstack-nova python-novaclient openstack-glance python-glanceclient</app>
 			<app group="mysql" service="mysqld">mysql-server</app>
 			<app group="apache" service="apache2">apache2</app>
 			<app group="nginx" service="nginx">nginx mysql-server</app>

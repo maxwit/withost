@@ -58,6 +58,10 @@ if __name__ == '__main__':
 	dist.setup(conf)
 	print
 
+	if not cfg_parser.has_section('pub'):
+		print 'pub path not configured\n'
+		exit()
+
 	path = cfg_parser.get('pub', 'path')
 	if path == None:
 		print 'path path not configured!\n'
