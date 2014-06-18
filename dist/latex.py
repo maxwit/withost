@@ -20,7 +20,7 @@ def setup(dist, conf, apps):
 			continue
 
 		if os.path.exists(dst + pkg):
-			os.rmdir(dst + pkg)
+			shutil.rmtree(dst + pkg)
 
 		pkg_file = pkg + '.zip'
 		if not os.path.exists(pkg):
