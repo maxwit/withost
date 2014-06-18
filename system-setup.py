@@ -36,7 +36,7 @@ if __name__ == '__main__':
 		exit()
 
 	try:
-		dist = distrib.get_dist()
+		dist = distrib.get_distro()
 	except Exception, e:
 		print e
 		opt_parser.print_help()

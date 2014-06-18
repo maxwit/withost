@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-	<distri name="redhat">
+	<distri name="redhatenterpriseserver centos olinux">
 		<release version="any">
 			<app group="pkg">redhat-lsb rpm-build yum-utils</app>
 			<app group="libzip">zlib zlib-devel libzip lzo-devel</app>
@@ -47,7 +47,7 @@
 			<app group="libgui">gtk3-devel</app>
 			<app group="dns">bind9</app>
 		</release>
-		<release version="6.5">
+		<release version="6.3 6.4 6.5">
 			<app group="nfs" service="rpcbind nfs">nfs-utils portmap</app>
 			<app group="libgui">gtk2-devel</app>
 			<app group="dns">bind9</app>

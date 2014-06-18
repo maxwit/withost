@@ -46,66 +46,68 @@ class unix(object):
 
 		print 'Host name = "%s"\n' % self.host
 
-		self.app_setup(config)
-
-	def app_setup(self, config):
 		install_list = config['sys.apps'].split()
 
 		tree = ElementTree.parse('dist/app.xml')
 		root = tree.getroot()
 
 		for dist_node in root.getchildren():
-			if dist_node.attrib['name'].lower() == self.name.lower():
-				break
+			if self.name.lower() in dist_node.attrib['name'].split():
+				for release in dist_node.getchildren():
+					version = release.attrib['version']
+					if version == 'any' or self.version.lower() in version.split():
+						self.do_setup(release, config, install_list)
 
-		for release in dist_node.getchildren():
-			version = release.attrib['version']
-			if version == 'any' or version.lower() == self.version.lower():
-				for app_node in release.getchildren():
-					if self.arch != app_node.get('arch', self.arch):
-						continue
-
-					group = app_node.get('group')
-					if group not in install_list:
-						continue
-					install_list.remove(group)
-
-					print '[%s]\n%s' % (group, app_node.text)
-					install = app_node.get('install', None)
-					if install is None:
-						self.app_install(app_node.text)
-					elif install == 'pip':
-						self.pip_install(app_node.text)
-					else:
-						raise Exception('Bug!')
-
-					if os.path.exists('dist/%s.py' % group):
-						print 'Setup %s ...' % group
-						mod = __import__('dist.' + group, fromlist = ['setup'])
-						mod.setup((self.name, self.version), config,  app_node.text)
-						try:
-							mod = __import__('dist.' + group, fromlist = ['setup'])
-							mod.setup((self.name, self.version), config,  app_node.text)
-							#mod.setup((self.name, self.version), config, (group, app_list))
-						except Exception, e:
-							print '%r\n' % e
-							continue
-
-					service_list = app_node.get('service', '')
-					for service in service_list.split():
-						self.service_start(service)
-						print 'service %s started' % service
-
+				if len(install_list) != 0:
+					print '#########################'
+					print '##       Warning      ##'
+					print '#########################'
+					print 'Application(s) NOT installed:', install_list
 					print
 
-		if len(install_list) != 0:
-			print '#########################'
-			print '##       Warning      ##'
-			print '#########################'
-			print 'Application(s) NOT installed:', install_list
+				return
+
+		print '%s %s: no app config found!' % (self.name, self.version)
+
+	def do_setup(self, release, config, install_list):
+		for app_node in release.getchildren():
+			if self.arch != app_node.get('arch', self.arch):
+				continue
+
+			group = app_node.get('group')
+			if group not in install_list:
+				continue
+			install_list.remove(group)
+
+			print '[%s]\n%s' % (group, app_node.text)
+			install = app_node.get('install', None)
+			if install is None:
+				self.app_install(app_node.text)
+			elif install == 'pip':
+				self.pip_install(app_node.text)
+			else:
+				raise Exception('Bug!')
+
+			if os.path.exists('dist/%s.py' % group):
+				print 'Setup %s ...' % group
+				mod = __import__('dist.' + group, fromlist = ['setup'])
+				mod.setup((self.name, self.version), config,  app_node.text)
+				try:
+					mod = __import__('dist.' + group, fromlist = ['setup'])
+					mod.setup((self.name, self.version), config,  app_node.text)
+					#mod.setup((self.name, self.version), config, (group, app_list))
+				except Exception, e:
+					print '%r\n' % e
+					continue
+
+			service_list = app_node.get('service', '')
+			for service in service_list.split():
+				self.service_start(service)
+				print 'service %s started' % service
+
 			print
 
-def get_dist():
+def get_distro():
 	os_type = platform.system()
 
 	if os_type == 'Linux':

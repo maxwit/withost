@@ -16,11 +16,20 @@ class redhat(unix):
 		os.system('yum remove -y ' + install_list)
 
 	def service_start(self, service):
-		os.system('systemctl enable ' + service)
-		os.system('systemctl restart ' + service)
+		major = int(self.version.split('.')[0])
+		if major <= 6:
+			os.system('chkconfig %s on' % service)
+			os.system('service %s restart' % service)
+		else:
+			os.system('systemctl enable ' + service)
+			os.system('systemctl restart ' + service)
 
 	def service_disable(self, service):
-		os.system('systemctl disable ' + service)
+		major = int(self.version.split('.')[0])
+		if major <= 6:
+			os.system('chkconfig %s off' % service)
+		else:
+			os.system('systemctl disable ' + service)
 
 	def sys_init(self):
 		#os.system('yum upgrade -y')
