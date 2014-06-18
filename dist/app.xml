@@ -28,7 +28,6 @@
 			<app group="uwsgi" dep="python" install="pip">uwsgi</app>
 			<app group="django" dep="python" install="pip">django</app>
 			<app group="tomcat" dep="gcc">gcc tomcat tomcat-jsp-2.2-api tomcat-servlet-3.0-api tomcat-lib tomcat-el-2.2-api</app>
-			<app group="mysql" service="mysqld">mariadb mariadb-server</app>
 			<app group="postfix">dovecot postfix</app>
 			<app group="xinetd" service="xinetd">xinetd</app>
 			<app group="git-daemon" dep="git xinetd">git xinetd git-daemon</app>
@@ -43,11 +42,13 @@
 			<app group="mail">msmtp fetchmail procmail</app>
 		</release>
 		<release version="7.0">
+			<app group="mysql" service="mysqld">mariadb mariadb-server</app>
 			<app group="nfs" service="rpcbind nfs-server">nfs-utils portmap</app>
 			<app group="libgui">gtk3-devel</app>
 			<app group="dns">bind9</app>
 		</release>
 		<release version="6.3 6.4 6.5">
+			<app group="mysql" service="mysqld">mysql mysql-server</app>
 			<app group="nfs" service="rpcbind nfs">nfs-utils portmap</app>
 			<app group="libgui">gtk2-devel</app>
 			<app group="dns">bind9</app>
