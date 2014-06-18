@@ -7,6 +7,7 @@ import shutil
 from lib import base
 
 def setup(dist, conf, apps):
+	# or from ZJU
 	url = 'http://mirrors.ctan.org/macros/latex/contrib'
 	pkgs = ['draftwatermark', 'everypage', 'multirow', 'makecell', 'xltxtra', 'realscripts', 'metalogo', 'fancyhdr']
 	dst = '/usr/share/texlive/texmf-dist/tex/latex/'

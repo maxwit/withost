@@ -7,7 +7,7 @@
 			<app group="uart">minicom</app>
 			<app group="reader">evince poppler-data</app>
 			<app group="mount">cifs-utils fuse</app>
-			<app group="gcc">gcc gcc-c++ gcc-objc gcc-objc++ glibc-devel</app>
+			<app group="gcc">gcc gcc-c++ gcc-objc gcc-objc++ glibc-devel gnustep-base-devel gnustep-gui-libs</app>
 			<app group="essential">ncurses-devel ncurses-libs patch autoconf automake bison flex gawk gettext libtool m4 sed texinfo</app>
 			<app group="libmm">SDL SDL-devel alsa-lib alsa-lib-devel</app>
 			<app group="mpfr">mpfr mpfr-devel libmpcdec libmpcdec-devel</app>
@@ -63,7 +63,7 @@
 			<app group="uart">minicom</app>
 			<app group="reader">evince poppler-data</app>
 			<app group="mount">cifs-utils fuse</app>
-			<app group="gcc">gcc gcc-c++ gcc-objc gcc-objc++ glibc-devel</app>
+			<app group="gcc">gcc gcc-c++ gcc-objc gcc-objc++ glibc-devel gnustep-base-devel gnustep-gui-libs</app>
 			<app group="essential">ncurses-devel ncurses-libs patch autoconf automake bison flex gawk gettext libtool m4 sed texinfo</app>
 			<app group="mpfr">mpfr mpfr-devel libmpcdec libmpcdec-devel</app>
 			<app group="libmm">SDL SDL-devel alsa-lib alsa-lib-devel</app>
