@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-	<distri name="redhatenterpriseserver centos olinux">
+	<distri name="redhat centos olinux">
 		<release version="any">
 			<app group="pkg">redhat-lsb rpm-build yum-utils</app>
 			<app group="libzip">zlib zlib-devel libzip lzo-devel</app>
