@@ -9,6 +9,7 @@ def add_site(dist, server_type, server_name, owner):
 	base.render_to_file('/var/lib/tomcat7/Catalina/localhost/%s.xml' % server_name, 'dist/site/tomcat.xml', pattern)
 
 def setup(dist, conf, apps):
+	return
 	owner = os.getlogin()
 	for server_name in conf['web.site'].split():
 		add_site(dist, 'tomcat', server_name, os.getlogin())
