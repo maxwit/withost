@@ -22,6 +22,7 @@
 			<app group="hplip">hplip hplip-gui</app>
 			<app group="vsftpd" service="vsftpd">vsftpd</app>
 			<app group="python">python-devel python-pip</app>
+			<app group="java">javamail</app>
 			<app group="openstack">openstack-nova python-novaclient openstack-glance python-glanceclient</app>
 			<app group="apache" service="httpd">httpd</app>
 			<app group="nginx" service="nginx">nginx</app>
@@ -38,8 +39,8 @@
 			<app group="dhcp">dhcp</app>
 			<app group="libgui">qt-devel</app>
 			<app group="incron" service="incrond">incron</app>
-			<app group="fonts">fonts-arphic-uming fonts-arphic-ukai xfonts-wqy ttf-wqy-microhei ttf-wqy-zenhei</app>
-			<app group="ibus">ibus-sunpinyin ibus-table-wubi</app>
+			<app group="fonts">wqy-zenhei-fonts cjkuni-ukai-fonts cjkuni-uming-fonts</app>
+			<app group="ibus">ibus-pinyin ibus-table-wubi</app>
 			<app group="mail">msmtp fetchmail procmail</app>
 		</release>
 		<release version="7.0">
@@ -77,6 +78,7 @@
 			<app group="hplip" dep="cups">hplip hplip-gui</app>
 			<app group="vsftpd" service="vsftpd">vsftpd</app>
 			<app group="python">python-devel python-pip</app>
+			<app group="java">javamail</app>
 			<app group="openstack">openstack-nova python-novaclient openstack-glance python-glanceclient</app>
 			<app group="mysql" service="mysqld">mariadb mariadb-server</app>
 			<app group="apache" service="httpd">httpd</app>
@@ -128,6 +130,7 @@
 			<app group="vim">vim ctags dos2unix</app>
 			<app group="openssh">openssh-server</app>
 			<app group="python">libpython-dev python-pip idle idle3</app>
+			<app group="java">javamail</app>
 			<app group="openstack">openstack-nova python-novaclient openstack-glance python-glanceclient</app>
 			<app group="mysql" service="mysqld">mysql-server</app>
 			<app group="apache" service="apache2">apache2</app>
