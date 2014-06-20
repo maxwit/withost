@@ -6,7 +6,7 @@ from optparse import OptionParser
 from user import rt_user
 from tree import dir_tree
 
-version = '4.2'
+version = '4.3'
 
 if __name__ == '__main__':
 	if os.getuid() == 0:

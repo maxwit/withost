@@ -1,13 +1,36 @@
 #!/usr/bin/python
 
 import os
+import platform
 import string
+import shutil
 import ConfigParser
 from optparse import OptionParser
+
 from dist import distrib
 from tree import dir_tree
 
-version = '4.2'
+version = '4.3'
+
+def xcopy(dir_src, dir_dst, ext):
+	src_list = os.listdir(dir_src)
+	try:
+		dst_list = os.listdir(dir_dst)
+	except:
+		dst_list = []
+
+	for fn in set(src_list) - set(dst_list):
+		src = '/'.join([dir_src, fn])
+		dst = '/'.join([dir_dst, fn])
+
+		if os.path.isdir(src):
+			xcopy(src, dst, ext)
+		elif fn.endswith(ext):
+			parent = os.path.dirname(dst)
+			if not os.path.exists(parent):
+				os.makedirs(parent)
+			print '%s -> %s' % (src, dst)
+			shutil.copyfile(src, dst)
 
 if __name__ == '__main__':
 	if os.getuid() != 0:
@@ -15,6 +38,8 @@ if __name__ == '__main__':
 		exit()
 
 	opt_parser = OptionParser()
+	opt_parser.add_option('-s', '--sync', dest='path',
+					  help='path to sync repo cache with')
 	opt_parser.add_option('-v', '--version', dest='version',
 					  default=False, action='store_true',
 					  help='show WitPower version')
@@ -25,14 +50,28 @@ if __name__ == '__main__':
 		print 'WitPower v%s\nby MaxWit Software (http://www.maxwit.com)\n' % version
 		exit()
 
-	if not os.path.exists('.config'):
-		print '.config file does not exist!'
+	if opt.path:
+		(distro, release) = platform.dist()[0:2]
+		arch = platform.processor()
 
-	cfg_parser = ConfigParser.ConfigParser();
-	try:
-		cfg_parser.read('.config')
-	except Exception, e:
-		print e
+		distro = distro.lower()
+		if distro == 'ubuntu':
+			dir_src = '/var/cache/apt/archives'
+			ext = '.deb'
+		elif distro in ['redhat', 'centos', 'fedora']:
+			dir_src = '/var/cache/yum/%s/%s' % (arch, release.split('.')[0])
+			ext = '.rpm'
+		else:
+			print distro + ' not supported!'
+			exit(1)
+
+		dir_dst = opt.path
+		#/packages[/distro/release/arch/]
+		dir_dst = '/'.join([dir_dst, distro, release, arch])
+
+		xcopy(dir_src, dir_dst, ext)
+		xcopy(dir_dst, dir_src, ext)
+
 		exit()
 
 	try:
@@ -44,11 +83,21 @@ if __name__ == '__main__':
 
 	print "System setup: %s %s\n" % (dist.name, dist.version)
 
+	#if not os.path.exists('.config'):
+	#	print '.config file does not exist!'
+
+	cfg_parser = ConfigParser.ConfigParser();
+	try:
+		cfg_parser.read('.config')
+	except Exception, e:
+		print e
+		exit()
+
 	conf = {}
-	for sect in cfg_parser.sections():	
+	for sect in cfg_parser.sections():
 		for (key, value) in cfg_parser.items(sect):
 			conf[sect + '.' + key] = value
-	
+
 	if not conf.has_key('sys.apps'):
 		print 'Invalid confuration'
 		exit()

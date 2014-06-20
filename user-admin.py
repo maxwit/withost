@@ -60,7 +60,7 @@ if __name__ == '__main__':
 		print 'pls run as root!'
 		exit()
 
-	version = 'v4.2'
+	version = '4.3'
 	opt_parser = ArgumentParser(description='Add or del the user')
 
 	opt_parser.add_argument('operation', action='store',
