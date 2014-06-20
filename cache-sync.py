@@ -23,7 +23,7 @@ def xcopy(dir_src, dir_dst, ext):
 		elif fn.endswith(ext):
 			parent = os.path.dirname(dst)
 			if not os.path.exists(parent):
-				os.mkdir(parent)
+				os.makedirs(parent)
 			print '%s -> %s' % (src, dst)
 			shutil.copyfile(src, dst)
 
@@ -53,6 +53,9 @@ else:
 dir_dst = sys.argv[1]
 #/packages[/distro/codename/arch/]
 dir_dst = '/'.join([dir_dst, distro, codename, arch])
+
+if not os.path.exists(dir_dst):
+	os.makedirs(dir_dst)
 
 xcopy(dir_src, dir_dst, ext)
 xcopy(dir_dst, dir_src, ext)
