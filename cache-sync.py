@@ -35,7 +35,7 @@ if len(sys.argv) != 2 or not os.path.isdir(sys.argv[1]):
 	usage()
 	exit(1)
 
-(distro, release, codename) = platform.dist()
+(distro, release) = platform.dist()[0:2]
 distro = distro.lower()
 
 arch = platform.processor()
@@ -51,8 +51,8 @@ else:
 	exit(1)
 
 dir_dst = sys.argv[1]
-#/packages[/distro/codename/arch/]
-dir_dst = '/'.join([dir_dst, distro, codename, arch])
+#/packages[/distro/release/arch/]
+dir_dst = '/'.join([dir_dst, distro, release, arch])
 
 if not os.path.exists(dir_dst):
 	os.makedirs(dir_dst)
