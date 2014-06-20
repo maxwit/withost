@@ -32,6 +32,24 @@ def xcopy(dir_src, dir_dst, ext):
 			print '%s -> %s' % (src, dst)
 			shutil.copyfile(src, dst)
 
+def cache_sync(distro, release, arch):
+	if distro == 'ubuntu':
+		dir_src = '/var/cache/apt/archives'
+		ext = '.deb'
+	elif distro in ['redhat', 'centos', 'fedora']:
+		dir_src = '/var/cache/yum/%s/%s' % (arch, release.split('.')[0])
+		ext = '.rpm'
+	else:
+		print distro + ' not supported!'
+		exit(1)
+
+	dir_dst = opt.path
+	#/packages[/distro/release/arch/]
+	dir_dst = '/'.join([dir_dst, distro, release, arch])
+
+	xcopy(dir_src, dir_dst, ext)
+	xcopy(dir_dst, dir_src, ext)
+
 if __name__ == '__main__':
 	if os.getuid() != 0:
 		print 'pls run as root or with sudo!'
@@ -53,25 +71,7 @@ if __name__ == '__main__':
 	if opt.path:
 		(distro, release) = platform.dist()[0:2]
 		arch = platform.processor()
-
-		distro = distro.lower()
-		if distro == 'ubuntu':
-			dir_src = '/var/cache/apt/archives'
-			ext = '.deb'
-		elif distro in ['redhat', 'centos', 'fedora']:
-			dir_src = '/var/cache/yum/%s/%s' % (arch, release.split('.')[0])
-			ext = '.rpm'
-		else:
-			print distro + ' not supported!'
-			exit(1)
-
-		dir_dst = opt.path
-		#/packages[/distro/release/arch/]
-		dir_dst = '/'.join([dir_dst, distro, release, arch])
-
-		xcopy(dir_src, dir_dst, ext)
-		xcopy(dir_dst, dir_src, ext)
-
+		cache_sync(distro.lower(), release, arch)
 		exit()
 
 	try:
