@@ -4,7 +4,7 @@ import sys
 import re
 from progressbar import Pro
 
-def process(a,b,c):
+def process(a, b, c):
 	per = 100 * a * b / c
 	if per >= 100:
 		per = 100
