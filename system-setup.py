@@ -13,19 +13,24 @@ from tree import dir_tree
 version = '4.3'
 
 def xcopy(dir_src, dir_dst, ext):
+	if not os.path.exists(dir_src):
+		print '"%s" does not exist!'
+		return
+
 	src_list = os.listdir(dir_src)
+
 	try:
 		dst_list = os.listdir(dir_dst)
 	except:
 		dst_list = []
 
-	for fn in set(src_list) - set(dst_list):
+	for fn in src_list:
 		src = '/'.join([dir_src, fn])
 		dst = '/'.join([dir_dst, fn])
 
 		if os.path.isdir(src):
 			xcopy(src, dst, ext)
-		elif fn.endswith(ext):
+		elif fn.endswith(ext) and fn not in dst_list:
 			parent = os.path.dirname(dst)
 			if not os.path.exists(parent):
 				os.makedirs(parent)
