@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
-import os, re
-import shutil
+import os
 from dist import website
 
 def setup(dist, conf, apps):
