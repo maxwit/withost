@@ -92,7 +92,7 @@ class unix(object):
 				print 'Setup %s ...' % group
 				try:
 					mod = __import__('dist.' + group, fromlist = ['setup'])
-					mod.setup((self.name, self.version), config,  app_node.text)
+					mod.setup((self.name, self.version), config,  app_node.text.split())
 					#mod.setup((self.name, self.version), config, (group, app_list))
 				except Exception, e:
 					print '%r\n' % e

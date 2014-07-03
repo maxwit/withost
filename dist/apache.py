@@ -6,7 +6,7 @@ from dist import website
 
 def setup(dist, conf, apps):
 	owner = os.getlogin()
-	backend = website.get_backend(dist, conf, apps)
+	backend = website.get_backend(dist, conf)
 
 	for server_name in conf['web.site'].split():
 		website.add_site(dist, 'apache', server_name, owner, backend)

@@ -4,14 +4,14 @@ import os
 import shutil
 from lib import base
 
-def get_backend(dist, conf, apps):
+def get_backend(dist, conf):
 	if conf.has_key('web.backend'):
 		backend = conf['web.backend']
 		if backend.lower() == 'none':
 			backend = None
 	else:
 		for be in ['wsgi', 'uwsgi', 'tomcat']:
-			if be in apps:
+			if be in conf['sys.apps'].split():
 				backend = be
 				break
 		else:
@@ -100,7 +100,7 @@ def add_site(dist, server_type, server_name, owner, backend):
 		print 'Warning: init site for "%s" is ignored!' % backend
 		return
 
-	if dist[0].lower in ['ubuntu', 'mint']:
+	if dist[0].lower() in ['ubuntu', 'mint']:
 		group = 'www-data'
 	else:
 		group = server_type
