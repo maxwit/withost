@@ -82,8 +82,8 @@ def add_site(dist, server_type, server_name, owner, backend):
 	print 'generating %s ...' % site_conf
 	base.render_to_file(site_conf, template, pattern)
 
-	if os.path.dirname(site_conf) == 'sites-available':
-		os.symlink(site_conf, site_conf.replace('sites-available', 'sites-enable'))
+	if os.path.basename(os.path.dirname(site_conf)) == 'sites-available':
+		os.symlink(site_conf, site_conf.replace('sites-available', 'sites-enabled'))
 
 	print 'generating %s (%s) ...' % (site_root, backend or 'html')
 
@@ -118,7 +118,7 @@ def del_site(dist, server_type, server_name):
 		return
 
 	if os.path.dirname(site_conf) == 'sites-available':
-		os.remove(site_conf.replace('sites-available', 'sites-enable'))
+		os.remove(site_conf.replace('sites-available', 'sites-enabled'))
 	os.remove(site_conf)
 
 	site_root = get_site_root(server_type, server_name)
