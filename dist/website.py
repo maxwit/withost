@@ -19,22 +19,6 @@ def get_backend(dist, conf, apps):
 
 	return backend
 
-def get_plugin(dist, conf, apps):
-	if conf.has_key('web.plugin'):
-		plugin = conf['web.plugin']
-		if plugin.lower() == 'none':
-			plugin = None
-	else:
-		_plugin = {'python':'python', 'django':'python', 'ruby':'ruby'}
-		for be in apps:
-			if be in _plugin:
-				plugin = _plugin[be]
-				break
-		else:
-			plugin = None
-
-	return plugin
-
 def get_site_root(server_type, server_name):
 	#if conf.has_key('web.root'):
 	#	site_root = conf['web.root']
@@ -57,13 +41,15 @@ def get_site_conf(server_type, server_name):
 			site_conf = '/etc/apache2/sites-available'
 		else:
 			raise Exception('OS not supported!')
-	else:
+	elif server_type == 'nginx':
 		if os.path.isdir('/etc/nginx/sites-available'):
 			site_conf = '/etc/nginx/sites-available'
 		elif os.path.isdir('/etc/nginx/conf.d'):
 			site_conf = '/etc/nginx/conf.d'
 		else:
 			raise Exception('OS not supported!')
+	else:
+		raise Exception('server "%s" not supported!' % server_type)
 
 	site_name = server_name.replace('.', '_')
 	#site_name = server_name
@@ -87,16 +73,8 @@ def add_site(dist, server_type, server_name, owner, backend):
 	else:
 		template = 'dist/site/%s-%s.conf' % (server_type, backend)
 
-		if backend == 'wsgi':
-			main = 'main'
-			pattern['__MAINDIR__'] = main
-
-			# FIXME
-			if server_type == 'apache':
-				pattern['__PYTHONPATH__'] = site_root
-		elif backend == 'uwsgi':
-			#pattern['__PORT__'] = site_port
-			pass
+		if server_type == 'apache' and backend == 'wsgi':
+			pattern['__PYTHONPATH__'] = site_root
 
 	if not os.path.exists(template):
 		raise Exception(template + ' dost NOT exist!')
@@ -107,26 +85,29 @@ def add_site(dist, server_type, server_name, owner, backend):
 	if os.path.dirname(site_conf) == 'sites-available':
 		os.symlink(site_conf, site_conf.replace('sites-available', 'sites-enable'))
 
-	if backend == 'wsgi' or backend is None:
-		print 'generating %s (%s) ...' % (site_root, backend or 'html')
-		if backend == 'wsgi':
-			pwd = os.getcwd()
-			os.chdir(os.path.dirname(site_root))
-			os.system('django-admin.py startproject ' + main)
-			os.rename(main, os.path.basename(site_root))
-			os.chdir(pwd)
-		else:
-			os.mkdir(site_root)
-			base.render_to_file(site_root + '/index.html', 'dist/site/index.html', pattern)
+	print 'generating %s (%s) ...' % (site_root, backend or 'html')
 
-		if dist[0].lower in ['ubuntu', 'mint']:
-			group = 'www-data'
-		else:
-			group = server_type 
+	if backend is None:
+		os.mkdir(site_root)
+		base.render_to_file(site_root + '/index.html', 'dist/site/index.html', pattern)
+	elif backend in ['wsgi', 'uwsgi']:
+		pwd = os.getcwd()
+		os.chdir(os.path.dirname(site_root))
+		os.system('django-admin.py startproject main')
+		os.rename('main', os.path.basename(site_root))
+		os.chdir(pwd)
+	else:
+		print 'Warning: init site for "%s" is ignored!' % backend
+		return
 
-		# FIXME
-		os.system('chown %s.%s -R %s' % (owner, group, site_root))
-		os.system('chmod g+w -R ' + site_root)
+	if dist[0].lower in ['ubuntu', 'mint']:
+		group = 'www-data'
+	else:
+		group = server_type
+
+	# FIXME
+	os.system('chown %s.%s -R %s' % (owner, group, site_root))
+	os.system('chmod g+w -R ' + site_root)
 
 def del_site(dist, server_type, server_name):
 	print 'removing %s ...' % server_name
