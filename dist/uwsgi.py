@@ -25,6 +25,7 @@ def setup(dist, conf, apps):
 		f.write('uwsgi --ini %s\n' % uwsgi_conf)
 		f.write('exit 0')
 		f.close()
+		os.system("chmod +x /etc/rc.local")
 
 def remove(dist, conf, apps):
 	pass
