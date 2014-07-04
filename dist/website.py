@@ -91,11 +91,13 @@ def add_site(dist, server_type, server_name, owner, backend):
 		os.mkdir(site_root)
 		base.render_to_file(site_root + '/index.html', 'dist/site/index.html', pattern)
 	elif backend in ['wsgi', 'uwsgi']:
-		pwd = os.getcwd()
-		os.chdir(os.path.dirname(site_root))
-		os.system('django-admin.py startproject main')
-		os.rename('main', os.path.basename(site_root))
-		os.chdir(pwd)
+		#pwd = os.getcwd()
+		#os.chdir(os.path.dirname(site_root))
+		#os.system('django-admin.py startproject main')
+		#os.rename('main', os.path.basename(site_root))
+		#os.chdir(pwd)
+		os.makedirs(site_root + '/main')
+		base.render_to_file(site_root + '/main/wsgi.py', 'dist/site/wsgi.py', pattern)
 	else:
 		print 'Warning: init site for "%s" is ignored!' % backend
 		return
