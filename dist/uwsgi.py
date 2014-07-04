@@ -12,8 +12,19 @@ def setup(dist, conf, apps):
 	if os.path.exists('/etc/rc.local'):
 		with open('/etc/rc.local') as f:
 			lines = f.readlines()
-		lines.insert(len(lines) - 1, 'uwsgi --ini %s\n' % uwsgi_conf)
-		open('/etc/rc.local', 'w').writelines(lines)
+
+		for line in lines:
+			if line.find(uwsgi_conf) > 0:
+				break
+		else:
+			lines.insert(len(lines) - 1, 'uwsgi --ini %s\n' % uwsgi_conf)
+			open('/etc/rc.local', 'w').writelines(lines)
+	else:
+		f = open('/etc/rc.local', 'w')
+		f.write('#!/usr/bin/sh\n')
+		f.write('uwsgi --ini %s\n' % uwsgi_conf)
+		f.write('exit 0')
+		f.close()
 
 def remove(dist, conf, apps):
 	pass
