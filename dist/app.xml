@@ -131,7 +131,7 @@
 			<app group="vim">vim ctags dos2unix</app>
 			<app group="openssh">openssh-server</app>
 			<app group="python">libpython-dev python-pip idle idle3</app>
-			<app group="java">javamail</app>
+			<app group="java">libgnumail-java</app>
 			<app group="openstack">openstack-nova python-novaclient openstack-glance python-glanceclient</app>
 			<app group="mysql" service="mysqld">mysql-server</app>
 			<app group="apache" service="apache2">apache2</app>
