@@ -29,12 +29,10 @@
 			<app group="wsgi">mod_wsgi</app>
 			<app group="uwsgi" dep="python" install="pip">uwsgi</app>
 			<app group="django" dep="python" install="pip">django</app>
-			<app group="tomcat" dep="gcc">gcc tomcat tomcat-jsp-2.2-api tomcat-servlet-3.0-api tomcat-lib tomcat-el-2.2-api</app>
 			<app group="postfix">dovecot postfix</app>
 			<app group="xinetd" service="xinetd">xinetd</app>
 			<app group="git-daemon" dep="git xinetd">git xinetd git-daemon</app>
 			<app group="gitolite" dep="git incron">git incron</app>
-			<app group="latex">texlive-xetex texlive-xetex-def texlive-xecjk texlive-euenc texlive-beamer texlive-collection-fontsrecommended</app>
 			<app group="player">totem</app>
 			<app group="dhcp">dhcp</app>
 			<app group="libgui">qt-devel</app>
@@ -45,12 +43,14 @@
 		</release>
 		<release version="7.0">
 			<app group="mysql" service="mysqld">mariadb mariadb-server</app>
+			<app group="tomcat">tomcat tomcat-jsp-2.2-api tomcat-servlet-3.0-api tomcat-lib tomcat-el-2.2-api</app>
 			<app group="nfs" service="rpcbind nfs-server">nfs-utils portmap</app>
 			<app group="libgui">gtk3-devel</app>
 			<app group="dns">bind9</app>
 		</release>
 		<release version="6.3 6.4 6.5">
 			<app group="mysql" service="mysqld">mysql mysql-server</app>
+			<app group="tomcat">tomcat tomcat-jsp-2.2-api tomcat-servlet-3.0-api tomcat-lib tomcat-el-2.2-api</app>
 			<app group="nfs" service="rpcbind nfs">nfs-utils portmap</app>
 			<app group="libgui">gtk2-devel</app>
 			<app group="dns">bind9</app>
@@ -80,18 +80,15 @@
 			<app group="python">python-devel python-pip</app>
 			<app group="java">javamail</app>
 			<app group="openstack">openstack-nova python-novaclient openstack-glance python-glanceclient</app>
-			<app group="mysql" service="mysqld">mariadb mariadb-server</app>
 			<app group="apache" service="httpd">httpd</app>
 			<app group="nginx" service="nginx">nginx</app>
 			<app group="wsgi">mod_wsgi</app>
 			<app group="uwsgi" dep="python" install="pip">uwsgi</app>
 			<app group="django" dep="python" install="pip">django</app>
-			<app group="tomcat" dep="gcc">gcc tomcat tomcat-jsp-2.2-api tomcat-servlet-3.0-api tomcat-lib tomcat-el-2.2-api</app>
 			<app group="postfix">dovecot postfix</app>
 			<app group="xinetd" service="xinetd">xinetd</app>
 			<app group="git-daemon" dep="git xinetd">git xinetd git-daemon</app>
 			<app group="gitolite" dep="git incron">git incron</app>
-			<app group="latex">texlive-xetex texlive-xetex-def texlive-xecjk texlive-euenc texlive-beamer texlive-collection-fontsrecommended</app>
 			<app group="player">totem</app>
 			<app group="dhcp">dhcp</app>
 			<app group="libgui">qt-devel</app>
@@ -100,13 +97,17 @@
 			<app group="ibus">ibus-sunpinyin ibus-table-wubi</app>
 			<app group="mail">msmtp fetchmail procmail</app>
 		</release>
-		<release version="19">
+		<release version="18 19 20 21">
 			<app group="nfs" service="rpcbind nfs-server">nfs-utils portmap</app>
+			<app group="mysql" service="mysqld">mariadb mariadb-server</app>
+			<app group="tomcat">tomcat tomcat-jsp-2.2-api tomcat-servlet-3.0-api tomcat-lib tomcat-el-2.2-api</app>
 			<app group="libgui">gtk3-devel</app>
 			<app group="dns">bind10</app>
 		</release>
 		<release version="17">
 			<app group="nfs" service="rpcbind nfs">nfs-utils portmap</app>
+			<app group="mysql" service="mysqld">mysql mysql-server</app>
+			<app group="tomcat">tomcat tomcat-jsp-2.2-api tomcat-servlet-3.0-api tomcat-lib tomcat-el-2.2-api</app>
 			<app group="libgui">gtk2-devel</app>
 			<app group="dns">bind9</app>
 		</release>
@@ -153,7 +154,6 @@
 			<app group="qemu">qemu qemu-kvm</app>
 			<app group="browser">chromium-browser chromium-codecs-ffmpeg flashplugin-installer</app>
 			<app group="player">kmplayer gstreamer1.0-plugins</app>
-			<app group="latex">texlive-xetex texlive-latex-extra latex-beamer texlive-fonts-extra texlive-fonts-recommended</app>
 			<app group="dns">bind9</app>
 			<app group="dhcp">isc-dhcp-server</app>
 			<app group="incron">incron</app>
