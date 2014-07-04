@@ -97,6 +97,7 @@ def add_site(dist, server_type, server_name, owner, backend):
 		#os.rename('main', os.path.basename(site_root))
 		#os.chdir(pwd)
 		os.makedirs(site_root + '/main')
+		os.system('touch %s/main/__init__.py' % site_root)
 		base.render_to_file(site_root + '/main/wsgi.py', 'dist/site/wsgi.py', pattern)
 	else:
 		print 'Warning: init site for "%s" is ignored!' % backend
