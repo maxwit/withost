@@ -4,21 +4,6 @@ import os
 import shutil
 from lib import base
 
-def get_backend(dist, conf):
-	if conf.has_key('web.backend'):
-		backend = conf['web.backend']
-		if backend.lower() == 'none':
-			backend = None
-	else:
-		for be in ['wsgi', 'uwsgi', 'tomcat']:
-			if be in conf['sys.apps'].split():
-				backend = be
-				break
-		else:
-			backend = None
-
-	return backend
-
 def get_site_root(server_type, server_name):
 	#if conf.has_key('web.root'):
 	#	site_root = conf['web.root']
@@ -97,6 +82,7 @@ def add_site(dist, server_type, server_name, owner, backend):
 		#os.rename('main', os.path.basename(site_root))
 		#os.chdir(pwd)
 		os.makedirs(site_root + '/main')
+		# FIXME
 		os.system('touch %s/main/__init__.py' % site_root)
 		base.render_to_file(site_root + '/main/wsgi.py', 'dist/site/wsgi.py', pattern)
 	else:
