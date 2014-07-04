@@ -2,17 +2,44 @@ import os
 from lib import base
 from dist import website
 
-def add_site(dist, server_type, server_name, owner):
-	site_root = website.get_site_root(server_type, server_name)
-	pattern = {'__DOCROOT__':site_root, '__SERVERNAME__':server_name}
-	# FIXME: fix path for CentOS 6.x
-	base.render_to_file('/var/lib/tomcat7/Catalina/localhost/%s.xml' % server_name, 'dist/site/tomcat.xml', pattern)
-
 def setup(dist, conf, apps):
-	return
 	owner = os.getlogin()
-	for server_name in conf['web.site'].split():
-		add_site(dist, 'tomcat', server_name, os.getlogin())
+	group_list = conf['sys.apps'].split()
+
+	# FIXME
+	if 'tomcat' in group_list:
+		tom_ver = 'tomcat'
+	elif 'tomcat7' in group_list:
+		tom_ver = 'tomcat7'
+
+	cata = '/etc/%s/Catalina/localhost' % tom_ver
+
+	if not os.path.isdir(cata):
+		raise Exception('tomcat.py: %s does not exist!' % cata)
+
+	fronts = set(['apache', 'nginx']) and set(group_list)
+	if len(fronts) == 1:
+		server_type = fronts.pop()
+	else:
+		server_type = None
+
+	for site in conf['web.site'].split():
+		site_info = site.split('@')
+		if len(site_info) != 2 or site_info[1] != 'tomcat':
+			continue
+
+		server_name = site_info[0]
+
+		if server_type is not None:
+			site_root = website.get_site_root(server_type, server_name)
+		else:
+			# FIXME
+			site_root = "/var/lib/tomcat/webapps/"
+
+		pattern = {'__DOCROOT__':site_root, '__SERVERNAME__':server_name}
+		print 'Generating %s/%s.xml' % (cata, server_name)
+		base.render_to_file('%s/%s.xml' % (cata, server_name), 'dist/site/tomcat.xml', pattern)
+
 		print
 
 def remove(dist, conf, apps):
