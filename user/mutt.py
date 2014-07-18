@@ -16,7 +16,7 @@ def get_full_name():
 	for line in fp_user:
 		account = line.split(':')
 		if login == account[0]:
-			full_name = account[4]
+			full_name = account[4].split(',')[0]
 
 	fp_user.close()
 
