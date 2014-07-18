@@ -23,7 +23,6 @@ def get_full_name():
 	return full_name
 
 def config(user, conf):
-	conf = {}
 	name = get_full_name()
 	group = ['msmtp', 'fetchmail', 'procmail', 'mutt']
 	home = os.getenv('HOME')
@@ -195,4 +194,4 @@ def config(user, conf):
 	return rc_list
 
 if __name__ == '__main__':
-	config('', '')
+	config(None, {})
