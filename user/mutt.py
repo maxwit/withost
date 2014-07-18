@@ -22,7 +22,7 @@ def get_full_name():
 
 	return full_name
 
-def config(user = '', conf = ''):
+def config(user, conf):
 	conf = {}
 	name = get_full_name()
 	group = ['msmtp', 'fetchmail', 'procmail', 'mutt']
@@ -195,9 +195,4 @@ def config(user = '', conf = ''):
 	return rc_list
 
 if __name__ == '__main__':
-	dist_name = platform.dist()[0]
-	if dist_name in ['Ubuntu', 'Debain', 'Mint']:
-		os.system('sudo apt-get install msmtp mutt fetchmail procmail -y')
-	elif dist_name in ['redhat', 'fedora', 'centos']:
-		os.system('sudo yum install msmtp mutt fetchmail procmail -y')
-	config()
+	config('', '')
