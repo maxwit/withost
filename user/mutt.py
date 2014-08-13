@@ -3,6 +3,8 @@
 import os, sys
 from datetime import date
 import platform
+import grp,pwd
+import fileinput
 #from lib.base import name_to_mail
 
 def name_to_mail(name):
@@ -10,17 +12,8 @@ def name_to_mail(name):
 
 def get_full_name():
 	login = os.getenv('USER')
-	full_name = ''
 
-	fp_user = open('/etc/passwd', 'r')
-	for line in fp_user:
-		account = line.split(':')
-		if login == account[0]:
-			full_name = account[4].split(',')[0]
-
-	fp_user.close()
-
-	return full_name
+	return pwd.getpwnam(login).pw_gecos.split(',')[0].strip()
 
 def config(user, conf):
 	name = get_full_name()

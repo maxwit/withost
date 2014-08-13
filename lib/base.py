@@ -2,6 +2,7 @@
 
 import sys
 import re
+import grp,pwd
 from progressbar import Pro
 
 def process(a, b, c):
@@ -16,44 +17,27 @@ def name_to_mail(name):
 	return name.lower().replace(' ', '.') + '@maxwit.com'
 
 def get_full_name(user):
-	fd_rept = open('/etc/passwd', 'r')
+	try:
+		full_name = pwd.getpwnam(user).pw_gecos.split(',')[0].strip()
 
-	for line in fd_rept:
-		account = line.split(':')
-		if account[0] == user:
-			full_name = account[4].split(',')[0].strip()
-			fd_rept.close()
+		if full_name == '':
+			return None
+		return full_name
 
-			if full_name == '':
-				return None
-			return full_name
-
-	fd_rept.close()
-	raise Exception('User %s not found!' % user)
+	except KeyError:
+		raise Exception('User %s not found!' % user)
 
 def group_exits(group):
-	fp_group = open('/etc/group', 'r')
-
-	for line in fp_group:
-		group = line.split(':')[0]
-		if group == group:
-			fp_group.close()
+	for stru_gr in grp.getgrall():
+		if group == stru_gr.gr_name:
 			return True
-
-	fp_group.close()
 
 	return False
 
 def user_exits(user):
-	fp_user = open('/etc/passwd', 'r')
-
-	for line in fp_user:
-		account = line.split(':')
-		if user == account[0]:
-			fp_user.close()
+	for stru_passwd in pwd.getpwall():
+            if user == stru_passwd.pw_name:
 			return True
-
-	fp_user.close()
 
 	return False
 
