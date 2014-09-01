@@ -3,15 +3,14 @@
 import sys
 import re
 import grp,pwd
-from progressbar import Pro
+import progressbar
 
 def process(a, b, c):
 	per = 100 * a * b / c
 	if per >= 100:
 		per = 100
 
-	p = Pro()
-	p.set_value(per)
+	progressbar.set_value(per)
 
 def name_to_mail(name):
 	return name.lower().replace(' ', '.') + '@maxwit.com'

@@ -3,7 +3,7 @@
 import time
 import sys
 
-def set_progressbar(value, max = 100, min = 0):
+def set_value(value, max = 100, min = 0):
 	if value < min or value > max:
 		print 'error value'
 		exit()
