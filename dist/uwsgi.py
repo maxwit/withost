@@ -18,12 +18,12 @@ def setup(dist, conf, apps):
 				return
 		f.close()
 
-		lines.insert(len(lines) - 1, 'uwsgi --ini %s\n' % uwsgi_conf)
+		lines.insert(len(lines) - 1, 'uwsgi --uid nginx --ini %s\n' % uwsgi_conf)
 		open('/etc/rc.local', 'w').writelines(lines)
 	else:
 		f = open('/etc/rc.local', 'w')
 		f.write('#!/bin/sh\n')
-		f.write('uwsgi --ini %s\n' % uwsgi_conf)
+		f.write('uwsgi --uid nginx --ini %s\n' % uwsgi_conf)
 		f.write('exit 0')
 		f.close()
 		os.system("chmod +x /etc/rc.local")
