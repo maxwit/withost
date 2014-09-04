@@ -29,4 +29,5 @@ sudo chown $USER.nginx -R /var/www/redmine-2.5.2
 # FIXME
 sudo chmod g+w -R /var/www/redmine-2.5.2
 
+cd -
 sudo cp -v config/redmine.conf /etc/nginx/conf.d/

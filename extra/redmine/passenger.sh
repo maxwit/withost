@@ -7,7 +7,6 @@ curl -sSL https://get.rvm.io | sudo bash -s stable --ruby || exit 1
 # TODO: auto loaded when login?
 source /etc/profile.d/rvm.sh || exit 1
 export rvmsudo_secure_path=1
-
 sudo usermod -a -G rvm $USER
 # rvm use 2.1.2
 
