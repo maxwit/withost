@@ -1,20 +1,18 @@
 #!/bin/bash
 
+TOP=$PWD
+REDMINE="redmine-2.5.2"
+
 yum install -y ruby-devel sqlite-devel nodejs mysql mysql-server mysql-devel ImageMagick-devel tk tk-devel curl-devel pcre-devel libyaml-devel libffi-devel gcc-c++ readline-devel openssl-devel libtool bison
 
-source /etc/profile.d/rvm.sh || exit 1
+cd /tmp
+curl -O http://www.redmine.org/releases/$REDMINE.tar.gz
 
-wget -P /tmp http://www.redmine.org/releases/redmine-2.5.2.tar.gz
-tar xf /tmp/redmine-2.5.2.tar.gz -C /var/www
-rm -vf /var/www/redmine
-ln -sv redmine-2.5.2 /var/www/redmine
+tar xf $REDMINE.tar.gz -C /var/www
 
-chown $SUDO_USER.nginx -R /var/www/redmine-2.5.2
-# FIXME
-chmod g+w -R /var/www/redmine-2.5.2
+cd /var/www/$REDMINE
 
-cp -v config/database.yml /var/www/redmine-2.5.2/config
-cd /var/www/redmine-2.5.2
+cp -v $TOP/config/database.yml config
 
 bundle install || exit 1
 
@@ -27,9 +25,11 @@ rake generate_secret_token
 RAILS_ENV=production rake db:migrate
 RAILS_ENV=production rake redmine:load_default_data
 
-chown $SUDO_USER.nginx -R /var/www/redmine-2.5.2
+chown $SUDO_USER.nginx -R /var/www/$REDMINE
 # FIXME
-chmod g+w -R /var/www/redmine-2.5.2
+chmod g+w -R /var/www/$REDMINE
 
-cd -
-cp -v config/redmine.conf /etc/nginx/conf.d/
+rm -vf /var/www/redmine
+ln -sv $REDMINE /var/www/redmine
+
+cp -v $TOP/config/redmine.conf /etc/nginx/conf.d/
