@@ -9,7 +9,7 @@ tar xf /tmp/redmine-2.5.2.tar.gz -C /var/www
 rm -vf /var/www/redmine
 ln -sv redmine-2.5.2 /var/www/redmine
 
-chown $USER.nginx -R /var/www/redmine-2.5.2
+chown $SUDO_USER.nginx -R /var/www/redmine-2.5.2
 # FIXME
 chmod g+w -R /var/www/redmine-2.5.2
 
@@ -27,7 +27,7 @@ rake generate_secret_token
 RAILS_ENV=production rake db:migrate
 RAILS_ENV=production rake redmine:load_default_data
 
-chown $USER.nginx -R /var/www/redmine-2.5.2
+chown $SUDO_USER.nginx -R /var/www/redmine-2.5.2
 # FIXME
 chmod g+w -R /var/www/redmine-2.5.2
 

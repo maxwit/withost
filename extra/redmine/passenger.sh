@@ -9,7 +9,7 @@ echo "installing passenger..."
 gem install -N passenger || exit 1
 
 useradd --no-create-home --system --shell /sbin/nologin nginx
-usermod -a -G nginx $USER
+usermod -a -G nginx $SUDO_USER
 
 # --nginx-source-dir=
 passenger-install-nginx-module \
