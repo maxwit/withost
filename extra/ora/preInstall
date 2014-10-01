@@ -1,0 +1,8 @@
+#!/bin/sh
+
+yum install -y compat-libcap1 compat-libstdc++-33 compat-libstdc++-33 gcc gcc-c++ glibc glibc-devel ksh libgcc libstdc++ libstdc++-devel libaio libaio-devel libXext libXtst libX11 libXau libxcb libXi make sysstat pam xorg-x11-xauth unixODBC
+
+groupadd oinstall
+groupadd dba
+useradd -g oinstall -G dba,wheel ora
+echo -e "maxwit144\nmaxwit144" | passwd ora

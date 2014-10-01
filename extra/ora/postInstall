@@ -1,0 +1,7 @@
+#!/bin/sh
+
+echo >> ~/.bashrd
+echo 'export ORACLE_BASE=$HOME' >> ~/.bashrd
+echo 'export ORACLE_HOME=$ORACLE_BASE/app/$USER/product/12.1.0/dbhome_1' >> ~/.bashrd
+echo 'export ORACLE_SID=orcl' >> ~/.bashrd
+echo 'export PATH=$PATH:$ORACLE_HOME/bin' >> ~/.bashrd
