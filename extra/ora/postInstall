@@ -1,7 +1,17 @@
 #!/bin/sh
 
-echo >> ~/.bashrd
-echo 'export ORACLE_BASE=$HOME' >> ~/.bashrd
-echo 'export ORACLE_HOME=$ORACLE_BASE/app/$USER/product/12.1.0/dbhome_1' >> ~/.bashrd
-echo 'export ORACLE_SID=orcl' >> ~/.bashrd
-echo 'export PATH=$PATH:$ORACLE_HOME/bin' >> ~/.bashrd
+if [ $UID == 0 ]; then
+	echo  "do NOT run as root!"
+	echo
+	exit 1
+fi
+
+grep ORACLE_HOME ~/.bashrc > /dev/null && exit 0
+
+echo >> ~/.bashrc
+echo 'export ORACLE_BASE=$HOME' >> ~/.bashrc
+echo 'export ORACLE_HOME=$ORACLE_BASE/app/$USER/product/12.1.0/dbhome_1' >> ~/.bashrc
+echo 'export ORACLE_SID=orcl' >> ~/.bashrc
+echo 'export PATH=$PATH:$ORACLE_HOME/bin' >> ~/.bashrc
+
+echo
