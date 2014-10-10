@@ -52,5 +52,4 @@ bn=`basename $0`
 
 if [ $bn == 'witpower' ]; then
 	sudo python system-setup.py
-	python user-config.py
 fi
