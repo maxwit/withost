@@ -4,13 +4,11 @@ from dist import website
 
 def setup(dist, conf, apps):
 	owner = os.getlogin()
-	group_list = conf['sys.apps'].split()
 
-	# FIXME
-	if 'tomcat' in group_list:
-		tom_ver = 'tomcat'
-	elif 'tomcat7' in group_list:
+	if 'tomcat7' in apps:
 		tom_ver = 'tomcat7'
+	else:
+		tom_ver = 'tomcat'
 
 	cata = '/etc/%s/Catalina/localhost' % tom_ver
 
