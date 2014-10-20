@@ -1,11 +1,9 @@
 #!/usr/bin/python
 
-import os, re, sys
-import platform
-from xml.etree import ElementTree
-from distrib import unix
+import os
+from distrib import linux
 
-class debian(unix):
+class debian(linux):
 	def __init__(self, ostype):
 		super(debian, self).__init__(ostype)
 

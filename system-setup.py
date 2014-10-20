@@ -104,7 +104,7 @@ if __name__ == '__main__':
 			conf[sect + '.' + key] = value
 
 	if not conf.has_key('sys.apps'):
-		print 'Invalid confuration'
+		print 'Invalid configuration!'
 		exit()
 
 	dist.sys_init()

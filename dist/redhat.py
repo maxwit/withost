@@ -1,11 +1,9 @@
 #!/usr/bin/python
 
-import os, re, sys
-import platform
-from xml.etree import ElementTree
-from distrib import unix
+import os
+from distrib import linux
 
-class redhat(unix):
+class redhat(linux):
 	def __init__(self, ostype):
 		super(redhat, self).__init__(ostype)
 
@@ -16,8 +14,7 @@ class redhat(unix):
 		os.system('yum remove -y ' + install_list)
 
 	def service_start(self, service):
-		major = int(self.version.split('.')[0])
-		if major <= 6:
+		if self.major <= 6:
 			os.system('chkconfig %s on' % service)
 			os.system('service %s restart' % service)
 		else:
@@ -25,16 +22,22 @@ class redhat(unix):
 			os.system('systemctl restart ' + service)
 
 	def service_disable(self, service):
-		major = int(self.version.split('.')[0])
-		if major <= 6:
+		if self.major <= 6:
 			os.system('chkconfig %s off' % service)
 		else:
 			os.system('systemctl disable ' + service)
 
 	def sys_init(self):
-		#os.system('yum upgrade -y')
+		if self.name != 'fedora':
+			repos = [
+				'http://rpms.famillecollet.com/enterprise/remi-release-%d.rpm' % self.major,
+				]
 
+			for repo in repos:
+				print 'installing repo: ' + repo
+				os.system('yum install -y ' + repo)
+
+		# FIXME
 		os.system('sed -i "s/SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config')
-
 		self.service_disable('iptables')
 		self.service_disable('firewalld')

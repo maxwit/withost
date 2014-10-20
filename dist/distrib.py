@@ -4,12 +4,15 @@ import os
 import platform
 from xml.etree import ElementTree
 
-class unix(object):
+class linux(object):
 	def __init__(self, ostype):
 		self.name = ostype[0]
+		# FIXME: to be removed
 		self.version = ostype[1]
+		self.major = int(self.version.split('.')[0])
+		self.minor = int(self.version.split('.')[1])
 		self.arch = platform.processor()
-		self.host = platform.node()
+# 		self.host = platform.node()
 
 	def sys_init(self):
 		pass
@@ -29,6 +32,7 @@ class unix(object):
 	def service_start(self, service):
 		print 'service_start: %s not supported' % self.name
 
+	# FIXME
 	def set_hostname(self, host):
 		# TODO
 		# open('/etc/hostname', 'w+').write(host)
@@ -36,15 +40,15 @@ class unix(object):
 		os.system('hostname ' + host)
 
 	def setup(self, config):
-		## TODO: move to sys_init()
-		#if config.has_key('sys.host'):
-		#	host = config['sys.host'].strip().replace(' ', '-')
+		# # TODO: move to sys_init()
+		# if config.has_key('sys.host'):
+		# 	host = config['sys.host'].strip().replace(' ', '-')
 
-		#	if host != self.host:
-		#		self.set_hostname(host)
-		#		self.host = host
+		# 	if host != self.host:
+		# 		self.set_hostname(host)
+		# 		self.host = host
 
-		#print 'Host name = "%s"\n' % self.host
+		# print 'Host name = "%s"\n' % self.host
 
 		install_list = config['sys.apps'].split()
 
@@ -91,9 +95,9 @@ class unix(object):
 			if os.path.exists('dist/%s.py' % group):
 				print 'Setup %s ...' % group
 				try:
-					mod = __import__('dist.' + group, fromlist = ['setup'])
-					mod.setup((self.name, self.version), config,  app_node.text.split())
-					#mod.setup((self.name, self.version), config, (group, app_list))
+					mod = __import__('dist.' + group, fromlist=['setup'])
+					mod.setup((self.name, self.version), config, app_node.text.split())
+					# mod.setup((self.name, self.version), config, (group, app_list))
 				except Exception, e:
 					print '%r\n' % e
 					continue
@@ -110,17 +114,19 @@ def get_distro():
 
 	if os_type != 'Linux':
 		raise Exception(os_type + ' NOT supported!')
-	
+
 	(dist_name, version) = platform.dist()[0:2]
+
+	dist_name = dist_name.lower()
 
 	ver = version.split('.')
 	if len(ver) > 2:
 		version = '.'.join([ver[0], ver[1]])
 
-	if dist_name in ['Debain', 'Ubuntu', 'Mint']:
+	if dist_name in ['debian', 'ubuntu', 'mint']:
 		from debian import debian
 		dist = debian((dist_name, version))
-	elif dist_name in ['redhat', 'fedora', 'centos', 'OLinux']:
+	elif dist_name in ['redhat', 'fedora', 'centos', 'olinux']:
 		from redhat import redhat
 		dist = redhat((dist_name, version))
 	else:
