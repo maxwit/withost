@@ -1,1 +1,55 @@
-configure
+#!/bin/bash
+
+usage()
+{
+	list=`ls configs | sed 's/.config/ /g'`
+
+	echo "usage:"
+	echo "    $0 -s <system>: system type (" $list")"
+	echo
+}
+
+cd `dirname $0`
+
+echo
+echo "###########################################"
+echo "#             WitPower v1.0              #"
+echo "###########################################"
+echo
+
+system="desktop"
+
+while getopts "s:h" opt
+do
+	case $opt in
+	s)
+		system=$OPTARG
+		;;
+	h)
+		usage
+		exit 1
+		;;
+	esac
+done
+
+echo "System type: $system"
+echo "Generating .config ..."
+
+if [ -e configs/${system}.config ]; then
+	cp configs/${system}.config .config
+	echo
+else
+	echo "${system}.config does not exist!"
+	echo
+	usage
+	exit 1
+fi
+
+cat .config
+echo
+
+bn=`basename $0`
+
+if [ $bn == 'witpower' ]; then
+	sudo python system-setup.py
+fi
