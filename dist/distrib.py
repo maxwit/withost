@@ -56,7 +56,7 @@ class linux(object):
 		root = tree.getroot()
 
 		for dist_node in root.getchildren():
-			if self.name.lower() in dist_node.attrib['name'].split():
+			if self.name in dist_node.attrib['name'].split():
 				for release in dist_node.getchildren():
 					version = release.attrib['version']
 					if version == 'any' or self.version.lower() in version.split():
@@ -74,7 +74,7 @@ class linux(object):
 		print '%s %s: no app config found!' % (self.name, self.version)
 
 	def do_setup(self, release, config, install_list):
-		for app_node in release.getchildren():
+		for app_node in release.getchildren(): # FIXME: in install_list instead
 			if self.arch != app_node.get('arch', self.arch):
 				continue
 
