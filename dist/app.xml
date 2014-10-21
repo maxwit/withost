@@ -53,7 +53,7 @@
 			<app group="tomcat">tomcat tomcat-jsp-2.2-api tomcat-servlet-3.0-api tomcat-lib tomcat-el-2.2-api</app>
 			<app group="nfs" service="rpcbind nfs">nfs-utils portmap</app>
 			<app group="libgui">gtk2-devel</app>
-			<app group="bind">bind</app>
+			<app group="bind" service="named">bind</app>
 		</release>
 	</distri>
 

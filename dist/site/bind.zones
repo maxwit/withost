@@ -1,0 +1,13 @@
+zone "__DOMAIN_NAME__" IN {
+	type master;
+	file "db.__DOMAIN_NAME__";
+	allow-update {key rndc;};
+};
+
+zone "__DOMAIN_ADDR__.in-addr.arpa" IN {
+	type master;
+	file "db.__DOMAIN_ADDR__";
+	allow-update {key rndc;};
+};
+
+include "/etc/rndc.key";
