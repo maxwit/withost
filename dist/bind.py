@@ -1,21 +1,70 @@
 import os
 import shutil
+import socket
 from lib import base
 
-def setup(dist, conf, apps):
-	forward      = '192.168.3.253'
-	domain_name  = 'maxwit.org'
-	domain_addr  = '192.168.3.253'
-	domain_email = 'email.maxwit.org'
+def get_ip(ifname):
+	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	local_ip = fcntl.ioctl(sock.fileno(), 0x8915, struct.pack('256s', ifname[:15]))
+	return socket.inet_ntoa(local_ip[20:24])
 
-	addr_arpa = domain_addr.split('.')[0:3]
-	addr_arpa.reverse()
-	addr_arpa = '.'.join(addr_arpa)
-	addr_arpa_file = 'db.%s' % addr_arpa
-	domain_file = 'db.%s' % domain_name
+def get_default_ifx():
+	# FIXME
+	for ifx in os.listdir('/sys/class/net'):
+		if ifx == 'lo' or ifx.startswith('vmnet'):
+			continue
+
+		try:
+			ip = get_ip(ifx)
+		except:
+			# print 'interface "%s" is inactive, skipped.' % ifx
+			continue
+
+		return ifx
+
+	return None
+
+# FIXME
+def get_gateway(ip):
+	gw = ip.split('.')
+	gw[3] = '253'
+	return '.'.join(gw)
+
+def setup(dist, conf, apps):
+	if not conf.has_key('net.domain'):
+		raise Exception('domain name NOT configured!')
+	doamin_name = conf['net.domain']
+
+	#if conf.has_key('net.domain'):
+	#	domain_name = conf['net.domain']
+	#else:
+	#	print 'Warning: domain name NOT configured! guessing ...'
+	#	domain_name = socket.gethostname()
+	#	tmp_dn = domain_name.split('.')
+	#	if len(tmp_dn) < 3:
+	#		raise Exception('Invalid domain name!')
+	#	del tmp_dn[0]
+	#	domain_name = '.'.join(tmp_dn)
+
+	mail_server = 'mail.' + domain_name
+
+	if conf.has_key('net.ip'):
+		domain_addr = conf['net.ip']
+	else:
+		ifx = get_default_ifx()
+		if ifx is None:
+			raise Exception('Fail to find default NIC!')
+
+		domain_addr = get_ip()
+
+	forward = get_gateway(domain_addr)
+
+	arpa_addr = domain_addr.split('.')[0:3]
+	arpa_addr.reverse()
+	arpa_addr = '.'.join(arpa_addr)
 
 	zone_conf = '/etc/named.%s.zones' % domain_name
-	pattern = {'__DOMAIN_NAME__':domain_name, '__DOMAIN_ADDR__':addr_arpa}
+	pattern = {'__DOMAIN_NAME__':domain_name, '__DOMAIN_ADDR__':arpa_addr}
 	base.render_to_file(zone_conf, 'dist/site/bind.zones', pattern)
 
 	fd = open('/etc/named.conf')
@@ -37,14 +86,13 @@ def setup(dist, conf, apps):
 	lines.append('include "%s";\n' % zone_conf)
 	open('/etc/named.conf', 'w').writelines(lines)
 
-	domain_conf = '/var/named/%s' % domain_file
-	addr_arpa_conf = '/var/named/%s' % addr_arpa_file
+	arpa_conf = '/var/named/db.' + arpa_addr
+	domain_conf = '/var/named/db.' + domain_name
 
-	pattern = {'__EMAIL__':domain_email, '__ADDR__':domain_addr}
+	pattern['__EMAIL__'] = mail_server
+	pattern['__ADDR__'] = domain_addr
 	base.render_to_file(domain_conf, 'dist/site/bind-domain.conf', pattern)
-
-	pattern = {'__EMAIL__':domain_email, '__NAME__':domain_name}
-	base.render_to_file(addr_arpa_conf, 'dist/site/bind-arpa.conf', pattern)
+	base.render_to_file(arpa_conf, 'dist/site/bind-arpa.conf', pattern)
 
 	os.system('chmod +r /var/named/*')
 
