@@ -1,6 +1,7 @@
 import os
 from lib import base
 from dist import website
+import sys
 
 def setup(dist, conf, apps):
 	owner = os.getlogin()
@@ -15,7 +16,8 @@ def setup(dist, conf, apps):
 	if not os.path.isdir(cata):
 		raise Exception('tomcat.py: %s does not exist!' % cata)
 
-	fronts = set(['apache', 'nginx']) and set(group_list)
+	group_list = conf['sys.apps'].split()
+	fronts = set(['apache', 'nginx']) & set(group_list)
 	if len(fronts) == 1:
 		server_type = fronts.pop()
 	else:
@@ -33,11 +35,16 @@ def setup(dist, conf, apps):
 		else:
 			# FIXME
 			site_root = "/var/lib/tomcat/webapps/"
-
+		
 		pattern = {'__DOCROOT__':site_root, '__SERVERNAME__':server_name}
-		print 'Generating %s/%s.xml' % (cata, server_name)
-		base.render_to_file('%s/%s.xml' % (cata, server_name), 'dist/site/tomcat.xml', pattern)
-
+		#FIXME
+		#print 'Generating %s/%s.xml' % (cata, server_name)
+		#base.render_to_file('%s/%s.xml' % (cata, server_name), 'dist/site/tomcat.xml', pattern)
+		print 'Generating %s/ROOT.xml' % cata
+		base.render_to_file('%s/ROOT.xml' % cata, 'dist/site/tomcat.xml', pattern)
+		if server_type == 'apache' and os.path.isdir('/etc/httpd/conf'):
+			os.system('sed -i "s/#NameVirtualHost \*:80/NameVirtualHost *:80/" "/etc/httpd/conf/httpd.conf"')
+		
 		print
 
 def remove(dist, conf, apps):
