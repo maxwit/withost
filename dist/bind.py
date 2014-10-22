@@ -35,8 +35,15 @@ def setup(dist, conf, apps):
 	arpa_addr = '.'.join(arpa_addr)
 
 	zone_conf = '/etc/named.%s.zones' % domain_name
-	pattern = {'__DOMAIN_NAME__':domain_name, '__DOMAIN_ADDR__':arpa_addr}
-	base.render_to_file(zone_conf, 'dist/site/bind.zones', pattern)
+	domain_conf = '/var/named/db.' + domain_name
+	arpa_conf = '/var/named/db.' + arpa_addr
+
+	pattern = { '__DOMAINNAME__':domain_name, '__MAILSERVER__':mail_server,
+				'__DOMAINADDR__':domain_addr, '__ARPAADDR__':arpa_addr }
+
+	base.render_to_file(zone_conf, 'dist/bind/bind.zones', pattern)
+	base.render_to_file(domain_conf, 'dist/bind/bind-domain.conf', pattern)
+	base.render_to_file(arpa_conf, 'dist/bind/bind-arpa.conf', pattern)
 
 	fd = open('/etc/named.conf')
 	lines = fd.readlines()
@@ -44,26 +51,18 @@ def setup(dist, conf, apps):
 
 	for index in range(len(lines)):
 		line = lines[index]
-		if line.__contains__('listen'):
+		if 'listen' in line:
 			lines[index] = line.replace('127.0.0.1', 'any')
 
-		elif line.__contains__('allow-query'):
+		elif 'allow-query' in line:
 			lines[index] = line.replace('localhost', 'any')
 
 		elif line.strip() == '};':
 			lines.insert(index, '\n\tforwarders {\n\t\t%s;\n\t};\n' % forward.replace(' ', ';\n\t\t'))
 			break
 
-	lines.append('include "%s";\n' % zone_conf)
+	lines.insert(-1, 'include "%s";\n' % zone_conf)
 	open('/etc/named.conf', 'w').writelines(lines)
-
-	arpa_conf = '/var/named/db.' + arpa_addr
-	domain_conf = '/var/named/db.' + domain_name
-
-	pattern['__EMAIL__'] = mail_server
-	pattern['__ADDR__'] = domain_addr
-	base.render_to_file(domain_conf, 'dist/site/bind-domain.conf', pattern)
-	base.render_to_file(arpa_conf, 'dist/site/bind-arpa.conf', pattern)
 
 	os.system('chmod +r /var/named/*')
 

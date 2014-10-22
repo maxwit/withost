@@ -1,12 +1,12 @@
-zone "__DOMAIN_NAME__" IN {
+zone "__DOMAINNAME__" IN {
 	type master;
-	file "db.__DOMAIN_NAME__";
+	file "db.__DOMAINNAME__";
 	allow-update {key rndc;};
 };
 
-zone "__DOMAIN_ADDR__.in-addr.arpa" IN {
+zone "__ARPAADDR__.in-addr.arpa" IN {
 	type master;
-	file "db.__DOMAIN_ADDR__";
+	file "db.__ARPAADDR__";
 	allow-update {key rndc;};
 };
 
