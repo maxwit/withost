@@ -26,7 +26,7 @@ def get_pattern(conf):
     else:
         static_ip = '.'.join(router_arr[0 : 3]) + '.' + str(int(router_arr[3]) - 1)
 
-    pattern = ({
+    pattern = {
         '__ROUTERS__' : router,
         '__NETWORK__' : network,
         '__NETMASK__' : netmask,
@@ -34,9 +34,9 @@ def get_pattern(conf):
         '__RANGEMAX__' : range_max,
         '__DOMAINNAME__' : domain_name,
         '__DOMAINSERVER__' : domain_server,
-    }, static_ip)
+    }
 
-    return pattern
+    return (pattern, static_ip)
 
 def setup(dist, conf, apps):
     dhcp_conf = '/etc/dhcp/dhcpd.conf'
