@@ -1,39 +1,10 @@
 import os
-import shutil
-import socket
 from lib import base
-
-def get_ip(ifname):
-	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-	local_ip = fcntl.ioctl(sock.fileno(), 0x8915, struct.pack('256s', ifname[:15]))
-	return socket.inet_ntoa(local_ip[20:24])
-
-def get_default_ifx():
-	# FIXME
-	for ifx in os.listdir('/sys/class/net'):
-		if ifx == 'lo' or ifx.startswith('vmnet'):
-			continue
-
-		try:
-			ip = get_ip(ifx)
-		except:
-			# print 'interface "%s" is inactive, skipped.' % ifx
-			continue
-
-		return ifx
-
-	return None
-
-# FIXME
-def get_gateway(ip):
-	gw = ip.split('.')
-	gw[3] = '253'
-	return '.'.join(gw)
 
 def setup(dist, conf, apps):
 	if not conf.has_key('net.domain'):
 		raise Exception('domain name NOT configured!')
-	doamin_name = conf['net.domain']
+	domain_name = conf['net.domain']
 
 	#if conf.has_key('net.domain'):
 	#	domain_name = conf['net.domain']
@@ -51,13 +22,13 @@ def setup(dist, conf, apps):
 	if conf.has_key('net.ip'):
 		domain_addr = conf['net.ip']
 	else:
-		ifx = get_default_ifx()
+		ifx = base.get_default_ifx()
 		if ifx is None:
 			raise Exception('Fail to find default NIC!')
 
-		domain_addr = get_ip()
+		domain_addr = base.get_ip(ifx)
 
-	forward = get_gateway(domain_addr)
+	forward = base.get_gateway(domain_addr)
 
 	arpa_addr = domain_addr.split('.')[0:3]
 	arpa_addr.reverse()

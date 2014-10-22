@@ -1,8 +1,11 @@
 #!/usr/bin/python
 
-import sys
+import os
 import re
 import grp,pwd
+import socket
+import fcntl
+import struct
 import progressbar
 
 def process(a, b, c):
@@ -26,16 +29,16 @@ def get_full_name(user):
 	except KeyError:
 		raise Exception('User %s not found!' % user)
 
-def group_exits(group):
+def group_exist(group):
 	for stru_gr in grp.getgrall():
 		if group == stru_gr.gr_name:
 			return True
 
 	return False
 
-def user_exits(user):
+def user_exist(user):
 	for stru_passwd in pwd.getpwall():
-            if user == stru_passwd.pw_name:
+		if user == stru_passwd.pw_name:
 			return True
 
 	return False
@@ -54,3 +57,30 @@ def render_to_file(dst, src, pattern):
 		fdst.write(line)
 	fsrc.close()
 	fdst.close()
+
+def get_ip(ifname):
+	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	local_ip = fcntl.ioctl(sock.fileno(), 0x8915, struct.pack('256s', ifname[:15]))
+	return socket.inet_ntoa(local_ip[20:24])
+
+def get_default_ifx():
+	# FIXME
+	for ifx in os.listdir('/sys/class/net'):
+		if ifx == 'lo' or ifx.startswith('vmnet'):
+			continue
+
+		try:
+			get_ip(ifx)
+		except:
+			# print 'interface "%s" is inactive, skipped.' % ifx
+			continue
+
+		return ifx
+
+	return None
+
+# FIXME
+def get_gateway(ip):
+	gw = ip.split('.')
+	gw[3] = '253'
+	return '.'.join(gw)
