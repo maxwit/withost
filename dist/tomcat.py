@@ -35,7 +35,7 @@ def setup(dist, conf, apps):
 		else:
 			# FIXME
 			site_root = "/var/lib/tomcat/webapps/"
-		
+
 		pattern = {'__DOCROOT__':site_root, '__SERVERNAME__':server_name}
 		#FIXME
 		#print 'Generating %s/%s.xml' % (cata, server_name)
@@ -44,7 +44,7 @@ def setup(dist, conf, apps):
 		base.render_to_file('%s/ROOT.xml' % cata, 'dist/site/tomcat.xml', pattern)
 		if server_type == 'apache' and os.path.isdir('/etc/httpd/conf'):
 			os.system('sed -i "s/#NameVirtualHost \*:80/NameVirtualHost *:80/" "/etc/httpd/conf/httpd.conf"')
-		
+
 		print
 
 def remove(dist, conf, apps):
