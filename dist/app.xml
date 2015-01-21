@@ -101,7 +101,7 @@
 		</release>
 		<release version="18 19 20 21">
 			<app group="nfs" service="rpcbind nfs-server">nfs-utils portmap</app>
-			<app group="mysql" service="mysqld">mariadb mariadb-server</app>
+			<app group="mysql" service="mariadb">mariadb mariadb-server</app>
 			<app group="tomcat">tomcat tomcat-jsp-2.2-api tomcat-servlet-3.0-api tomcat-lib tomcat-el-2.2-api</app>
 			<app group="libgui">gtk3-devel</app>
 			<app group="bind">bind10</app>
