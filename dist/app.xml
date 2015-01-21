@@ -40,6 +40,7 @@
 			<app group="fonts">wqy-zenhei-fonts cjkuni-ukai-fonts cjkuni-uming-fonts</app>
 			<app group="ibus">ibus-pinyin ibus-table-wubi</app>
 			<app group="mail">msmtp fetchmail procmail</app>
+			<app group="php">php</app>
 		</release>
 		<release version="7.0">
 			<app group="mysql" service="mysqld">mariadb mariadb-server</app>
@@ -96,6 +97,7 @@
 			<app group="fonts">fonts-arphic-uming fonts-arphic-ukai xfonts-wqy ttf-wqy-microhei ttf-wqy-zenhei</app>
 			<app group="ibus">ibus-sunpinyin ibus-table-wubi</app>
 			<app group="mail">msmtp fetchmail procmail</app>
+			<app group="php">php</app>
 		</release>
 		<release version="18 19 20 21">
 			<app group="nfs" service="rpcbind nfs-server">nfs-utils portmap</app>
@@ -161,6 +163,7 @@
 			<app group="fonts">fonts-arphic-uming fonts-arphic-ukai xfonts-wqy ttf-wqy-microhei ttf-wqy-zenhei</app>
 			<app group="ibus">ibus-sunpinyin ibus-table-wubi</app>
 			<app group="mail">msmtp fetchmail procmail</app>
+			<app group="php">php</app>
 		</release>
 		<release version="14.04">
 			<app group="postfix">mail-stack-delivery</app>
