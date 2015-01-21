@@ -34,8 +34,9 @@ class redhat(linux):
 				]
 
 			for repo in repos:
-				print 'installing repo: ' + repo
-				os.system('yum install -y ' + repo)
+				if not os.path.exists('/etc/yum.repos.d/%s.repo' % repo):
+					print 'installing repo: ' + repo
+					os.system('yum install -y ' + repo)
 
 		# FIXME
 		os.system('sed -i "s/SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config')
