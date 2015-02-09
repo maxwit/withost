@@ -15,12 +15,12 @@
 			<app group="vim">vim ctags dos2unix</app>
 			<app group="git">git git-email</app>
 			<app group="svn">subversion</app>
-			<app group="openssh">openssh</app>
+			<app group="ssh">ssh</app>
 			<app group="nfs">nfs-utils portmap</app>
 			<app group="samba" service="smb">samba samba-client samba-common</app>
 			<app group="cups" service="cups">cups cups-pdf xsane</app>
 			<app group="hplip">hplip hplip-gui</app>
-			<app group="vsftpd" service="vsftpd">vsftpd</app>
+			<app group="ftp" service="vsftpd">vsftpd</app>
 			<app group="python">python-devel python-pip</app>
 			<app group="java">javamail</app>
 			<app group="openstack">openstack-nova python-novaclient openstack-glance python-glanceclient</app>
@@ -73,11 +73,11 @@
 			<app group="vim">vim ctags dos2unix</app>
 			<app group="git">git git-email</app>
 			<app group="svn">subversion</app>
-			<app group="openssh">openssh</app>
+			<app group="ssh">ssh</app>
 			<app group="samba" service="smb">samba samba-client samba-common</app>
 			<app group="cups" service="cups">cups cups-pdf xsane</app>
 			<app group="hplip" dep="cups">hplip hplip-gui</app>
-			<app group="vsftpd" service="vsftpd">vsftpd</app>
+			<app group="ftp" service="vsftpd">vsftpd</app>
 			<app group="python">python-devel python-pip</app>
 			<app group="java">javamail</app>
 			<app group="openstack">openstack-nova python-novaclient openstack-glance python-glanceclient</app>
@@ -131,7 +131,7 @@
 			<app group="mpfr">libgmp3-dev libmpfr-dev libmpc-dev</app>
 			<app group="devhelp">devhelp</app>
 			<app group="vim">vim ctags dos2unix</app>
-			<app group="openssh">openssh-server</app>
+			<app group="ssh">ssh-server</app>
 			<app group="python">libpython-dev python-pip idle idle3</app>
 			<app group="java">libgnumail-java</app>
 			<app group="openstack">openstack-nova python-novaclient openstack-glance python-glanceclient</app>
@@ -146,7 +146,7 @@
 			<app group="samba" service="smbd">samba</app>
 			<app group="cups" service="cups">cups cups-pdf sane xsane</app>
 			<app group="hplip">hplip hplip-gui</app>
-			<app group="vsftpd" service="vsftpd">vsftpd</app>
+			<app group="ftp" service="vsftpd">vsftpd</app>
 			<app group="git-daemon" dep="git">git git-daemon-run</app>
 			<app group="gitolite" dep="git incron">git incron</app>
 			<app group="uart">ckermit minicom</app>
