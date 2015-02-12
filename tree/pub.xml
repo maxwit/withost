@@ -1,20 +1,6 @@
 <?xml version="1.0"?>
 <dir>
-	<dir name="ebook">
-	</dir>
-	<dir name="source">
-	</dir>
-	<dir name="utility">
-		<dir name="windows"/>
-		<dir name="linux"/>
-		<dir name="osx"/>
-	</dir>
-	<dir name="image">
-		<dir name="vmware"/>
-		<dir name="vbox"/>
-		<dir name="xen"/>
-		<dir name="qemu"/>
-		<dir name="iso"/>
-	</dir>
-	<dir name="ssh-key"/>
+	<dir name="app"/>
+	<dir name="ebook"/>
+	<dir name="source"/>
 </dir>

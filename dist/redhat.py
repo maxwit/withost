@@ -28,15 +28,14 @@ class redhat(linux):
 			os.system('systemctl disable ' + service)
 
 	def sys_init(self):
-		if self.name != 'fedora':
-			repos = [
-				'http://rpms.famillecollet.com/enterprise/remi-release-%d.rpm' % self.major,
-				]
+		repos = [
+			('remi', 'http://rpms.famillecollet.com/enterprise/remi-release-%d.rpm' % self.major),
+			]
 
-			for repo in repos:
-				if not os.path.exists('/etc/yum.repos.d/%s.repo' % repo):
-					print 'installing repo: ' + repo
-					os.system('yum install -y ' + repo)
+		for (name, repo) in repos:
+			if not os.path.exists('/etc/yum.repos.d/%s.repo' % name):
+				print 'installing repo: ' + name
+				os.system('yum install -y ' + repo)
 
 		# FIXME
 		os.system('sed -i "s/SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config')

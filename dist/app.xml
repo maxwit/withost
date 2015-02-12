@@ -7,7 +7,8 @@
 			<app group="uart">minicom</app>
 			<app group="reader">evince poppler-data</app>
 			<app group="mount">cifs-utils fuse</app>
-			<app group="gcc">gcc gcc-c++ gcc-objc gcc-objc++ glibc-devel glibc-static libstdc++-static gnustep-base-devel gnustep-gui-libs</app>
+			<app group="gcc">gcc gcc-c++ glibc-devel glibc-static libstdc++-static</app>
+			<app group="objc">gcc-objc gcc-objc++ gnustep-base-devel</app>
 			<app group="essential">ncurses-devel ncurses-libs patch autoconf automake bison flex gawk gettext libtool m4 sed texinfo gperf</app>
 			<app group="libmm">SDL SDL-devel alsa-lib alsa-lib-devel</app>
 			<app group="mpfr">mpfr mpfr-devel libmpcdec libmpcdec-devel</app>
@@ -15,7 +16,7 @@
 			<app group="vim">vim ctags dos2unix</app>
 			<app group="git">git git-email</app>
 			<app group="svn">subversion</app>
-			<app group="ssh">ssh</app>
+			<app group="ssh">openssh-server</app>
 			<app group="nfs">nfs-utils portmap</app>
 			<app group="samba" service="smb">samba samba-client samba-common</app>
 			<app group="cups" service="cups">cups cups-pdf xsane</app>
@@ -65,7 +66,8 @@
 			<app group="uart">minicom</app>
 			<app group="reader">evince poppler-data</app>
 			<app group="mount">cifs-utils fuse</app>
-			<app group="gcc">gcc gcc-c++ gcc-objc gcc-objc++ glibc-devel glibc-static libstdc++-static gnustep-base-devel gnustep-gui-libs</app>
+			<app group="gcc">gcc gcc-c++ glibc-devel glibc-static libstdc++-static</app>
+			<app group="objc">gcc-objc gcc-objc++ gnustep-base-devel</app>
 			<app group="essential">ncurses-devel ncurses-libs patch autoconf automake bison flex gawk gettext libtool m4 sed texinfo gperf</app>
 			<app group="mpfr">mpfr mpfr-devel libmpcdec libmpcdec-devel</app>
 			<app group="libmm">SDL SDL-devel alsa-lib alsa-lib-devel</app>
@@ -125,8 +127,9 @@
 			<app group="libjpeg">libjpeg-dev libpng12-dev</app>
 			<app group="git">git git-email</app>
 			<app group="svn">subversion</app>
-			<app group="gcc">gcc g++ gobjc gobjc++ gnustep gnustep-devel</app>
-			<app group="mono-mcs">mono-mcs</app>
+			<app group="gcc">gcc g++</app>
+			<app group="objc">gobjc gobjc++ gnustep gnustep-devel</app>
+			<app group="csharp">mono-mcs</app>
 			<app group="essential">patch autoconf automake bison flex gawk gettext libtool m4 sed texinfo libncurses5-dev gperf</app>
 			<app group="mpfr">libgmp3-dev libmpfr-dev libmpc-dev</app>
 			<app group="devhelp">devhelp</app>

@@ -32,24 +32,7 @@ class linux(object):
 	def service_start(self, service):
 		print 'service_start: %s not supported' % self.name
 
-	# FIXME
-	def set_hostname(self, host):
-		# TODO
-		# open('/etc/hostname', 'w+').write(host)
-		os.system('echo %s > /etc/hostname' % host)
-		os.system('hostname ' + host)
-
 	def setup(self, config):
-		# # TODO: move to sys_init()
-		# if config.has_key('sys.host'):
-		# 	host = config['sys.host'].strip().replace(' ', '-')
-
-		# 	if host != self.host:
-		# 		self.set_hostname(host)
-		# 		self.host = host
-
-		# print 'Host name = "%s"\n' % self.host
-
 		install_list = config['sys.apps'].split()
 
 		tree = ElementTree.parse('dist/app.xml')
