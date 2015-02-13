@@ -15,11 +15,11 @@ def add_user(user, fname, password, mail, group, apps):
 		print "skipping current user!\n"
 		exit()
 
-	if base.user_exits(user):
+	if base.user_exist(user):
 		print 'user %s exists!' % user
 		exit()
 
-	if not base.group_exits(group):
+	if not base.group_exist(group):
 		print 'group %s does not exist!\n' % group
 		exit()
 

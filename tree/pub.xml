@@ -2,5 +2,14 @@
 <dir>
 	<dir name="app"/>
 	<dir name="ebook"/>
-	<dir name="source"/>
+	<dir name="os">
+		<dir name="linux"/>
+		<dir name="osx"/>
+		<dir name="windows"/>
+	</dir>
+	<dir name="source">
+		<dir name="toolchain"/>
+		<dir name="jquery"/>
+		<dir name="mp3"/>
+	</dir>
 </dir>
