@@ -17,7 +17,6 @@
 			<app group="git">git git-email</app>
 			<app group="svn">subversion</app>
 			<app group="ssh">openssh-server</app>
-			<app group="nfs">nfs-utils portmap</app>
 			<app group="samba" service="smb">samba samba-client samba-common</app>
 			<app group="cups" service="cups">cups cups-pdf xsane</app>
 			<app group="hplip">hplip hplip-gui</app>
