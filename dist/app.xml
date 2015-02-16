@@ -39,7 +39,7 @@
 			<app group="incron" service="incrond">incron</app>
 			<app group="fonts">wqy-zenhei-fonts cjkuni-ukai-fonts cjkuni-uming-fonts</app>
 			<app group="ibus">ibus-pinyin ibus-table-wubi</app>
-			<app group="mail">msmtp fetchmail procmail</app>
+			<app group="mutt">mutt msmtp fetchmail procmail</app>
 			<app group="php">php</app>
 		</release>
 		<release version="7.0">
@@ -97,7 +97,7 @@
 			<app group="incron" service="incrond">incron</app>
 			<app group="fonts">fonts-arphic-uming fonts-arphic-ukai xfonts-wqy ttf-wqy-microhei ttf-wqy-zenhei</app>
 			<app group="ibus">ibus-sunpinyin ibus-table-wubi</app>
-			<app group="mail">msmtp fetchmail procmail</app>
+			<app group="mutt">mutt msmtp fetchmail procmail</app>
 			<app group="php">php</app>
 		</release>
 		<release version="18 19 20 21">
@@ -164,7 +164,7 @@
 			<app group="dropbox">nautilus-dropbox</app>
 			<app group="fonts">fonts-arphic-uming fonts-arphic-ukai xfonts-wqy ttf-wqy-microhei ttf-wqy-zenhei</app>
 			<app group="ibus">ibus-sunpinyin ibus-table-wubi</app>
-			<app group="mail">msmtp fetchmail procmail</app>
+			<app group="mutt">mutt msmtp fetchmail procmail</app>
 			<app group="php">php</app>
 		</release>
 		<release version="14.04">
