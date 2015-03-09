@@ -43,7 +43,7 @@ def del_user(user, apps):
 		print 'cannot delete current user!\n'
 		exit()
 
-	if not base.user_exits(user):
+	if not base.user_exist(user):
 		print 'user %s does not exist!\n' % user
 		exit()
 
