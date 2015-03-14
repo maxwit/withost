@@ -23,6 +23,7 @@
 			<app group="ftp" service="vsftpd">vsftpd</app>
 			<app group="python">python-devel python-pip</app>
 			<app group="java">javamail</app>
+			<app group="nodejs">nodejs npm</app>
 			<app group="openstack">openstack-nova python-novaclient openstack-glance python-glanceclient</app>
 			<app group="apache" service="httpd">httpd</app>
 			<app group="nginx" service="nginx">nginx</app>
@@ -81,6 +82,7 @@
 			<app group="ftp" service="vsftpd">vsftpd</app>
 			<app group="python">python-devel python-pip</app>
 			<app group="java">javamail</app>
+			<app group="nodejs">nodejs npm</app>
 			<app group="openstack">openstack-nova python-novaclient openstack-glance python-glanceclient</app>
 			<app group="apache" service="httpd">httpd</app>
 			<app group="nginx" service="nginx">nginx</app>
@@ -136,6 +138,7 @@
 			<app group="ssh">ssh-server</app>
 			<app group="python">libpython-dev python-pip idle idle3</app>
 			<app group="java">libgnumail-java</app>
+			<app group="nodejs">nodejs npm</app>
 			<app group="openstack">openstack-nova python-novaclient openstack-glance python-glanceclient</app>
 			<app group="mysql" service="mysqld">mysql-server</app>
 			<app group="apache" service="apache2">apache2</app>
