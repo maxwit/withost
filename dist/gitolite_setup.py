@@ -2,39 +2,38 @@
 
 import os
 import shutil
-import grp
-from optparse import OptionParser
 
-def gitolite_add():
-	user = os.getlogin()
-	path = os.getcwd()
+if not os.path.exists('.ssh/id_rsa.pub'):
+	os.system('echo | ssh-keygen -N ""')
 
-	for struct_gr in grp.getgrall():
-		if struct_gr.gr_name.lower() == 'git':
-			ret = os.system('useradd -g git -s /bin/bash -m git')
-			break
-	else:
-		ret = os.system('useradd -s /bin/bash -m git')
+gitdir = '/tmp/gitkey/'
+if not os.path.exists(gitdir):
+	os.mkdir(gitdir, 0755)
 
-	if ret != 0:
-		exit()
+f = open('.ssh/id_rsa.pub')
+key = f.readline().split()[2].lower().replace('@', '_')
+filename = key + '.pub'
+f.close()
+shutil.copy('.ssh/id_rsa.pub', gitdir + filename)
 
-	os.system('usermod -a -G git ' + user)
-	os.system('sudo -H -i -u ' + user + ' python ' + path + '/dist/gitolite_add.py')
+print 'gitolite setup with ' + filename
+os.system('sudo -H -i -u git gitolite setup -pk ' + gitdir + filename)
 
-def gitolite_remove():
-	user = os.getlogin()
-	path = os.getcwd()
-	os.system('sudo -H -i -u ' + user + ' python ' + path + '/dist/gitolite_remove.py')
+if os.path.exists('gitolite-admin'):
+	shutil.rmtree('gitolite-admin')
+	
+os.system('git clone git@127.0.0.1:gitolite-admin.git')
+os.chdir('gitolite-admin')
+f = open('conf/gitolite.conf')
+lines = f.readlines()
+f.close()
 
-	print 'deleteing user git'
-	os.system('userdel -r -f git')
-
-if __name__ == '__main__':
-	option = OptionParser()
-	option.add_option('-s', '--set', action='store', dest='option', help='setting')
-	(opt, args) = option.parse_args()
-	if opt.option == 'add':
-		gitolite_add()
-	elif opt.option == 'del':
-		gitolite_remove()
+user = os.getlogin()
+for i in range(len(lines)):
+	lines[i] = lines[i].replace(key, '@devel')
+lines.insert(0, '@devel = ' + key + '\n\n')
+f = open('conf/gitolite.conf', 'w')
+f.writelines(lines)
+f.close()
+os.system('git commit -asm "update gitolite.conf"')
+os.system('git push')

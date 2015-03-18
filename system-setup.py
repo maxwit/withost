@@ -111,34 +111,3 @@ if __name__ == '__main__':
 	print
 	dist.setup(conf)
 	print
-
-	if not cfg_parser.has_section('pub'):
-		print 'pub path not configured\n'
-		exit()
-
-	path = cfg_parser.get('pub', 'path')
-	if path == None:
-		print 'path path not configured!\n'
-		exit()
-
-	parent = os.path.dirname(path)
-	if not os.access(parent, 5):
-		print 'fail to access path "%s"!\n' % parent
-		exit()
-
-	mode = cfg_parser.get('pub', 'mode')
-	tree = dir_tree.dir_tree(path, 'pub.xml', string.atoi(mode, 8))
-	tree.populate()
-	print
-
-	# if pub.owner is None:
-	user = os.getlogin()
-	group = cfg_parser.get('sys', 'group')
-	# FIXME
-	try:
-		os.system('groupadd ' + group)
-		os.system('usermod -a -G %s %s' % (group, user))
-	except Exception, e:
-		print e
-	os.system('chown %s.%s -R %s' % (user, group, path))
-	print

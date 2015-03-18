@@ -29,16 +29,16 @@ def get_full_name(user):
 	except KeyError:
 		raise Exception('User %s not found!' % user)
 
-def group_exist(group):
-	for stru_gr in grp.getgrall():
-		if group == stru_gr.gr_name:
+def group_exists(group_name):
+	for group in grp.getgrall():
+		if group_name == group.gr_name:
 			return True
 
 	return False
 
-def user_exist(user):
-	for stru_passwd in pwd.getpwall():
-		if user == stru_passwd.pw_name:
+def user_exists(user_name):
+	for user in pwd.getpwall():
+		if user_name == user.pw_name:
 			return True
 
 	return False

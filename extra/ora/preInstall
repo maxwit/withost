@@ -11,4 +11,8 @@ yum install -y compat-libcap1 compat-libstdc++-33 compat-libstdc++-33 gcc gcc-c+
 groupadd oinstall
 groupadd dba
 useradd -g oinstall -G dba,wheel ora
-echo -e "maxwit144\nmaxwit144" | passwd ora
+
+y=$(date +%y)
+m=$(date +%m)
+pass="maxwit$y$(((m+1)/2))"
+echo -e "$pass\n$pass" | passwd ora

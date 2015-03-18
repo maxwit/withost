@@ -50,6 +50,6 @@ echo
 
 bn=`basename $0`
 
-if [ $bn == 'witpower' ]; then
+if [ $bn == 'withost' ]; then
 	sudo python system-setup.py
 fi

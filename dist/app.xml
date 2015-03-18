@@ -33,7 +33,7 @@
 			<app group="postfix">dovecot postfix</app>
 			<app group="xinetd" service="xinetd">xinetd</app>
 			<app group="git-daemon" dep="git xinetd">git xinetd git-daemon</app>
-			<app group="gitolite" dep="git incron">git incron</app>
+			<app group="gitolite" dep="git">gitolite3</app>
 			<app group="player">totem</app>
 			<app group="dhcp" service="dhcpd">dhcp</app>
 			<app group="libgui">qt-devel</app>
@@ -92,7 +92,7 @@
 			<app group="postfix">dovecot postfix</app>
 			<app group="xinetd" service="xinetd">xinetd</app>
 			<app group="git-daemon" dep="git xinetd">git xinetd git-daemon</app>
-			<app group="gitolite" dep="git incron">git incron</app>
+			<app group="gitolite" dep="git">gitolite3</app>
 			<app group="player">totem</app>
 			<app group="dhcp">dhcp</app>
 			<app group="libgui">qt-devel</app>
@@ -153,7 +153,7 @@
 			<app group="hplip">hplip hplip-gui</app>
 			<app group="ftp" service="vsftpd">vsftpd</app>
 			<app group="git-daemon" dep="git">git git-daemon-run</app>
-			<app group="gitolite" dep="git incron">git incron</app>
+			<app group="gitolite" dep="git">gitolite3</app>
 			<app group="uart">ckermit minicom</app>
 			<app group="reader">evince poppler-data xchm chm2pdf</app>
 			<app group="mount">nfs-common cifs-utils ntfs-3g</app>
