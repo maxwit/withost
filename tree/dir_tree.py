@@ -32,7 +32,7 @@ class dir_tree(object):
 				print e
 				return
 
-			fd.write('Created by MaxWit WitPowser v%s\n' % version)
+			fd.write('Created by MaxWit WitHost v%s\n' % version)
 			fd.close()
 
 	def remove(self):

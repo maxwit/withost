@@ -10,7 +10,7 @@ from optparse import OptionParser
 from dist import distrib
 from tree import dir_tree
 
-version = '4.3'
+version = '5.2'
 
 def xcopy(dir_src, dir_dst, ext):
 	if not os.path.exists(dir_src):
@@ -65,12 +65,12 @@ if __name__ == '__main__':
 					  help='path to sync repo cache with')
 	opt_parser.add_option('-v', '--version', dest='version',
 					  default=False, action='store_true',
-					  help='show WitPower version')
+					  help='show WitHost version')
 
 	(opt, args) = opt_parser.parse_args()
 
 	if opt.version:
-		print 'WitPower v%s\nby MaxWit Software (http://www.maxwit.com)\n' % version
+		print 'WitHost v%s\nby MaxWit Software (http://www.maxwit.com)\n' % version
 		exit()
 
 	if opt.path:

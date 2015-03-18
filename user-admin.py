@@ -73,7 +73,7 @@ if __name__ == '__main__':
 							help='e-mail')
 	opt_parser.add_argument('-p', '--password', action='store', dest='password',
 							help='password')
-	opt_parser.add_argument('-v', '--version', action='version', version='WitPower %s' % version,
+	opt_parser.add_argument('-v', '--version', action='version', version='WitHost %s' % version,
 							help='show WitPowser version')
 
 	args = opt_parser.parse_args()

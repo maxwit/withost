@@ -52,7 +52,7 @@ if __name__ == '__main__':
 	arg_parser = ArgumentParser(description='Add or del the user')
 	arg_parser.add_argument('user', action='store', help='repo maintainer')
 	arg_parser.add_argument('repo', action='store', help='repo name')
-	arg_parser.add_argument('-v', '--version', action='version', version='WitPower %s' % version,
+	arg_parser.add_argument('-v', '--version', action='version', version='WitHost %s' % version,
 							help='show WitPowser version')
 
 	arg = arg_parser.parse_args()
