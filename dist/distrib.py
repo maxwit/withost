@@ -35,7 +35,7 @@ class linux(object):
 	def setup(self, config):
 		install_list = config['sys.apps'].split()
 
-		tree = ElementTree.parse('dist/app.xml')
+		tree = ElementTree.parse('app/app.xml')
 		root = tree.getroot()
 
 		for dist_node in root.getchildren():
@@ -75,10 +75,10 @@ class linux(object):
 			else:
 				raise Exception('Bug!')
 
-			if os.path.exists('dist/%s.py' % group):
+			if os.path.exists('app/%s.py' % group):
 				print 'Setup %s ...' % group
 				try:
-					mod = __import__('dist.' + group, fromlist=['setup'])
+					mod = __import__('app.' + group, fromlist=['setup'])
 					mod.setup((self.name, self.version), config, app_node.text.split())
 					# mod.setup((self.name, self.version), config, (group, app_list))
 				except Exception, e:
