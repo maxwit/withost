@@ -55,8 +55,7 @@ def add_site(web_server, app_server, site_name, proj_path):
 
 	site_conf = get_site_conf(web_server, site_name)
 	if os.path.exists(site_conf):
-		print 'The site "%s" already exists! (skipped)' % site_name
-		return
+		raise Exception('The site "%s" already exists!' % site_name)
 
 	print 'generating "%s" ...' % site_conf
 	pattern = {'__SERVERNAME__':site_name}
@@ -64,11 +63,9 @@ def add_site(web_server, app_server, site_name, proj_path):
 	if app_server is None:
 		template = 'site/%s.conf' % web_server
 		site_root = get_site_root(web_server, site_name)
-		pattern['__SERVERTYPE__'] = app_server
 	else:
 		template = 'site/%s-%s.conf' % (web_server, app_server)
 		site_root = get_site_root(app_server, site_name)
-		pattern['__SERVERTYPE__'] = web_server
 
 		if app_server == 'tomcat':
 			pattern['__SITEDIR__'] = os.path.basename(site_root)
@@ -86,31 +83,40 @@ def add_site(web_server, app_server, site_name, proj_path):
 
 	print 'generating "%s" ...' % site_root
 
-	if app_server is None:
-		os.mkdir(site_root)
-		if proj_path:
+	try:
+		if proj_path is None:
+			if not os.path.exists(site_root):
+				os.mkdir(site_root)
+			if app_server in ['wsgi', 'uwsgi']:
+				os.mkdir(site_root + '/main')
+				wsgi = site_root + '/main/wsgi.py'
+				os.system('touch ' + wsgi) # FIXME
+				base.render_to_file(wsgi, 'site/wsgi.py', pattern)
+			#elif app_server in []
+			else:
+				if app_server:
+					server = '%s + %s' % (web_server, app_server)
+				else:
+					server = web_server
+				pattern['__SERVERTYPE__'] = server
+				base.render_to_file(site_root + '/index.html', 'site/index.html', pattern)
+				print '"%s": initialized with a default index.html' % server
+		elif os.path.isdir(proj_path):
 			shutil.copytree(proj_path, site_root)
 		else:
-			base.render_to_file(site_root + '/index.html', 'site/index.html', pattern)
-	else:
-		if app_server in ['wsgi', 'uwsgi']:
-			os.makedirs(site_root + '/main')
-			# FIXME
-			os.system('touch %s/main/__init__.py' % site_root)
-			base.render_to_file(site_root + '/main/wsgi.py', 'site/wsgi.py', pattern)
-		elif app_server == 'tomcat':
-			if proj_path:
-				if proj_path.endswith('.war'):
-					base.render_to_file(site_root + '/index.html', 'site/index.html', pattern)
-					shutil.copyfile(proj_path, site_root + '.war')
-				else:
+			if app_server in ['tomcat', 'jboss']:
+				if not proj_path.endswith('.war'):
 					raise Exception('"%s" is not a valid WAR file!' % proj_path)
+				shutil.copyfile(proj_path, site_root + '.war')
 			else:
-				os.mkdir(site_root)
-				base.render_to_file(site_root + '/index.html', 'site/index.html', pattern)
-		else:
-			print 'Warning: init site for "%s" is ignored!' % app_server
-			return
+				raise Exception('TODO')
+	except Exception, e:
+		if os.path.dirname(site_conf) == 'sites-available':
+			enabled_conf = site_conf.replace('sites-available', 'sites-enabled')
+			os.remove(enabled_conf)
+			print '"%s" removed' % enabled_conf
+		os.remove(site_conf)
+		print '"%s" removed' % site_conf
 
 	#if dist[0].lower() in ['ubuntu', 'mint']:
 	#	group = 'www-data'
