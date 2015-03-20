@@ -1,0 +1,187 @@
+#!/usr/bin/python
+
+import os, sys
+import shutil
+from argparse import ArgumentParser
+from lib import base
+
+# Usage:
+#   siteadd <-n|--name DomainName> <-p|--path ProjectPath>
+#   sitedel <-n|--name DomainName>
+
+# server type:
+#   nginx/apache + local tomcat/uwsgi
+
+def name2dir(name):
+	return name.replace('.', '-')
+
+def get_site_root(server_type, site_name):
+	if server_type == 'nginx':
+		site_root = '/usr/share/nginx'
+	elif server_type == 'apache':
+		site_root = '/var/www'
+	elif server_type == 'tomcat':
+		site_root = '/var/lib/tomcat/webapps'
+	elif server_type == 'uwsgi':
+		site_root = '???'
+	else:
+		raise Exception('server "%s" not supported!' % server_type)
+
+	return site_root + '/' + name2dir(site_name)
+
+def get_site_conf(server_type, site_name):
+	if server_type == 'apache':
+		if os.path.isdir('/etc/httpd/conf.d'):
+			site_conf = '/etc/httpd/conf.d'
+		elif os.path.isdir('/etc/apache2/sites-available'):
+			site_conf = '/etc/apache2/sites-available'
+		else:
+			raise Exception('OS not supported!')
+	elif server_type == 'nginx':
+		if os.path.isdir('/etc/nginx/sites-available'):
+			site_conf = '/etc/nginx/sites-available'
+		elif os.path.isdir('/etc/nginx/conf.d'):
+			site_conf = '/etc/nginx/conf.d'
+		else:
+			raise Exception('OS not supported!')
+	else:
+		raise Exception('server "%s" not supported!' % server_type)
+
+	return '%s/%s.conf' % (site_conf, name2dir(site_name))
+
+def add_site(web_server, app_server, site_name, proj_path):
+	#print '%s: creating %s for %s ...' % (web_server.capitalize(), site_name)
+	print 'deploying site "%s" ...' % (site_name)
+
+	site_conf = get_site_conf(web_server, site_name)
+	if os.path.exists(site_conf):
+		print 'The site "%s" already exists! (skipped)' % site_name
+		return
+
+	print 'generating "%s" ...' % site_conf
+	pattern = {'__SERVERNAME__':site_name}
+
+	if app_server is None:
+		template = 'site/%s.conf' % web_server
+		site_root = get_site_root(web_server, site_name)
+		pattern['__SERVERTYPE__'] = app_server
+	else:
+		template = 'site/%s-%s.conf' % (web_server, app_server)
+		site_root = get_site_root(app_server, site_name)
+		pattern['__SERVERTYPE__'] = web_server
+
+		if app_server == 'tomcat':
+			pattern['__SITEDIR__'] = os.path.basename(site_root)
+		elif web_server == 'apache' and app_server == 'wsgi':
+			pattern['__PYTHONPATH__'] = site_root
+
+	pattern['__DOCROOT__'] = site_root
+
+	if not os.path.exists(template):
+		raise Exception(template + ' dost NOT exist!')
+
+	base.render_to_file(site_conf, template, pattern)
+	if os.path.basename(os.path.dirname(site_conf)) == 'sites-available':
+		os.symlink(site_conf, site_conf.replace('sites-available', 'sites-enabled'))
+
+	print 'generating "%s" ...' % site_root
+
+	if app_server is None:
+		os.mkdir(site_root)
+		if proj_path:
+			shutil.copytree(proj_path, site_root)
+		else:
+			base.render_to_file(site_root + '/index.html', 'site/index.html', pattern)
+	else:
+		if app_server in ['wsgi', 'uwsgi']:
+			os.makedirs(site_root + '/main')
+			# FIXME
+			os.system('touch %s/main/__init__.py' % site_root)
+			base.render_to_file(site_root + '/main/wsgi.py', 'site/wsgi.py', pattern)
+		elif app_server == 'tomcat':
+			if proj_path:
+				if proj_path.endswith('.war'):
+					base.render_to_file(site_root + '/index.html', 'site/index.html', pattern)
+					shutil.copyfile(proj_path, site_root + '.war')
+				else:
+					raise Exception('"%s" is not a valid WAR file!' % proj_path)
+			else:
+				os.mkdir(site_root)
+				base.render_to_file(site_root + '/index.html', 'site/index.html', pattern)
+		else:
+			print 'Warning: init site for "%s" is ignored!' % app_server
+			return
+
+	#if dist[0].lower() in ['ubuntu', 'mint']:
+	#	group = 'www-data'
+	#else:
+	#	group = web_server
+
+	## FIXME
+	#os.system('chown %s.%s -R %s' % (owner, group, site_root))
+	#os.system('chmod g+w -R ' + site_root)
+
+def del_site(web_server, app_server, site_name):
+	site_conf = get_site_conf(web_server, site_name)
+	if not os.path.exists(site_conf):
+		print 'The site "%s" does not exist' % site_name
+		return
+
+	print 'removing site "%s" ...' % site_name
+
+	if os.path.dirname(site_conf) == 'sites-available':
+		enabled_conf = site_conf.replace('sites-available', 'sites-enabled')
+		os.remove(enabled_conf)
+		print '"%s" removed' % enabled_conf
+	os.remove(site_conf)
+	print '"%s" removed' % site_conf
+
+	if app_server is None:
+		site_root = get_site_root(web_server, site_name)
+	else:
+		site_root = get_site_root(app_server, site_name)
+		war = site_root + '.war'
+		if app_server == 'tomcat' and os.path.exists(war):
+			os.remove(war)
+			print '"%s" removed' % war
+
+	if os.path.exists(site_root):
+		shutil.rmtree(site_root)
+		print '"%s" removed' % site_root
+
+if __name__ == '__main__':
+	if os.getuid() != 0:
+		print 'pls run as root or with sudo!'
+		exit()
+
+	opt_parser = ArgumentParser(description='Add a web site')
+	opt_parser.add_argument('-n', '--name', action='store',
+						dest='name', help='server name')
+	opt_parser.add_argument('-p', '--path', action='store',
+						dest='path', help='project path')
+#	opt_parser.add_argument('-w', '--web', action='store',
+#						dest='web', help='web server type')
+#	opt_parser.add_argument('-a', '--app', action='store',
+#						dest='app', help='application server')
+#	opt_parser.add_argument('operation', action='store',
+#						choices=('add','del'), help='add or delete a site')
+#	opt_parser.add_argument('site_name', action='store',
+#						help='server name')
+	args = opt_parser.parse_args()
+
+	if args.name is None:
+		# FIXME
+		exit(1)
+
+	if args.path and not os.path.exists(args.path):
+		raise Exception('"%s" does NOT exists!' % args.path)
+
+	web_server = 'nginx'
+	app_server = 'tomcat'
+
+	if os.path.basename(sys.argv[0]) == 'siteadd':
+		add_site(web_server, app_server, args.name, args.path)
+	else:
+		del_site(web_server, app_server, args.name)
+
+	print
