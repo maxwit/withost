@@ -21,7 +21,11 @@ def get_site_root(server_type, site_name):
 	elif server_type == 'apache':
 		site_root = '/var/www'
 	elif server_type == 'tomcat':
-		site_root = '/var/lib/tomcat/webapps'
+		# FIXME
+		if os.path.exists('/var/lib/tomcat7'):
+			site_root = '/var/lib/tomcat7/webapps'
+		else:
+			site_root = '/var/lib/tomcat/webapps'
 	elif server_type == 'uwsgi':
 		site_root = '???'
 	else:
@@ -111,7 +115,8 @@ def add_site(web_server, app_server, site_name, proj_path):
 			else:
 				raise Exception('TODO')
 	except Exception, e:
-		if os.path.dirname(site_conf) == 'sites-available':
+		print e
+		if os.path.basename(os.path.dirname(site_conf)) == 'sites-available':
 			enabled_conf = site_conf.replace('sites-available', 'sites-enabled')
 			os.remove(enabled_conf)
 			print '"%s" removed' % enabled_conf
@@ -135,7 +140,7 @@ def del_site(web_server, app_server, site_name):
 
 	print 'removing site "%s" ...' % site_name
 
-	if os.path.dirname(site_conf) == 'sites-available':
+	if os.path.basename(os.path.dirname(site_conf)) == 'sites-available':
 		enabled_conf = site_conf.replace('sites-available', 'sites-enabled')
 		os.remove(enabled_conf)
 		print '"%s" removed' % enabled_conf
