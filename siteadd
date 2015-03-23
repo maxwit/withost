@@ -165,10 +165,10 @@ if __name__ == '__main__':
 						dest='name', help='server name')
 	opt_parser.add_argument('-p', '--path', action='store',
 						dest='path', help='project path')
-#	opt_parser.add_argument('-w', '--web', action='store',
-#						dest='web', help='web server type')
-#	opt_parser.add_argument('-a', '--app', action='store',
-#						dest='app', help='application server')
+	opt_parser.add_argument('-w', '--web', action='store',
+						dest='web', help='web server type')
+	opt_parser.add_argument('-a', '--app', action='store',
+						dest='app', help='application server')
 #	opt_parser.add_argument('operation', action='store',
 #						choices=('add','del'), help='add or delete a site')
 #	opt_parser.add_argument('site_name', action='store',
@@ -182,8 +182,15 @@ if __name__ == '__main__':
 	if args.path and not os.path.exists(args.path):
 		raise Exception('"%s" does NOT exists!' % args.path)
 
-	web_server = 'nginx'
-	app_server = 'tomcat'
+	if args.web:
+		web_server = args.web
+	else:
+		web_server = 'nginx'
+
+	if args.app:
+		app_server = args.app
+	else:
+		app_server = 'tomcat'
 
 	if os.path.basename(sys.argv[0]) == 'siteadd':
 		add_site(web_server, app_server, args.name, args.path)
