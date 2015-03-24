@@ -67,11 +67,12 @@ def add_site(dist, web_server, app_server, site_name, proj_path):
 	print 'generating "%s" ...' % site_conf
 	pattern = {'__SERVERNAME__':site_name}
 
+	template = 'site/' + web_server + '/'
 	if app_server is None:
-		template = 'site/%s.conf' % web_server
+		template += web_server + '.conf'
 		site_root = get_site_root(web_server, site_name)
 	else:
-		template = 'site/%s-%s.conf' % (web_server, app_server)
+		template += app_server + '.conf'
 		site_root = get_site_root(app_server, site_name)
 
 		if app_server == 'tomcat':
