@@ -208,4 +208,18 @@ if __name__ == '__main__':
 	else:
 		del_site(dist, web_server, app_server, args.name)
 
+	major = dist[1].split('.')[0]
+	if dist[0] in ['centos', 'redhat']:
+		if web_server == 'apache':
+			service = 'httpd'
+		else:
+			service = web_server
+
+		if int(major) >= 7:
+			os.system('systemctl reload ' + service)
+		else:
+			os.system('service ' + service + ' reload')
+	else:
+		os.system('service ' + web_server + ' reload')
+
 	print
