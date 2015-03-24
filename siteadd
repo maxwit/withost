@@ -140,8 +140,7 @@ def add_site(dist, web_server, app_server, site_name, proj_path, owner):
 def del_site(dist, web_server, app_server, site_name):
 	site_conf = get_site_conf(web_server, site_name)
 	if not os.path.exists(site_conf):
-		print 'The site "%s" does not exist' % site_name
-		return
+		raise Exception('The site "%s" does not exist' % site_name)
 
 	print 'removing site "%s" ...' % site_name
 
@@ -204,26 +203,29 @@ if __name__ == '__main__':
 
 	dist = platform.dist()[0:2]
 
-	if os.path.basename(sys.argv[0]) == 'siteadd':
-		add_site(dist, web_server, app_server, args.name, args.path, os.getlogin())
-	else:
-		del_site(dist, web_server, app_server, args.name)
-
-	major = dist[1].split('.')[0]
-	service = web_server
-	if dist[0] in ['centos', 'redhat']:
-		if web_server == 'apache':
-			service = 'httpd'
-
-		if int(major) >= 7:
-			os.system('systemctl reload ' + service)
+	try:
+		if os.path.basename(sys.argv[0]) == 'siteadd':
+			add_site(dist, web_server, app_server, args.name, args.path, os.getlogin())
 		else:
+			del_site(dist, web_server, app_server, args.name)
+
+		major = dist[1].split('.')[0]
+		service = web_server
+		if dist[0] in ['centos', 'redhat']:
+			if web_server == 'apache':
+				service = 'httpd'
+
+			if int(major) >= 7:
+				os.system('systemctl reload ' + service)
+			else:
+				os.system('service ' + service + ' reload')
+		else:
+			if web_server == 'apache':
+				service = 'apache2'
+
+			print 'service ' + service + ' reload'
 			os.system('service ' + service + ' reload')
-	else:
-		if web_server == 'apache':
-			service = 'apache2'
-
-		print 'service ' + service + ' reload'
-		os.system('service ' + service + ' reload')
-
-	print
+	except Exception, e:
+		print e
+	finally:
+		print
