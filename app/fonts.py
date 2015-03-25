@@ -2,7 +2,7 @@
 
 import os
 
-def setup(dist, conf, apps):
+def setup(dist, apps):
 	pass
 	#file_svr = 'www.maxwit.org'
 	#font_dir = '/usr/share/fonts/truetype/extra'

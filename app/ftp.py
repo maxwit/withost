@@ -3,7 +3,7 @@
 import os
 import shutil
 
-def setup(dist, conf, apps):
+def setup(dist, apps):
 	pub = conf['pub.path']
 
 	if os.path.exists('/etc/vsftpd.conf'):

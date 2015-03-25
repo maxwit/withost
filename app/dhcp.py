@@ -39,7 +39,7 @@ def get_pattern(conf):
 
     return pattern
 
-def setup(dist, conf, apps):
+def setup(dist, apps):
     dhcp_conf = '/etc/dhcp/dhcpd.conf'
 
     pattern = get_pattern(conf)

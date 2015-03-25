@@ -3,7 +3,7 @@
 import os
 from dist import website
 
-def setup(dist, conf, apps):
+def setup(dist, apps):
 	owner = os.getlogin()
 
 	for site in conf['web.site'].split():

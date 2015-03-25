@@ -1,7 +1,7 @@
 import os
 from lib import base
 
-def setup(dist, conf, apps):
+def setup(dist, apps):
 	uwsgi_conf = '/etc/uwsgi.ini'
 	# FIXME
 	site_port = '9999'

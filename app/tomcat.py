@@ -3,7 +3,7 @@ from lib import base
 from dist import website
 import sys
 
-def setup(dist, conf, apps):
+def setup(dist, apps):
 	owner = os.getlogin()
 
 	if 'tomcat7' in apps:

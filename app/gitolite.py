@@ -21,7 +21,7 @@ def install_gitolite():
 	link = os.readlink('/usr/bin/gitolite')
 	print '/usr/bin/gitolite -> ' + link
 
-def setup(dist, conf, apps):
+def setup(dist, apps):
 	#if 'gitolite' not in apps:
 	#	install_gitolite()
 

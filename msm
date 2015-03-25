@@ -1,10 +1,9 @@
 #!/usr/bin/python
 
-import os
+import os, sys
 import platform
 import string
 import shutil
-import ConfigParser
 from optparse import OptionParser
 
 from dist import distrib
@@ -60,24 +59,26 @@ if __name__ == '__main__':
 		print 'pls run as root or with sudo!'
 		exit()
 
-	opt_parser = OptionParser()
-	opt_parser.add_option('-s', '--sync', dest='path',
-					  help='path to sync repo cache with')
-	opt_parser.add_option('-v', '--version', dest='version',
-					  default=False, action='store_true',
-					  help='show WitHost version')
+	#opt_parser = OptionParser()
+	#opt_parser.add_option('-s', '--sync', dest='path',
+	#				  help='path to sync repo cache with')
+	#opt_parser.add_option('-i', '--install', dest='install',
+	#				  help='install package')
+	#opt_parser.add_option('-v', '--version', dest='version',
+	#				  default=False, action='store_true',
+	#				  help='show WitHost version')
 
-	(opt, args) = opt_parser.parse_args()
+	#(opt, args) = opt_parser.parse_args()
 
-	if opt.version:
-		print 'WitHost v%s\nby MaxWit Software (http://www.maxwit.com)\n' % version
-		exit()
+	#if opt.version:
+	#	print 'WitHost v%s\nby MaxWit Software (http://www.maxwit.com)\n' % version
+	#	exit()
 
-	if opt.path:
-		(distro, release) = platform.dist()[0:2]
-		arch = platform.processor()
-		cache_sync(distro.lower(), release, arch)
-		exit()
+	#if opt.path:
+	#	(distro, release) = platform.dist()[0:2]
+	#	arch = platform.processor()
+	#	cache_sync(distro.lower(), release, arch)
+	#	exit()
 
 	try:
 		dist = distrib.get_distro()
@@ -86,28 +87,19 @@ if __name__ == '__main__':
 		opt_parser.print_help()
 		exit()
 
-	print "System setup: %s %s\n" % (dist.name, dist.version)
+	#print "System setup: %s %s\n" % (dist.name, dist.version)
 
-	#if not os.path.exists('.config'):
-	#	print '.config file does not exist!'
+	#dist.sys_init()
 
-	cfg_parser = ConfigParser.ConfigParser();
-	try:
-		cfg_parser.read('.config')
-	except Exception, e:
-		print e
-		exit()
+	if len(sys.argv) < 2:
+		print 'usage: %s install/remove/list packages' % sys.argv[0]
+		exit(1)
 
-	conf = {}
-	for sect in cfg_parser.sections():
-		for (key, value) in cfg_parser.items(sect):
-			conf[sect + '.' + key] = value
-
-	if not conf.has_key('sys.apps'):
-		print 'Invalid configuration!'
-		exit()
-
-	dist.sys_init()
 	print
-	dist.setup(conf)
+	if sys.argv[1] == 'install':
+		dist.setup(sys.argv[2:])
+	elif sys.argv[1] == 'list':
+		app_list = dist.get_app_list()
+		for key in app_list:
+			print '%s - %s' % (key, app_list[key])
 	print

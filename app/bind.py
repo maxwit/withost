@@ -1,7 +1,7 @@
 import os
 from lib import base
 
-def setup(dist, conf, apps):
+def setup(dist, apps):
 	if not conf.has_key('net.domain'):
 		raise Exception('domain name NOT configured!')
 	domain_name = conf['net.domain']

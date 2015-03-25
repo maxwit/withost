@@ -3,7 +3,7 @@
 import os
 import shutil
 
-def setup(dist, conf, apps):
+def setup(dist, apps):
 	src = '/etc/exports'
 	dst = '/tmp/nfs_exports'
 	pub = conf['pub.path']

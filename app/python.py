@@ -2,7 +2,7 @@ import os
 import urllib
 from lib import base
 
-def setup(dist, conf, apps):
+def setup(dist, apps):
 	if 'python-pip' not in apps:
 		dest = '/tmp/get-pip.py'
 		url = 'https://bootstrap.pypa.io/get-pip.py'

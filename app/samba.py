@@ -3,7 +3,7 @@
 import os
 import shutil
 
-def setup(dist, conf, apps):
+def setup(dist, apps):
 	src = '/etc/samba/smb.conf'
 	dst = '/tmp/smb.conf'
 	pub = conf['pub.path']

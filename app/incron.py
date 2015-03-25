@@ -2,7 +2,7 @@
 
 import os
 
-def setup(dist, conf, apps):
+def setup(dist, apps):
 	fn = '/etc/incron.allow'
 	admin = os.getlogin()
 

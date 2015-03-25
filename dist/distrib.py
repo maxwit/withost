@@ -32,9 +32,25 @@ class linux(object):
 	def service_start(self, service):
 		print 'service_start: %s not supported' % self.name
 
-	def setup(self, config):
-		install_list = config['sys.apps'].split()
+	def get_app_list(self):
+		tree = ElementTree.parse('app/app.xml')
+		root = tree.getroot()
 
+		app_list = {}
+		for dist_node in root.getchildren():
+			if self.name in dist_node.attrib['name'].split():
+				for release in dist_node.getchildren():
+					version = release.attrib['version']
+					if version == 'any' or self.version.lower() in version.split():
+						for app_node in release.getchildren():
+							if self.arch != app_node.get('arch', self.arch):
+								continue
+
+							group = app_node.get('group')
+							app_list[group] = app_node.text
+		return app_list
+
+	def setup(self, install_list):
 		tree = ElementTree.parse('app/app.xml')
 		root = tree.getroot()
 
@@ -43,7 +59,7 @@ class linux(object):
 				for release in dist_node.getchildren():
 					version = release.attrib['version']
 					if version == 'any' or self.version.lower() in version.split():
-						self.do_setup(release, config, install_list)
+						self.do_setup(release, install_list)
 
 				if len(install_list) != 0:
 					print '#########################'
@@ -56,7 +72,7 @@ class linux(object):
 
 		print '%s %s: no app config found!' % (self.name, self.version)
 
-	def do_setup(self, release, config, install_list):
+	def do_setup(self, release, install_list):
 		for app_node in release.getchildren(): # FIXME: in install_list instead
 			if self.arch != app_node.get('arch', self.arch):
 				continue
@@ -79,8 +95,8 @@ class linux(object):
 				print 'Setup %s ...' % group
 				try:
 					mod = __import__('app.' + group, fromlist=['setup'])
-					mod.setup((self.name, self.version), config, app_node.text.split())
-					# mod.setup((self.name, self.version), config, (group, app_list))
+					mod.setup((self.name, self.version), app_node.text.split())
+					# mod.setup((self.name, self.version), (group, app_list))
 				except Exception, e:
 					print '%r\n' % e
 					continue
