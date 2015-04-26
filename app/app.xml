@@ -131,7 +131,6 @@
 			<app group="gcc">gcc g++</app>
 			<app group="objc">gobjc gobjc++ gnustep gnustep-devel</app>
 			<app group="csharp">mono-mcs</app>
-			<app group="essential">patch autoconf automake bison flex gawk gettext libtool m4 sed texinfo libncurses5-dev gperf</app>
 			<app group="mpfr">libgmp3-dev libmpfr-dev libmpc-dev</app>
 			<app group="devhelp">devhelp</app>
 			<app group="vim">vim ctags dos2unix</app>
@@ -146,7 +145,6 @@
 			<app group="wsgi">libapache2-mod-wsgi</app>
 			<app group="uwsgi" dep="python" install="pip">uwsgi</app>
 			<app group="django" dep="python" install="pip">django</app>
-			<app group="tomcat" service="tomcat7">tomcat7 tomcat7-common libapache2-mod-jk</app>
 			<app group="nfs" service="nfs-kernel-server">nfs-kernel-server</app>
 			<app group="samba" service="smbd">samba</app>
 			<app group="cups" service="cups">cups cups-pdf sane xsane</app>
@@ -170,18 +168,34 @@
 			<app group="mutt">mutt msmtp fetchmail procmail</app>
 			<app group="php">php</app>
 		</release>
+		<release version="15.04">
+			<app group="postfix">mail-stack-delivery</app>
+			<app group="essential">patch autoconf automake bison flex gawk gettext libtool libtool-bin m4 sed texinfo libncurses5-dev gperf</app>
+			<app group="tomcat" service="tomcat8">tomcat8</app>
+		</release>
+		<release version="14.10">
+			<app group="postfix">mail-stack-delivery</app>
+			<app group="essential">patch autoconf automake bison flex gawk gettext libtool libtool-bin m4 sed texinfo libncurses5-dev gperf</app>
+			<app group="tomcat" service="tomcat8">tomcat8</app>
+		</release>
 		<release version="14.04">
 			<app group="postfix">mail-stack-delivery</app>
+			<app group="essential">patch autoconf automake bison flex gawk gettext libtool m4 sed texinfo libncurses5-dev gperf</app>
+			<app group="tomcat" service="tomcat7">tomcat7 tomcat7-common libapache2-mod-jk</app>
 		</release>
 		<release version="13.10">
 			<app group="reader">chmsee</app>
 			<app group="postfix">dovecot-postfix</app>
+			<app group="essential">patch autoconf automake bison flex gawk gettext libtool m4 sed texinfo libncurses5-dev gperf</app>
+			<app group="tomcat" service="tomcat7">tomcat7 tomcat7-common libapache2-mod-jk</app>
 		</release>
 		<release version="13.04">
 			<app group="reader">chmsee</app>
 			<app group="libstdc">libstdc++6-4.7-dev</app>
 			<app group="libc6" arch="x86_64">libc6-dev-i386 ia32-libs</app>
 			<app group="postfix">dovecot-postfix</app>
+			<app group="essential">patch autoconf automake bison flex gawk gettext libtool m4 sed texinfo libncurses5-dev gperf</app>
+			<app group="tomcat" service="tomcat7">tomcat7 tomcat7-common libapache2-mod-jk</app>
 		</release>
 	</distri>
 </package>
