@@ -12,7 +12,9 @@ groupadd oinstall
 groupadd dba
 useradd -g oinstall -G dba,wheel ora
 
-y=$(date +%y)
-m=$(date +%m)
-pass="maxwit$y$(((m+1)/2))"
+pass="maxwit"
 echo -e "$pass\n$pass" | passwd ora
+
+echo
+echo "please re-login as 'ora'!"
+echo
