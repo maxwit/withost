@@ -14,7 +14,7 @@ fi
 
 user=ora$over
 
-#yum install -y compat-libcap1 compat-libstdc++-33 gcc gcc-c++ glibc glibc-devel ksh libgcc libstdc++ libstdc++-devel libaio libaio-devel libXext libXtst libX11 libXau libxcb libXi make sysstat pam xorg-x11-xauth unixODBC
+yum install -y compat-libcap1 compat-libstdc++-33 gcc gcc-c++ glibc glibc-devel ksh libgcc libstdc++ libstdc++-devel libaio libaio-devel libXext libXtst libX11 libXau libxcb libXi make sysstat pam xorg-x11-xauth unixODBC
 
 groupadd oinstall
 groupadd witdba
