@@ -6,11 +6,18 @@ if [ $UID == 0 ]; then
 	exit 1
 fi
 
+if [ $# = 1 ]; then
+	over=$1
+else
+	echo "usage: xxx"
+	exit 1
+fi
+
 grep ORACLE_HOME ~/.bashrc > /dev/null && exit 0
 
 echo >> ~/.bashrc
 echo 'export ORACLE_BASE=$HOME/app/oracle' >> ~/.bashrc
-echo 'export ORACLE_HOME=$ORACLE_BASE/product/11.2.0/dbhome_1' >> ~/.bashrc
+echo "export ORACLE_HOME=\$ORACLE_BASE/product/$over/dbhome_1" >> ~/.bashrc
 echo 'export ORACLE_SID=orcl' >> ~/.bashrc
 echo 'export PATH=$PATH:$ORACLE_HOME/bin' >> ~/.bashrc
 
