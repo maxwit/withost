@@ -1,20 +1,26 @@
 #!/bin/sh
 
+over=11
+
 if [ $UID != 0 ]; then
 	echo  "must run as root!"
 	echo
 	exit 1
 fi
 
+if [ $# = 1 ]; then
+	over=$1
+fi
+
 yum install -y compat-libcap1 compat-libstdc++-33 gcc gcc-c++ glibc glibc-devel ksh libgcc libstdc++ libstdc++-devel libaio libaio-devel libXext libXtst libX11 libXau libxcb libXi make sysstat pam xorg-x11-xauth unixODBC
 
 groupadd oinstall
 groupadd witdba
-useradd -g oinstall -G witdba,wheel ora11
+useradd -g oinstall -G witdba,wheel ora$over || exit 1
 
 pass="maxwit"
-echo -e "$pass\n$pass" | passwd ora11
+echo -e "$pass\n$pass" | passwd ora$over
 
 echo
-echo "please re-login as 'ora11'!"
+echo "please re-login as 'ora$over'!"
 echo
