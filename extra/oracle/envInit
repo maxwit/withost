@@ -19,6 +19,6 @@ echo >> ~/.bashrc
 echo 'export ORACLE_BASE=$HOME/app/oracle' >> ~/.bashrc
 echo "export ORACLE_HOME=\$ORACLE_BASE/product/$over/dbhome_1" >> ~/.bashrc
 echo 'export ORACLE_SID=orcl' >> ~/.bashrc
-echo 'export PATH=$PATH:$ORACLE_HOME/bin' >> ~/.bashrc
+echo 'export PATH=$PATH:$ORACLE_HOME/bin:$ORACLE_HOME/sqldeveloper/sqldeveloper/bin' >> ~/.bashrc
 
 echo

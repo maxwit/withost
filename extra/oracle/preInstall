@@ -18,7 +18,7 @@ yum install -y compat-libcap1 compat-libstdc++-33 gcc gcc-c++ glibc glibc-devel 
 
 groupadd oinstall
 groupadd witdba
-useradd -g oinstall -G witdba,wheel $user || exit 1
+useradd -g oinstall -G witdba,wheel -c "Oracle $over" $user || exit 1
 
 pass="maxwit"
 echo -e "$pass\n$pass" | passwd $user
