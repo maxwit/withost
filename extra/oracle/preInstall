@@ -23,8 +23,8 @@ useradd -g oinstall -G witdba,wheel $user || exit 1
 pass="maxwit"
 echo -e "$pass\n$pass" | passwd $user
 
-cp __EnvInit /tmp/
-sudo -i -u $user /tmp/__EnvInit $over
+cp envInit /tmp/
+sudo -i -u $user /tmp/envInit $over
 
 echo "please re-login as '$user'!"
 echo
