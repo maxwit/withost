@@ -193,9 +193,9 @@ insert into TBL_COURSE_CATEGORY (category_id, course_id) select 20, id from TBL_
 insert into TBL_COURSE_CATEGORY (category_id, course_id) select 20, id from TBL_COURSE where title = '数据结构与算法';
 
 
-insert into TBL_USER (uname, fname, password, mail, phone, gender, certified) values ('admin', 'Administer', 'maxwit', 'admin@maxwit.com', '11111111111', 'M', 1);
+insert into TBL_USER (user_name, full_name, password, mail, phone, gender) values ('admin', 'Administer', 'maxwit', 'admin@maxwit.com', '11111111111', 'M');
 
-insert into TBL_ADMIN (id, level) select id, 15 from TBL_USER where uname='admin';
+insert into TBL_ADMIN (id, level) select id, 15 from TBL_USER where user_name='admin';
 
 
 insert into TBL_LESSON (title, course_id, description) values ('title01', 1, 'description01');
