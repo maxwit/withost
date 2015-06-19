@@ -36,8 +36,8 @@ CREATE TABLE TBL_CATEGORY
 
 CREATE TABLE TBL_COURSE_CATEGORY
 (
-	course_id integer NOT NULL,
-	category_id integer NOT NULL
+	course_id integer,
+	category_id integer,
 	CONSTRAINT tbl_course_category_pkey PRIMARY KEY (course_id, category_id)
 );
 
@@ -73,8 +73,8 @@ CREATE TABLE TBL_ADMIN
 
 CREATE TABLE TBL_USER_COURSE
 (
-	user_id integer NOT NULL,
-	course_id integer NOT NULL,
+	user_id integer,
+	course_id integer,
 	apply_date timestamp,
 	progress integer,
 	score integer,
@@ -83,23 +83,23 @@ CREATE TABLE TBL_USER_COURSE
 
 CREATE TABLE TBL_BUDDY
 (
-	i_id integer NOT NULL,
-	u_id integer NOT NULL,
+	i_id integer,
+	u_id integer,
 	CONSTRAINT tbl_buddy_pkey PRIMARY KEY (i_id, u_id)
 );
 
 
 CREATE TABLE TBL_COURSE_DEPEND
 (
-	source_id integer NOT NULL,
-	depend_id integer NOT NULL,
+	source_id integer,
+	depend_id integer,
 	CONSTRAINT tbl_course_depend_pkey PRIMARY KEY (source_id, depend_id)
 );
 
 CREATE TABLE TBL_COURSE_IMPROVE
 (
-	source_id integer NOT NULL,
-	improve_id integer NOT NULL,
+	source_id integer,
+	improve_id integer,
 	CONSTRAINT tbl_course_improve_pkey PRIMARY KEY (source_id, improve_id)
 );
 
@@ -116,15 +116,15 @@ CREATE TABLE TBL_SUITE
 
 CREATE TABLE TBL_COURSE_SUITE
 (
-	course_id integer NOT NULL,
-	suite_id integer NOT NULL
+	course_id integer,
+	suite_id integer,
 	CONSTRAINT tbl_course_suite_pkey PRIMARY KEY (course_id, suite_id)
 );
 
 CREATE TABLE TBL_COURSE_TEACHER
 (
-	course_id integer NOT NULL,
-	teacher_id integer NOT NULL,
+	course_id integer,
+	teacher_id integer,
 	CONSTRAINT tbl_course_teacher_pkey PRIMARY KEY (course_id, teacher_id)
 );
 

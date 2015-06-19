@@ -26,6 +26,6 @@ oracle)
 	exit 1
 esac
 
-sed "s/__PRIMARY_KEY__/$pk/" template.sql > $out
+sed "s/__PRIMARY_KEY__/$pk/" template/witweb.sql > $out
 echo "$out generated"
 echo
