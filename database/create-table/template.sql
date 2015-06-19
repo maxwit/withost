@@ -38,6 +38,7 @@ CREATE TABLE TBL_COURSE_CATEGORY
 (
 	course_id integer NOT NULL,
 	category_id integer NOT NULL
+	CONSTRAINT tbl_course_category_pkey PRIMARY KEY (course_id, category_id)
 );
 
 
@@ -117,6 +118,7 @@ CREATE TABLE TBL_COURSE_SUITE
 (
 	course_id integer NOT NULL,
 	suite_id integer NOT NULL
+	CONSTRAINT tbl_course_suite_pkey PRIMARY KEY (course_id, suite_id)
 );
 
 CREATE TABLE TBL_COURSE_TEACHER
