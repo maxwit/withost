@@ -1,0 +1,31 @@
+#!/bin/sh
+
+if [ $# != 1 ]; then
+	echo "usage: $0 <dbms>"
+	exit 1
+fi
+
+dbms=$1
+out="/tmp/createtbl-${dbms}.sql"
+
+case $dbms in
+mysql)
+	pk="integer auto_increment"
+	;;
+pgsql|postgresql)
+	pk="serial"
+	;;
+mssql|sqlserver)
+	pk="integer identity"
+	;;
+oracle)
+	pk="integer ?"
+	;;
+*)
+	echo "'$dbms' not supported"
+	exit 1
+esac
+
+sed "s/__PRIMARY_KEY__/$pk/" template.sql > $out
+echo "$out generated"
+echo
