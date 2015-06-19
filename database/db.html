@@ -33,7 +33,7 @@
 			<td> </td>
 			<td> login/quit </td>
 			<td> mysql -uadmin -pmaxwit/quit</td>
-			<td> </td>
+			<td>su - postgres --> psql -U dbuser -d dbname -h 127.0.0.1 -p 5432/\q</td>
 			<td> </td>
 			<td> </td>
 		</tr>
@@ -41,7 +41,7 @@
 			<td> </td>
 			<td> help </td>
 			<td> help</td>
-			<td> </td>
+			<td>\h </td>
 			<td> </td>
 			<td> </td>
 		</tr>
@@ -49,7 +49,7 @@
 			<td> </td>
 			<td> show login </td>
 			<td> select user();</td>
-			<td> </td>
+			<td>\du </td>
 			<td> </td>
 			<td> </td>
 		</tr>
@@ -57,7 +57,7 @@
 			<td> </td>
 			<td> list databases </td>
 			<td> show databases;</td>
-			<td> </td>
+			<td>\l </td>
 			<td> </td>
 			<td> </td>
 		</tr>
@@ -73,7 +73,7 @@
 			<td> </td>
 			<td> create/drop database </td>
 			<td> </td>
-			<td> </td>
+			<td>create/drop database dbname </td>
 			<td> </td>
 			<td> </td>
 		</tr>
@@ -81,7 +81,7 @@
 			<td> </td>
 			<td> create/drop user </td>
 			<td> </td>
-			<td> </td>
+			<td>createuser/dropuser username </td>
 			<td> </td>
 			<td> </td>
 		</tr>
