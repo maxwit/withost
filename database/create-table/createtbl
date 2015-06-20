@@ -19,7 +19,7 @@ mssql|sqlserver)
 	pk="integer identity"
 	;;
 oracle)
-	pk="integer ?"
+	pk="integer"
 	;;
 *)
 	echo "'$dbms' not supported"
