@@ -6,7 +6,8 @@ if [ $# != 1 ]; then
 fi
 
 dbms=$1
-out="/tmp/createtbl-${dbms}.sql"
+out="/tmp/${dbms}"
+mkdir -p $out
 
 case $dbms in
 mysql)
@@ -17,6 +18,7 @@ pgsql|postgresql)
 	;;
 mssql|sqlserver)
 	pk="integer identity"
+	echo 'SET IDENTITY_INSERT TBL_CATEGORY ON;' > $out/insert.sql
 	;;
 oracle)
 	pk="integer"
@@ -26,6 +28,7 @@ oracle)
 	exit 1
 esac
 
-sed "s/__PRIMARY_KEY__/$pk/" template/witweb.sql > $out
+sed "s/__PRIMARY_KEY__/$pk/" witweb/create.sql > $out/create.sql
+cat witweb/insert.sql >> $out/insert.sql
 echo "$out generated"
 echo
