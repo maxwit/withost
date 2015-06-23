@@ -27,23 +27,23 @@
 			<td> sudo systemctl start/stop mysql</td>
 			<td> sudo systemctl start/stop postgres</td>
 			<td> net start/stop mssqlserver</td>
-			<td> </td>
+			<td> lsnrctl start&&sqlplus / as sysdba&&startup</td>
 		</tr>
 		<tr>
 			<td> </td>
 			<td> login/quit </td>
 			<td> mysql -u&lt;username&gt; -p&lt;password&gt; <br/> quit</td>
-			<td> psql -U &lt;username&gt; -d dbname -h 127.0.0.1 <br> \q</td>
+			<td> psql -U &lt;username&gt; -d &lt;dbname&gt; -h 127.0.0.1 <br> \q</td>
 			<td> sqlcmd -U&lt;username&gt; -P&lt;password&gt; -d&lt;dbname&gt; <br> quit</td>
-			<td> </td>
+			<td>sqlplus username/password@127.0.0.1/dbname as sysdba <br/>quit | exit</td>
 		</tr>
 		<tr>
 			<td> </td>
 			<td> help </td>
 			<td> help</td>
-			<td>\h </td>
+			<td> \h </td>
 			<td> sqlcmd -?/td>
-			<td> </td>
+			<td>? | help [command] | help index</td>
 		</tr>
 		<tr>
 			<td> </td>
@@ -51,7 +51,7 @@
 			<td> select user();</td>
 			<td>\du </td>
 			<td> </td>
-			<td> </td>
+			<td>show user;</td>
 		</tr>
 		<tr>
 			<td> </td>
@@ -59,15 +59,15 @@
 			<td> show databases;</td>
 			<td>\l </td>
 			<td> select name from sys.databases</td>
-			<td> </td>
+			<td>select name from v$database;</td>
 		</tr>
 		<tr>
 			<td> </td>
 			<td> create/drop tablespace </td>
 			<td> </td>
+			<td>create tablespace test owner user location '/var/lib/postgresql';</td>
 			<td> </td>
-			<td> net start/stop mssqlserver</td>
-			<td> </td>
+			<td>create [temporary] tablespace tabl_name [tempfile]datafile 'xx.dbf' size xx;<br/>drop tablespace tabl_name [including contents]; </td>
 		</tr>
 		<tr>
 			<td> </td>
@@ -81,9 +81,9 @@
 			<td> </td>
 			<td> create/drop user </td>
 			<td> sudo mysql</br> create/drop user &lt;username&gt;</td>
-			<td>createuser/dropuser username </td>
+			<td>createuser/dropuser &lt;username&gt; </td>
 			<td> 1,exec sp_addlogin '&lt;username&gt;','&lt;password&gt;'2,exec sp_adduser '&lt;username&gt;' '&lt;dbname&gt;'<br/>exec sp_droplogin '&lt;username&gt;'</td>
-			<td> </td>
+			<td>create user ting identified by maxwit; <br/>drop user username; </td>
 		</tr>
 		<tr>
 			<td> </td>
@@ -91,23 +91,23 @@
 			<td> show tables;</td>
 			<td>\d </td>
 			<td> select name from sys.tables;</td>
-			<td> </td>
+			<td>select table_name from user_tables;</td>
 		</tr>
 		<tr>
 			<td> </td>
 			<td> show schema(?) </td>
+			<td>desc tablename; </td>
+			<td>\d tablename </td>
 			<td> </td>
-			<td> </td>
-			<td> </td>
-			<td> </td>
+			<td>desc tablename; </td>
 		</tr>
 		<tr>
 			<td> </td>
 			<td> run script </td>
 			<td> source filename</td>
-			<td> </td>
+			<td>\i filename </td>
 			<td> sqlcmd -i C:\&lt;script&gt;.sql</td>
-			<td> </td>
+			<td>start filepath | @filepath  </td>
 		</tr>
 		<tr>
 			<td> </td>
