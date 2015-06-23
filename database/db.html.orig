@@ -26,7 +26,7 @@
 			<td> service start/stop</td>
 			<td> sudo systemctl start/stop mysql</td>
 			<td> sudo systemctl start/stop postgres</td>
-			<td> net start/stop mssqlserver</td>
+			<td> </td>
 			<td> </td>
 		</tr>
 		<tr>
@@ -34,7 +34,7 @@
 			<td> login/quit </td>
 			<td> mysql -u&lt;username&gt; -p&lt;password&gt; <br/> quit</td>
 			<td> psql -U &lt;username&gt; -d dbname -h 127.0.0.1 <br> \q</td>
-			<td> sqlcmd -U&lt;username&gt; -P&lt;password&gt; -d&lt;dbname&gt; <br> quit</td>
+			<td> </td>
 			<td> </td>
 		</tr>
 		<tr>
@@ -42,7 +42,7 @@
 			<td> help </td>
 			<td> help</td>
 			<td>\h </td>
-			<td> sqlcmd -?/td>
+			<td> </td>
 			<td> </td>
 		</tr>
 		<tr>
@@ -58,7 +58,7 @@
 			<td> list databases </td>
 			<td> show databases;</td>
 			<td>\l </td>
-			<td> select name from sys.databases</td>
+			<td> </td>
 			<td> </td>
 		</tr>
 		<tr>
@@ -66,7 +66,7 @@
 			<td> create/drop tablespace </td>
 			<td> </td>
 			<td> </td>
-			<td> net start/stop mssqlserver</td>
+			<td> </td>
 			<td> </td>
 		</tr>
 		<tr>
@@ -74,7 +74,7 @@
 			<td> create/drop database </td>
 			<td> sudo mysql</br> create/drop database &lt;dbname&gt; </td>
 			<td>create/drop database &lt;dbname&gt; </td>
-			<td> create/drop database &lt;dbname&gt;</td>
+			<td> </td>
 			<td> </td>
 		</tr>
 		<tr>
@@ -82,7 +82,7 @@
 			<td> create/drop user </td>
 			<td> sudo mysql</br> create/drop user &lt;username&gt;</td>
 			<td>createuser/dropuser username </td>
-			<td> 1,exec sp_addlogin '&lt;username&gt;','&lt;password&gt;'2,exec sp_adduser '&lt;username&gt;' '&lt;dbname&gt;'<br/>exec sp_droplogin '&lt;username&gt;'</td>
+			<td> </td>
 			<td> </td>
 		</tr>
 		<tr>
@@ -90,7 +90,7 @@
 			<td> list tables </td>
 			<td> show tables;</td>
 			<td>\d </td>
-			<td> select name from sys.tables;</td>
+			<td> </td>
 			<td> </td>
 		</tr>
 		<tr>
@@ -106,7 +106,7 @@
 			<td> run script </td>
 			<td> source filename</td>
 			<td> </td>
-			<td> sqlcmd -i C:\&lt;script&gt;.sql</td>
+			<td> </td>
 			<td> </td>
 		</tr>
 		<tr>
@@ -114,7 +114,7 @@
 			<td> backup/restore </td>
 			<td> </td>
 			<td> </td>
-			<td> BACKUP DATABASE Northwind TO DISK = 'c:\&lt;dbname&gt;.bak' <br/> RESTORE FILELISTONLY FROM DISK = 'c:\&lt;dbname&gt;.bak'</td>
+			<td> </td>
 			<td> </td>
 		</tr>
 		</tbody>
