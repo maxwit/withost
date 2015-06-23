@@ -43,7 +43,7 @@
 			<td> help</td>
 			<td>\h </td>
 			<td> </td>
-			<td>? | help <command> | help index</td>
+			<td>? | help [command] | help index</td>
 		</tr>
 		<tr>
 			<td> </td>
@@ -59,7 +59,7 @@
 			<td> show databases;</td>
 			<td>\l </td>
 			<td> </td>
-			<td> </td>
+			<td>select name from v$database;</td>
 		</tr>
 		<tr>
 			<td> </td>
@@ -83,7 +83,7 @@
 			<td> sudo mysql</br> create/drop user &lt;username&gt;</td>
 			<td>createuser/dropuser &lt;username&gt; </td>
 			<td> </td>
-			<td> </td>
+			<td>create user ting identified by maxwit; <br/>drop user username; </td>
 		</tr>
 		<tr>
 			<td> </td>
@@ -91,7 +91,7 @@
 			<td> show tables;</td>
 			<td>\d </td>
 			<td> </td>
-			<td> </td>
+			<td>select table_name from user_tables;</td>
 		</tr>
 		<tr>
 			<td> </td>
@@ -107,7 +107,7 @@
 			<td> source filename</td>
 			<td>\i filename </td>
 			<td> </td>
-			<td>get filepath | @filepath  </td>
+			<td>start filepath | @filepath  </td>
 		</tr>
 		<tr>
 			<td> </td>
