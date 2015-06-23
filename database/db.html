@@ -25,7 +25,7 @@
 			<td> </td>
 			<td> service start</br>service stop</td>
 			<td> sudo systemctl start mysql</br>sudo systemtcl stop mysql</td>
-			<td> sudo systemctl start mysql</br>sudo systemctl stop postgres</td>
+			<td> sudo systemctl start postgres</br>sudo systemctl stop postgres</td>
 			<td> net startstop mssqlserver</td>
 			<td> lsnrctl start&&sqlplus / as sysdba&&startup</td>
 		</tr>
@@ -81,7 +81,7 @@
 			<td> </td>
 			<td> create user</br>drop user </td>
 			<td> sudo mysql</br> create user &lt;username&gt;sudo mysql</br> drop user &lt;username&gt;</td>
-			<td>createuser&lt;username&gt; dropuser&lt;username&gt;</td>
+			<td>createuser &lt;username&gt; dropuser &lt;username&gt;</td>
 			<td> 1,exec sp_addlogin '&lt;username&gt;','&lt;password&gt;'2,exec sp_adduser '&lt;username&gt;' '&lt;dbname&gt;'<br/>exec sp_droplogin '&lt;username&gt;'</td>
 			<td>create user ting identified by maxwit; <br/>drop user username; </td>
 		</tr>
