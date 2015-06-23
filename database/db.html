@@ -27,7 +27,7 @@
 			<td> sudo systemctl start/stop mysql</td>
 			<td> sudo systemctl start/stop postgres</td>
 			<td> </td>
-			<td> </td>
+			<td> lsnrctl start&&sqlplus / as sysdba&&startup</td>
 		</tr>
 		<tr>
 			<td> </td>
@@ -35,7 +35,7 @@
 			<td> mysql -u&lt;username&gt; -p&lt;password&gt; <br/> quit</td>
 			<td> psql -U &lt;username&gt; -d dbname -h 127.0.0.1 <br> \q</td>
 			<td> </td>
-			<td> </td>
+			<td>sqlplus username/password@127.0.0.1/dbname as sysdba</td>
 		</tr>
 		<tr>
 			<td> </td>
