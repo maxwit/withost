@@ -27,7 +27,7 @@
 			<td> sudo systemctl start mysql</br>sudo systemtcl stop mysql</td>
 			<td> sudo systemctl start mysql</br>sudo systemctl stop postgres</td>
 			<td> net startstop mssqlserver</td>
-			<td> lsnrctl start&&sqlplus / as sysdba&&startup</td>
+			<td> lsnrctl start</br>sqlplus / as sysdba</br>startup</td>
 		</tr>
 		<tr>
 			<td> </td>
@@ -35,7 +35,7 @@
 			<td> mysql -u&lt;username&gt; -p&lt;password&gt; <br/> quit</td>
 			<td> psql -U &lt;username&gt; -d &lt;dbname&gt; -h 127.0.0.1 <br> \q</td>
 			<td> sqlcmd -U&lt;username&gt; -P&lt;password&gt; -d&lt;dbname&gt; <br> quit</td>
-			<td>sqlplus username/password@127.0.0.1/dbname as sysdba <br/>quit | exit</td>
+			<td>sqlplus username/password@127.0.0.1/dbname as sysdba <br/>quit</br> exit</td>
 		</tr>
 		<tr>
 			<td> </td>
@@ -43,7 +43,7 @@
 			<td> help</td>
 			<td> \h </td>
 			<td> sqlcmd -?</td>
-			<td>? | help [command] | help index</td>
+			<td>? </br> help [command] </br> help index</td>
 		</tr>
 		<tr>
 			<td> </td>
@@ -72,7 +72,7 @@
 		<tr>
 			<td> </td>
 			<td> create database</br>drop database </td>
-			<td> sudo mysql</br> create database &lt;dbname&gt; sudo mysql</br> drop database &lt;dbname&gt;  </td>
+			<td> create database &lt;dbname&gt;</br> drop database &lt;dbname&gt;  </td>
 			<td>create database &lt;dbname&gt;</br>drop database &lt;dbname&gt;</td>
 			<td> create database &lt;dbname&gt;</br>drop database &lt;dbname&gt;</td>
 			<td> </td>
@@ -80,7 +80,7 @@
 		<tr>
 			<td> </td>
 			<td> create user</br>drop user </td>
-			<td> sudo mysql</br> create user &lt;username&gt;sudo mysql</br> drop user &lt;username&gt;</td>
+			<td> create user &lt;username&gt;</br> drop user &lt;username&gt;</td>
 			<td>createuser&lt;username&gt; dropuser&lt;username&gt;</td>
 			<td> 1,exec sp_addlogin '&lt;username&gt;','&lt;password&gt;'2,exec sp_adduser '&lt;username&gt;' '&lt;dbname&gt;'<br/>exec sp_droplogin '&lt;username&gt;'</td>
 			<td>create user ting identified by maxwit; <br/>drop user username; </td>
@@ -107,7 +107,7 @@
 			<td> source filename</td>
 			<td>\i filename </td>
 			<td> sqlcmd -i C:\&lt;script&gt;.sql</td>
-			<td>start filename | @filename  </td>
+			<td>start filename </br> @filename  </td>
 		</tr>
 		<tr>
 			<td> </td>
