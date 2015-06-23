@@ -23,15 +23,15 @@
 		<tbody>
 		<tr>
 			<td> </td>
-			<td> service start/stop</td>
-			<td> sudo systemctl start/stop mysql</td>
-			<td> sudo systemctl start/stop postgres</td>
-			<td> net start/stop mssqlserver</td>
+			<td> service start</br>service stop</td>
+			<td> sudo systemctl start mysql</br>sudo systemtcl stop mysql</td>
+			<td> sudo systemctl start mysql</br>sudo systemctl stop postgres</td>
+			<td> net startstop mssqlserver</td>
 			<td> lsnrctl start&&sqlplus / as sysdba&&startup</td>
 		</tr>
 		<tr>
 			<td> </td>
-			<td> login/quit </td>
+			<td> login</br>quit </td>
 			<td> mysql -u&lt;username&gt; -p&lt;password&gt; <br/> quit</td>
 			<td> psql -U &lt;username&gt; -d &lt;dbname&gt; -h 127.0.0.1 <br> \q</td>
 			<td> sqlcmd -U&lt;username&gt; -P&lt;password&gt; -d&lt;dbname&gt; <br> quit</td>
@@ -42,7 +42,7 @@
 			<td> help </td>
 			<td> help</td>
 			<td> \h </td>
-			<td> sqlcmd -?/td>
+			<td> sqlcmd -?</td>
 			<td>? | help [command] | help index</td>
 		</tr>
 		<tr>
@@ -63,7 +63,7 @@
 		</tr>
 		<tr>
 			<td> </td>
-			<td> create/drop tablespace </td>
+			<td> create tablespace</br>drop tablespace </td>
 			<td> </td>
 			<td>create tablespace test owner user location '/var/lib/postgresql';</td>
 			<td> </td>
@@ -71,17 +71,17 @@
 		</tr>
 		<tr>
 			<td> </td>
-			<td> create/drop database </td>
-			<td> sudo mysql</br> create/drop database &lt;dbname&gt; </td>
-			<td>create/drop database &lt;dbname&gt; </td>
-			<td> create/drop database &lt;dbname&gt;</td>
+			<td> create database</br>drop database </td>
+			<td> sudo mysql</br> create database &lt;dbname&gt; sudo mysql</br> drop database &lt;dbname&gt;  </td>
+			<td>create database &lt;dbname&gt;</br>drop database &lt;dbname&gt;</td>
+			<td> create database &lt;dbname&gt;</br>drop database &lt;dbname&gt;</td>
 			<td> </td>
 		</tr>
 		<tr>
 			<td> </td>
-			<td> create/drop user </td>
-			<td> sudo mysql</br> create/drop user &lt;username&gt;</td>
-			<td>createuser/dropuser &lt;username&gt; </td>
+			<td> create user</br>drop user </td>
+			<td> sudo mysql</br> create user &lt;username&gt;sudo mysql</br> drop user &lt;username&gt;</td>
+			<td>createuser&lt;username&gt; dropuser&lt;username&gt;</td>
 			<td> 1,exec sp_addlogin '&lt;username&gt;','&lt;password&gt;'2,exec sp_adduser '&lt;username&gt;' '&lt;dbname&gt;'<br/>exec sp_droplogin '&lt;username&gt;'</td>
 			<td>create user ting identified by maxwit; <br/>drop user username; </td>
 		</tr>
@@ -111,7 +111,7 @@
 		</tr>
 		<tr>
 			<td> </td>
-			<td> backup/restore </td>
+			<td> backup</br>restore </td>
 			<td> </td>
 			<td> </td>
 			<td> BACKUP DATABASE Northwind TO DISK = 'c:\&lt;dbname&gt;.bak' <br/> RESTORE FILELISTONLY FROM DISK = 'c:\&lt;dbname&gt;.bak'</td>
