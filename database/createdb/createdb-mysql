@@ -49,6 +49,11 @@ _EOF_
 
 	psql|pgsql|postgresql)
 cat > $tmp << _EOF_
+drop database $dbname;
+_EOF_
+	psql -Upostgres < $tmp
+
+cat > $tmp << _EOF_
 create user $user with password '$pass';
 create database $dbname encoding='utf8' owner=$user;
 _EOF_
