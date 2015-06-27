@@ -146,7 +146,7 @@ CREATE TABLE TBL_HISTORY
 (
 	ID __PRIMARY_KEY__,
 	IP varchar(255),
-	LOGINDATE timestamp,
+	LOGIN_DATE timestamp,
 	USER_ID integer,
 	CONSTRAINT tbl_history_pkey PRIMARY KEY (ID)
 );
