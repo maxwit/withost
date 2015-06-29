@@ -14,11 +14,11 @@ fi
 
 user=ora$over
 
-yum install -y compat-libcap1 compat-libstdc++-33 gcc gcc-c++ glibc glibc-devel ksh libgcc libstdc++ libstdc++-devel libaio libaio-devel libXext libXtst libX11 libXau libxcb libXi make sysstat pam xorg-x11-xauth unixODBC
+yum install -y compat-libcap1 compat-libstdc++-33 gcc gcc-c++ glibc glibc-devel ksh libgcc libstdc++ libstdc++-devel libaio libaio-devel libXext libXtst libX11 libXau libxcb libXi make sysstat pam xorg-x11-xauth unixODBC-devel pdksh elfutils-libelf-devel
 
-groupadd oinstall
-groupadd witdba
-useradd -g oinstall -G witdba,wheel -c "Oracle $over" $user || exit 1
+/usr/sbin/groupadd oinstall
+/usr/sbin/groupadd witdba
+/usr/sbin/useradd -g oinstall -G witdba,wheel -c "Oracle $over" $user || exit 1
 
 pass="maxwit"
 echo -e "$pass\n$pass" | passwd $user
