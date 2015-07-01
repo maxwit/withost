@@ -1,271 +1,271 @@
 CREATE TABLE TBL_TEACHER
 (
-	id __PRIMARY_KEY__,
-	name varchar(255),
-	nick varchar(255),
-	password varchar(255),
-	CONSTRAINT tbl_teacher_pkey PRIMARY KEY (id)
+	ID __PRIMARY_KEY__,
+	NAME varchar(255),
+	NICK varchar(255),
+	PASSWORD varchar(255),
+	CONSTRAINT tbl_teacher_pkey PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE TBL_TEAM
 (
-	id __PRIMARY_KEY__,
-	teacher_id integer,
-	CONSTRAINT tbl_team_pkey PRIMARY KEY (id)
+	ID __PRIMARY_KEY__,
+	TEACHER_ID integer,
+	CONSTRAINT tbl_team_pkey PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE TBL_COURSE
 (
-	id __PRIMARY_KEY__,
-	price integer,
-	title varchar(255) NOT NULL,
-	CONSTRAINT tbl_course_pkey PRIMARY KEY (id),
-	CONSTRAINT uk_h8k7p4hln6v3u38l0ol637elo UNIQUE (title)
+	ID __PRIMARY_KEY__,
+	PRICE integer,
+	TITLE varchar(255) NOT NULL,
+	CONSTRAINT tbl_course_pkey PRIMARY KEY (ID),
+	CONSTRAINT uk_h8k7p4hln6v3u38l0ol637elo UNIQUE (TITLE)
 );
 
 CREATE TABLE TBL_CATEGORY
 (
-	id __PRIMARY_KEY__,
-	title varchar(255) NOT NULL,
-	CONSTRAINT tbl_category_pkey PRIMARY KEY (id),
-	CONSTRAINT uk_1by980g4j1ugfvhbqq2do8gnu UNIQUE (title)
+	ID __PRIMARY_KEY__,
+	TITLE varchar(255) NOT NULL,
+	CONSTRAINT tbl_category_pkey PRIMARY KEY (ID),
+	CONSTRAINT uk_1by980g4j1ugfvhbqq2do8gnu UNIQUE (TITLE)
 );
 
 
 CREATE TABLE TBL_COURSE_CATEGORY
 (
-	course_id integer,
-	category_id integer,
-	CONSTRAINT tbl_course_category_pkey PRIMARY KEY (course_id, category_id)
+	COURSE_ID integer,
+	CATEGORY_ID integer,
+	CONSTRAINT tbl_course_category_pkey PRIMARY KEY (COURSE_ID, CATEGORY_ID)
 );
 
 
 CREATE TABLE TBL_USER
 (
-	id __PRIMARY_KEY__,
-	certified char(1),
-	degree varchar(255),
-	full_name varchar(255),
-	gender character(1),
-	mail varchar(255) NOT NULL,
-	password varchar(255) NOT NULL,
-	phone varchar(255),
-	pid varchar(19),
-	reg_date timestamp,
-	user_name varchar(255),
-	team_id integer,
-	CONSTRAINT tbl_user_pkey PRIMARY KEY (id),
-	CONSTRAINT uk_d6tho5pxk6qd8xem6vwou8sdp UNIQUE (phone),
-	CONSTRAINT uk_eyhwfee2m7xra94ao5rgu7aue UNIQUE (mail),
-	CONSTRAINT uk_hjqumoudatq2l1w28halhritq UNIQUE (pid),
-	CONSTRAINT uk_s9ie0m36dohw89edvc6249yd0 UNIQUE (user_name)
+	ID __PRIMARY_KEY__,
+	CERTIFIED char(1),
+	DEGREE varchar(255),
+	FULL_NAME varchar(255),
+	GENDER character(1),
+	MAIL varchar(255) NOT NULL,
+	PASSWORD varchar(255) NOT NULL,
+	PHONE varchar(255),
+	PID varchar(19),
+	REG_DATE timestamp,
+	USER_NAME varchar(255),
+	TEAM_ID integer,
+	CONSTRAINT tbl_user_pkey PRIMARY KEY (ID),
+	CONSTRAINT uk_d6tho5pxk6qd8xem6vwou8sdp UNIQUE (PHONE),
+	CONSTRAINT uk_eyhwfee2m7xra94ao5rgu7aue UNIQUE (MAIL),
+	CONSTRAINT uk_hjqumoudatq2l1w28halhritq UNIQUE (PID),
+	CONSTRAINT uk_s9ie0m36dohw89edvc6249yd0 UNIQUE (USER_NAME)
 );
 
 
 CREATE TABLE TBL_ADMIN
 (
-	id __PRIMARY_KEY__,
-	privilege integer,
-	CONSTRAINT tbl_admin_pkey PRIMARY KEY (id)
+	ID __PRIMARY_KEY__,
+	PRIVILEGE integer,
+	CONSTRAINT tbl_admin_pkey PRIMARY KEY (ID)
 );
 
 CREATE TABLE TBL_USER_COURSE
 (
-	user_id integer,
-	course_id integer,
-	apply_date timestamp,
-	progress integer,
-	score integer,
-	CONSTRAINT tbl_user_course_pkey PRIMARY KEY (course_id, user_id)
+	USER_ID integer,
+	COURSE_ID integer,
+	APPLY_DATE timestamp,
+	PROGRESS integer,
+	SCORE integer,
+	CONSTRAINT tbl_user_course_pkey PRIMARY KEY (COURSE_ID, USER_ID)
 );
 
 CREATE TABLE TBL_BUDDY
 (
-	i_id integer,
-	u_id integer,
-	CONSTRAINT tbl_buddy_pkey PRIMARY KEY (i_id, u_id)
+	MY_ID integer,
+	YOUR_ID integer,
+	CONSTRAINT tbl_buddy_pkey PRIMARY KEY (MY_ID, YOUR_ID)
 );
 
 
 CREATE TABLE TBL_COURSE_DEPEND
 (
-	source_id integer,
-	depend_id integer,
-	CONSTRAINT tbl_course_depend_pkey PRIMARY KEY (source_id, depend_id)
+	SOURCE_ID integer,
+	DEPEND_ID integer,
+	CONSTRAINT tbl_course_depend_pkey PRIMARY KEY (SOURCE_ID, DEPEND_ID)
 );
 
 CREATE TABLE TBL_COURSE_IMPROVE
 (
-	source_id integer,
-	improve_id integer,
-	CONSTRAINT tbl_course_improve_pkey PRIMARY KEY (source_id, improve_id)
+	SOURCE_ID integer,
+	IMPROVE_ID integer,
+	CONSTRAINT tbl_course_improve_pkey PRIMARY KEY (SOURCE_ID, IMPROVE_ID)
 );
 
 
 CREATE TABLE TBL_SUITE
 (
-	id __PRIMARY_KEY__,
-	code varchar(255) NOT NULL,
-	title varchar(255) NOT NULL,
-	CONSTRAINT tbl_suite_pkey PRIMARY KEY (id),
-	CONSTRAINT uk_en9xivgf2d278dgj3cclg08ja UNIQUE (title),
-	CONSTRAINT uk_q7os4t16v1tkyskamxxhp3anr UNIQUE (code)
+	ID __PRIMARY_KEY__,
+	CODE varchar(255) NOT NULL,
+	TITLE varchar(255) NOT NULL,
+	CONSTRAINT tbl_suite_pkey PRIMARY KEY (ID),
+	CONSTRAINT uk_en9xivgf2d278dgj3cclg08ja UNIQUE (TITLE),
+	CONSTRAINT uk_q7os4t16v1tkyskamxxhp3anr UNIQUE (CODE)
 );
 
 CREATE TABLE TBL_COURSE_SUITE
 (
-	course_id integer,
-	suite_id integer,
-	CONSTRAINT tbl_course_suite_pkey PRIMARY KEY (course_id, suite_id)
+	COURSE_ID integer,
+	SUITE_ID integer,
+	CONSTRAINT tbl_course_suite_pkey PRIMARY KEY (COURSE_ID, SUITE_ID)
 );
 
 CREATE TABLE TBL_COURSE_TEACHER
 (
-	course_id integer,
-	teacher_id integer,
-	CONSTRAINT tbl_course_teacher_pkey PRIMARY KEY (course_id, teacher_id)
+	COURSE_ID integer,
+	TEACHER_ID integer,
+	CONSTRAINT tbl_course_teacher_pkey PRIMARY KEY (COURSE_ID, TEACHER_ID)
 );
 
 
 CREATE TABLE TBL_EDUCATION
 (
-	id __PRIMARY_KEY__,
-	degree varchar(255),
-	enddate date,
-	major varchar(255),
-	school varchar(255),
-	startdate date,
-	user_id integer,
-	CONSTRAINT tbl_education_pkey PRIMARY KEY (id)
+	ID __PRIMARY_KEY__,
+	DEGREE varchar(255),
+	ENDDATE date,
+	MAJOR varchar(255),
+	SCHOOL varchar(255),
+	STARTDATE date,
+	USER_ID integer,
+	CONSTRAINT tbl_education_pkey PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE TBL_HISTORY
 (
-	id __PRIMARY_KEY__,
-	ip varchar(255),
-	logindate timestamp,
-	user_id integer,
-	CONSTRAINT tbl_history_pkey PRIMARY KEY (id)
+	ID __PRIMARY_KEY__,
+	IP varchar(255),
+	LOGIN_DATE timestamp,
+	USER_ID integer,
+	CONSTRAINT tbl_history_pkey PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE TBL_LESSON
 (
-	id __PRIMARY_KEY__,
-	description varchar(255),
-	title varchar(255),
-	course_id integer,
-	CONSTRAINT tbl_lesson_pkey PRIMARY KEY (id)
+	ID __PRIMARY_KEY__,
+	DESCRIPTION varchar(255),
+	TITLE varchar(255),
+	COURSE_ID integer,
+	CONSTRAINT tbl_lesson_pkey PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE TBL_PROJECT
 (
-	id __PRIMARY_KEY__,
-	teacher_id integer,
-	CONSTRAINT tbl_project_pkey PRIMARY KEY (id)
+	ID __PRIMARY_KEY__,
+	TEACHER_ID integer,
+	CONSTRAINT tbl_project_pkey PRIMARY KEY (ID)
 );
 
 
 CREATE TABLE TBL_WORK
 (
-	id __PRIMARY_KEY__,
-	company varchar(255),
-	enddate date,
-	position varchar(255),
-	responsibility varchar(255),
-	startdate date,
-	user_id integer,
-	CONSTRAINT tbl_work_pkey PRIMARY KEY (id)
+	ID __PRIMARY_KEY__,
+	COMPANY varchar(255),
+	ENDDATE date,
+	POSITION varchar(255),
+	RESPONSIBILITY varchar(255),
+	STARTDATE date,
+	USER_ID integer,
+	CONSTRAINT tbl_work_pkey PRIMARY KEY (ID)
 );
 
 ------------------- create foreign keys ---------------------
 
 ALTER TABLE TBL_TEAM
-	ADD CONSTRAINT TBL_TEAM_fk_teacher_id FOREIGN KEY (teacher_id)
-		REFERENCES TBL_TEACHER (id);
+	ADD CONSTRAINT tbl_team_fk_teacher_id FOREIGN KEY (TEACHER_ID)
+		REFERENCES TBL_TEACHER (ID);
 
 ALTER TABLE TBL_COURSE_CATEGORY
-	ADD CONSTRAINT TBL_COURSE_CATEGORY_fk_category_id FOREIGN KEY (category_id)
-		REFERENCES TBL_CATEGORY (id);
+	ADD CONSTRAINT tbl_course_category_fk_category_id FOREIGN KEY (CATEGORY_ID)
+		REFERENCES TBL_CATEGORY (ID);
 ALTER TABLE TBL_COURSE_CATEGORY
-	ADD CONSTRAINT TBL_COURSE_CATEGORY_fk_course_id FOREIGN KEY (course_id)
-		REFERENCES TBL_COURSE (id);
+	ADD CONSTRAINT tbl_course_category_fk_course_id FOREIGN KEY (COURSE_ID)
+		REFERENCES TBL_COURSE (ID);
 
 ALTER TABLE TBL_USER
-	ADD CONSTRAINT TBL_USER_fk_team_id FOREIGN KEY (team_id)
-		REFERENCES TBL_TEAM (id);
+	ADD CONSTRAINT tbl_user_fk_team_id FOREIGN KEY (TEAM_ID)
+		REFERENCES TBL_TEAM (ID);
 
 ALTER TABLE TBL_ADMIN
-	ADD CONSTRAINT TBL_ADMIN_fk_id FOREIGN KEY (id)
-		REFERENCES TBL_USER (id);
+	ADD CONSTRAINT tbl_admin_fk_id FOREIGN KEY (ID)
+		REFERENCES TBL_USER (ID);
 
 ALTER TABLE TBL_USER_COURSE
-	ADD CONSTRAINT TBL_USER_COURSE_fk_user_id FOREIGN KEY (user_id)
-		REFERENCES TBL_USER (id);
+	ADD CONSTRAINT tbl_user_course_fk_user_id FOREIGN KEY (USER_ID)
+		REFERENCES TBL_USER (ID);
 
 ALTER TABLE TBL_USER_COURSE
-	ADD CONSTRAINT TBL_USER_COURSE_fk_course_id FOREIGN KEY (course_id)
-		REFERENCES TBL_COURSE (id);
+	ADD CONSTRAINT tbl_user_course_fk_course_id FOREIGN KEY (COURSE_ID)
+		REFERENCES TBL_COURSE (ID);
 
 ALTER TABLE TBL_BUDDY
-	ADD CONSTRAINT TBL_BUDDY_fk_i_id FOREIGN KEY (i_id)
-		REFERENCES TBL_USER (id);
+	ADD CONSTRAINT tbl_buddy_fk_my_id FOREIGN KEY (MY_ID)
+		REFERENCES TBL_USER (ID);
 
 ALTER TABLE TBL_BUDDY
-	ADD  CONSTRAINT TBL_BUDDY_fk_u_id FOREIGN KEY (u_id)
-		REFERENCES TBL_USER (id);
+	ADD  CONSTRAINT tbl_buddy_fk_your_id FOREIGN KEY (YOUR_ID)
+		REFERENCES TBL_USER (ID);
 
 ALTER TABLE TBL_COURSE_DEPEND
-	ADD CONSTRAINT TBL_COURSE_DEPEND_fk_source_id FOREIGN KEY (source_id)
-		REFERENCES TBL_COURSE (id);
+	ADD CONSTRAINT tbl_course_depend_fk_source_id FOREIGN KEY (SOURCE_ID)
+		REFERENCES TBL_COURSE (ID);
 ALTER TABLE TBL_COURSE_DEPEND
-	ADD CONSTRAINT TBL_COURSE_DEPEND_fk_depend_id FOREIGN KEY (depend_id)
-		REFERENCES TBL_COURSE (id);
+	ADD CONSTRAINT tbl_course_depend_fk_depend_id FOREIGN KEY (DEPEND_ID)
+		REFERENCES TBL_COURSE (ID);
 
 ALTER TABLE TBL_COURSE_IMPROVE
-	ADD CONSTRAINT TBL_COURSE_IMPROVE_fk_improve_id FOREIGN KEY (improve_id)
-		REFERENCES TBL_COURSE (id);
+	ADD CONSTRAINT tbl_course_improve_fk_improve_id FOREIGN KEY (IMPROVE_ID)
+		REFERENCES TBL_COURSE (ID);
 
 ALTER TABLE TBL_COURSE_IMPROVE
-	ADD CONSTRAINT TBL_COURSE_IMPROVE_fk_source_id FOREIGN KEY (source_id)
-		REFERENCES TBL_COURSE (id);
+	ADD CONSTRAINT tbl_course_improve_fk_source_id FOREIGN KEY (SOURCE_ID)
+		REFERENCES TBL_COURSE (ID);
 
 ALTER TABLE TBL_COURSE_SUITE
-	ADD CONSTRAINT TBL_COURSE_SUITE_fk_course_id FOREIGN KEY (course_id)
-		REFERENCES TBL_COURSE (id);
+	ADD CONSTRAINT tbl_course_suite_fk_course_id FOREIGN KEY (COURSE_ID)
+		REFERENCES TBL_COURSE (ID);
 
 ALTER TABLE TBL_COURSE_SUITE
-	ADD CONSTRAINT TBL_COURSE_SUITE_fk_suite_id FOREIGN KEY (suite_id)
-		REFERENCES TBL_SUITE (id);
+	ADD CONSTRAINT tbl_course_suite_fk_suite_id FOREIGN KEY (SUITE_ID)
+		REFERENCES TBL_SUITE (ID);
 
 ALTER TABLE TBL_COURSE_TEACHER
-	ADD CONSTRAINT TBL_COURSE_TEACHER_fk_course_id FOREIGN KEY (course_id)
-		REFERENCES TBL_COURSE (id);
+	ADD CONSTRAINT tbl_course_teacher_fk_course_id FOREIGN KEY (COURSE_ID)
+		REFERENCES TBL_COURSE (ID);
 
 ALTER TABLE TBL_COURSE_TEACHER
-	ADD CONSTRAINT TBL_COURSE_TEACHER_fk_teacher_id FOREIGN KEY (teacher_id)
-		REFERENCES TBL_TEACHER (id);
+	ADD CONSTRAINT tbl_course_teacher_fk_teacher_id FOREIGN KEY (TEACHER_ID)
+		REFERENCES TBL_TEACHER (ID);
 
 ALTER TABLE TBL_EDUCATION
-	ADD CONSTRAINT TBL_EDUCATION_fk_user_id FOREIGN KEY (user_id)
-		REFERENCES TBL_USER (id);
+	ADD CONSTRAINT tbl_education_fk_user_id FOREIGN KEY (USER_ID)
+		REFERENCES TBL_USER (ID);
 
 ALTER TABLE TBL_HISTORY
-	ADD CONSTRAINT TBL_HISTORY_fk_user_id FOREIGN KEY (user_id)
-		REFERENCES TBL_USER (id);
+	ADD CONSTRAINT tbl_history_fk_user_id FOREIGN KEY (USER_ID)
+		REFERENCES TBL_USER (ID);
 
 ALTER TABLE TBL_LESSON
-	ADD CONSTRAINT TBL_LESSON_fk_course_id FOREIGN KEY (course_id)
-		REFERENCES TBL_COURSE (id);
+	ADD CONSTRAINT tbl_lesson_fk_course_id FOREIGN KEY (COURSE_ID)
+		REFERENCES TBL_COURSE (ID);
 
 ALTER TABLE TBL_PROJECT
-	ADD CONSTRAINT TBL_PROJECT_fk_teacher_id FOREIGN KEY (teacher_id)
-		REFERENCES TBL_TEACHER (id);
+	ADD CONSTRAINT tbl_project_fk_teacher_id FOREIGN KEY (TEACHER_ID)
+		REFERENCES TBL_TEACHER (ID);
 
 ALTER TABLE TBL_WORK
-	ADD CONSTRAINT TBL_WORK_fk_user_id FOREIGN KEY (user_id)
-		REFERENCES TBL_USER (id);
+	ADD CONSTRAINT tbl_work_fk_user_id FOREIGN KEY (USER_ID)
+		REFERENCES TBL_USER (ID);
