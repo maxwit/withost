@@ -14,7 +14,7 @@ if (Test-Path "$JAVA_HOME\bin\javac.exe") {
 
 [Environment]::SetEnvironmentVariable("JAVA_HOME", $JAVA_HOME, "User");
 [Environment]::SetEnvironmentVariable("CLASSPATH", ".;%JAVA_HOME%\lib;%JAVA_HOME%\jre\lib", "User");
-[Environment]::SetEnvironmentVariable("PATH", "%JAVA_HOME%\bin", "User");
+[Environment]::SetEnvironmentVariable("PATH", "$JAVA_HOME\bin", "User");
 #$PATH = [Environment]::GetEnvironmentVariable("PATH", "User");
 #echo $PATH;
 
