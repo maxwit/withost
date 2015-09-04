@@ -13,7 +13,7 @@ else
 fi
 
 JAVA_HOME=`tar -tf $JDK | head -n 1`
-JAVA_HOME=${JAVA_HOME%/}
+JAVA_HOME=${JAVA_HOME%%/*}
 echo "Installing $JAVA_HOME ..."
 JAVA_HOME=$DIR/$JAVA_HOME
 
