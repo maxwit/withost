@@ -33,6 +33,7 @@ sudo -u jenkins rm -rf ${JENKINS_HOME}/.ssh
 sudo -u jenkins tar xf $tmpf -C ${JENKINS_HOME}/
 sudo -u jenkins rm -f ${JENKINS_HOME}/.ssh/known_hosts ${JENKINS_HOME}/.ssh/authorized_keys
 #sudo -u jenkins ls -al ${JENKINS_HOME}/.ssh
+rm $tmpf
 
 ##if [ ! -e ~/.ssh/id_rsa ]; then
 ##	sudo -u jenkins ssh-keygen -P '' -f ~/.ssh/id_rsa
