@@ -24,16 +24,15 @@ fi
 for plugin in gitlab-plugin
 do
 	sudo -i -u jenkins java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080/ install-plugin $plugin -restart
-	#sudo -i -u jenkins java -jar ${JENKINS_HOME}/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080/ install-plugin $plugin -restart
 done
 
+JENKINS_HOME=/var/lib/jenkins
 tmpf=`mktemp -u`
-sudo -i -u $SUDO_USER tar cf $tmpf .ssh/id_rsa .ssh/id_rsa.pub
-echo
-sudo -i -u jenkins pwd
-sudo -i -u jenkins rm -rf .ssh
-sudo -i -u jenkins tar xvf $tmpf
-sudo -i -u jenkins ls -al .ssh
+sudo -i -u $SUDO_USER tar cf $tmpf .ssh
+sudo -u jenkins rm -rf ${JENKINS_HOME}/.ssh
+sudo -u jenkins tar xf $tmpf -C ${JENKINS_HOME}/
+sudo -u jenkins rm -f ${JENKINS_HOME}/.ssh/known_hosts ${JENKINS_HOME}/.ssh/authorized_keys
+#sudo -u jenkins ls -al ${JENKINS_HOME}/.ssh
 
 ##if [ ! -e ~/.ssh/id_rsa ]; then
 ##	sudo -u jenkins ssh-keygen -P '' -f ~/.ssh/id_rsa
