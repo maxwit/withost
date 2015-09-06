@@ -13,19 +13,23 @@ else
 fi
 
 JAVA_HOME=`tar -tf $JDK | head -n 1`
-JAVA_HOME=$DIR/${JAVA_HOME%/}
+JAVA_HOME=${JAVA_HOME%%/*}
+echo "Installing $JAVA_HOME ..."
+JAVA_HOME=$DIR/$JAVA_HOME
 
 if [ ! -x $JAVA_HOME/bin/javac ]; then
-	echo "extracting $JDK to $JAVA_HOME ..."
 	tar xf $JDK -C $DIR || exit 1
 fi
 
-sed -i -e '/JAVA_HOME/d' -e '/CLASS_PATH/d' $HOME/.bashrc
+sed -i -e '/JAVA_HOME/d' -e '/CLASS_PATH/d' $HOME/.profile
 
-cat >> $HOME/.bashrc << EOF
+cat >> $HOME/.profile << EOF
 export JAVA_HOME=$JAVA_HOME
 export CLASS_PATH=.:\$JAVA_HOME/lib:\$JAVA_HOME/jre/lib
 export PATH=\$JAVA_HOME/bin:\$PATH
 EOF
 
-echo "JDK successfully installed to $JAVA_HOME"
+#source ~/.profile
+#javac -version || exit 1
+
+#echo "JDK successfully installed to $JAVA_HOME"
