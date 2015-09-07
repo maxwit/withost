@@ -37,6 +37,8 @@ do
 	done
 done
 
+service jenkins restart
+
 JENKINS_HOME=/var/lib/jenkins
 tmpf=`mktemp -u`
 sudo -i -u $SUDO_USER tar cf $tmpf .ssh
