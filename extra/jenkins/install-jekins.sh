@@ -8,7 +8,7 @@ fi
 if [ -e /etc/redhat-release ]; then
 	wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
 	rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
-	yum install -y jenkins
+	yum install -y jenkins || exit 1
 
 	usermod -a -G root jenkins
 	chmod g+r /etc/shadow
@@ -16,14 +16,15 @@ else
 	wget -q -O - https://jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
 	echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list
 	apt-get update
-	apt-get install -y jenkins
+	apt-get install -y jenkins || exit 1
 
 	usermod -a -G shadow jenkins
 fi
 
-for plugin in gitlab-plugin
+for plugin in git gitlab-plugin
 do
-	sudo -i -u jenkins java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080/ install-plugin $plugin -restart
+	echo "Installing plugin '$plugin' ..."
+	sudo -u jenkins java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080/ install-plugin $plugin
 done
 
 JENKINS_HOME=/var/lib/jenkins
