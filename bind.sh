@@ -8,7 +8,7 @@ fi
 
 sudo python << EOF
 from app import bind
-bind.setup(9, 18)
+bind.setup(9, 18, {'net.domain':'maxwit.com'})
 EOF
 
 which systemctl > /dev/null

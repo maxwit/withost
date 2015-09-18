@@ -39,11 +39,11 @@ def get_pattern(conf):
 
     return pattern
 
-def setup(dist, apps):
+def setup(dist, apps, conf):
     dhcp_conf = '/etc/dhcp/dhcpd.conf'
 
     pattern = get_pattern(conf)
     base.render_to_file(dhcp_conf, app/site/dhcpd.conf', pattern)
 
-def remove(dist, conf, apps):
+def remove(dist, apps, conf):
     pass

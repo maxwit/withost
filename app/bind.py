@@ -1,9 +1,7 @@
 import os
 from lib import base
 
-conf = {'net.domain':'maxwit.com'}
-
-def setup(dist, apps):
+def setup(dist, apps, conf):
 	if not conf.has_key('net.domain'):
 		raise Exception('domain name NOT configured!')
 	domain_name = conf['net.domain']
@@ -92,5 +90,5 @@ def setup(dist, apps):
 
 	print "DNS for domain '%s' configured!" % domain_name
 
-def remove(dist, conf, apps):
+def remove(dist, apps, conf):
 	pass

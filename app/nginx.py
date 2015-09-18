@@ -3,7 +3,7 @@
 import os
 from dist import website
 
-def setup(dist, apps):
+def setup(dist, apps, conf):
 	owner = os.getlogin()
 
 	for site in conf['web.site'].split():
@@ -16,7 +16,7 @@ def setup(dist, apps):
 		website.add_site(dist, 'nginx', server_name, owner, backend)
 		print
 
-def remove(dist, conf, apps):
+def remove(dist, apps, conf):
 	for site in conf['web.site'].split():
 		server_name = site.split('@')[0]
 		website.del_site(dist, 'nginx', server_name)

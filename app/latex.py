@@ -6,7 +6,7 @@ import zipfile
 import shutil
 from lib import base
 
-def setup(dist, apps):
+def setup(dist, apps, conf):
 	# or from ZJU
 	url = 'http://mirrors.ctan.org/macros/latex/contrib'
 	pkgs = ['draftwatermark', 'everypage', 'multirow', 'makecell', 'xltxtra', 'realscripts', 'metalogo', 'fancyhdr']

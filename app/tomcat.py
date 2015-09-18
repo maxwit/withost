@@ -3,7 +3,7 @@ from lib import base
 from dist import website
 import sys
 
-def setup(dist, apps):
+def setup(dist, apps, conf):
 	owner = os.getlogin()
 
 	if 'tomcat7' in apps:
@@ -47,5 +47,5 @@ def setup(dist, apps):
 
 		print
 
-def remove(dist, conf, apps):
+def remove(dist, apps, conf):
 	pass

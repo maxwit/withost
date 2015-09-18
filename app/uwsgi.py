@@ -1,7 +1,7 @@
 import os
 from lib import base
 
-def setup(dist, apps):
+def setup(dist, apps, conf):
 	uwsgi_conf = '/etc/uwsgi.ini'
 	# FIXME
 	site_port = '9999'
@@ -28,5 +28,5 @@ def setup(dist, apps):
 		f.close()
 		os.system("chmod +x /etc/rc.local")
 
-def remove(dist, conf, apps):
+def remove(dist, apps, conf):
 	pass

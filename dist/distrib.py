@@ -95,7 +95,7 @@ class linux(object):
 				print 'Setup %s ...' % group
 				try:
 					mod = __import__('app.' + group, fromlist=['setup'])
-					mod.setup((self.name, self.version), app_node.text.split())
+					mod.setup((self.name, self.version), app_node.text.split(), {})
 					# mod.setup((self.name, self.version), (group, app_list))
 				except Exception, e:
 					print '%r\n' % e
