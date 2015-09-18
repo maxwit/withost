@@ -44,7 +44,7 @@ def setup(dist, apps):
 
 	named_conf = named_path + '/named.conf'
 	zone_conf  = named_path + '/named.%s.zones' % domain_name
-	rndc_key   = named_path + '/rndc.key'
+	# rndc_key   = named_path + '/rndc.key'
 
 	# FIXME: detect by options.directory
 	directory = None
@@ -87,7 +87,7 @@ def setup(dist, apps):
 			return
 
 	lines.append('include "%s";\n' % zone_conf)
-	lines.append('include "%s";\n' % rndc_key)
+	# lines.append('include "%s";\n' % rndc_key)
 	open(named_conf, 'w').writelines(lines)
 
 	print "DNS for domain '%s' configured!" % domain_name

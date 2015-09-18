@@ -1,11 +1,11 @@
 zone "__DOMAINNAME__" IN {
 	type master;
 	file "db.__DOMAINNAME__";
-	allow-update {key rndc;};
+	allow-update {127.0.0.1;};
 };
 
 zone "__ARPAADDR__.in-addr.arpa" IN {
 	type master;
 	file "db.__ARPAADDR__";
-	allow-update {key rndc;};
+	allow-update {127.0.0.1;};
 };
