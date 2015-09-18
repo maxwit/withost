@@ -27,7 +27,6 @@ def setup(dist, apps):
 		ifx = base.get_default_ifx()
 		if ifx is None:
 			raise Exception('Fail to find default NIC!')
-
 		domain_addr = base.get_ip(ifx)
 
 	forward = base.get_gateway(domain_addr)
@@ -36,9 +35,27 @@ def setup(dist, apps):
 	arpa_addr.reverse()
 	arpa_addr = '.'.join(arpa_addr)
 
-	zone_conf = '/etc/named.%s.zones' % domain_name
-	domain_conf = '/var/named/db.' + domain_name
-	arpa_conf = '/var/named/db.' + arpa_addr
+	named_path = None
+	for dir in ['/etc', '/etc/bind']:
+		if os.path.exists(dir + '/named.conf'):
+			named_path = dir
+	if named_path is None:
+		raise Exception('named.conf not found!')
+
+	named_conf = named_path + '/named.conf'
+	zone_conf  = named_path + '/named.%s.zones' % domain_name
+	rndc_key   = named_path + '/rndc.key'
+
+	# FIXME: detect by options.directory
+	directory = None
+	for dir in ['/var/named', '/var/cache/bind']:
+		if os.path.isdir(dir):
+			directory = dir
+	if directory is None:
+		raise Exception('DB directory not found!')
+
+	domain_conf = directory + '/db.' + domain_name
+	arpa_conf = directory + '/db.' + arpa_addr
 
 	pattern = { '__DOMAINNAME__':domain_name, '__MAILSERVER__':mail_server,
 				'__DOMAINADDR__':domain_addr, '__ARPAADDR__':arpa_addr }
@@ -47,26 +64,33 @@ def setup(dist, apps):
 	base.render_to_file(domain_conf, 'app/bind/bind-domain.conf', pattern)
 	base.render_to_file(arpa_conf, 'app/bind/bind-arpa.conf', pattern)
 
-	fd = open('/etc/named.conf')
+	os.system('chmod +r %s/*' % directory)
+
+	fd = open(named_conf)
 	lines = fd.readlines()
 	fd.close()
 
+	in_options = False
 	for index in range(len(lines)):
-		line = lines[index]
-		if 'listen' in line:
+		line = lines[index].replace('\n', '')
+		if line == 'options {':
+			in_options = True
+		elif 'listen-on' in line:
 			lines[index] = line.replace('127.0.0.1', 'any')
-
 		elif 'allow-query' in line:
 			lines[index] = line.replace('localhost', 'any')
-
-		elif line.strip() == '};':
+		elif line == '};' and in_options:
 			lines.insert(index, '\n\tforwarders {\n\t\t%s;\n\t};\n' % forward.replace(' ', ';\n\t\t'))
-			break
+			in_options = False
+		elif zone_conf in line:
+			print "domain '%s' updated!" % domain_name
+			return
 
-	lines.insert(-1, 'include "%s";\n' % zone_conf)
-	open('/etc/named.conf', 'w').writelines(lines)
+	lines.append('include "%s";\n' % zone_conf)
+	lines.append('include "%s";\n' % rndc_key)
+	open(named_conf, 'w').writelines(lines)
 
-	os.system('chmod +r /var/named/*')
+	print "DNS for domain '%s' configured!" % domain_name
 
 def remove(dist, conf, apps):
 	pass
