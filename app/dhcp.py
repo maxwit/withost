@@ -43,7 +43,7 @@ def setup(dist, apps):
     dhcp_conf = '/etc/dhcp/dhcpd.conf'
 
     pattern = get_pattern(conf)
-    base.render_to_file(dhcp_conf, 'dist/site/dhcpd.conf', pattern)
+    base.render_to_file(dhcp_conf, app/site/dhcpd.conf', pattern)
 
 def remove(dist, conf, apps):
     pass

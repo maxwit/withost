@@ -1,6 +1,8 @@
 import os
 from lib import base
 
+conf = {'net.domain':'maxwit.com'}
+
 def setup(dist, apps):
 	if not conf.has_key('net.domain'):
 		raise Exception('domain name NOT configured!')
@@ -41,9 +43,9 @@ def setup(dist, apps):
 	pattern = { '__DOMAINNAME__':domain_name, '__MAILSERVER__':mail_server,
 				'__DOMAINADDR__':domain_addr, '__ARPAADDR__':arpa_addr }
 
-	base.render_to_file(zone_conf, 'dist/bind/bind.zones', pattern)
-	base.render_to_file(domain_conf, 'dist/bind/bind-domain.conf', pattern)
-	base.render_to_file(arpa_conf, 'dist/bind/bind-arpa.conf', pattern)
+	base.render_to_file(zone_conf, 'app/bind/bind.zones', pattern)
+	base.render_to_file(domain_conf, 'app/bind/bind-domain.conf', pattern)
+	base.render_to_file(arpa_conf, 'app/bind/bind-arpa.conf', pattern)
 
 	fd = open('/etc/named.conf')
 	lines = fd.readlines()

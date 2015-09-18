@@ -39,9 +39,9 @@ def setup(dist, apps):
 		pattern = {'__DOCROOT__':site_root, '__SERVERNAME__':server_name}
 		#FIXME
 		#print 'Generating %s/%s.xml' % (cata, server_name)
-		#base.render_to_file('%s/%s.xml' % (cata, server_name), 'dist/site/tomcat.xml', pattern)
+		#base.render_to_file('%s/%s.xml' % (cata, server_name), app/site/tomcat.xml', pattern)
 		print 'Generating %s/ROOT.xml' % cata
-		base.render_to_file('%s/ROOT.xml' % cata, 'dist/site/tomcat.xml', pattern)
+		base.render_to_file('%s/ROOT.xml' % cata, app/site/tomcat.xml', pattern)
 		if server_type == 'apache' and os.path.isdir('/etc/httpd/conf'):
 			os.system('sed -i "s/#NameVirtualHost \*:80/NameVirtualHost *:80/" "/etc/httpd/conf/httpd.conf"')
 

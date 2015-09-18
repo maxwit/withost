@@ -6,7 +6,7 @@ def setup(dist, apps):
 	# FIXME
 	site_port = '9999'
 	pattern = {'__PORT__':site_port}
-	base.render_to_file(uwsgi_conf, 'dist/site/uwsgi.ini', pattern)
+	base.render_to_file(uwsgi_conf, app/site/uwsgi.ini', pattern)
 
 	# FIXME
 	if os.path.exists('/etc/rc.local'):
