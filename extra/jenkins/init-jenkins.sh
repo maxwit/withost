@@ -13,6 +13,7 @@ if [ ! -e .ssh/id_rsa ]; then
 		chmod 700 .ssh
 	fi
 	ssh-keygen -P '' -f .ssh/id_rsa || exit 1
+	echo
 fi
 
 pid=`jps | awk '$2 == "jenkins.war" {print $1}'`
