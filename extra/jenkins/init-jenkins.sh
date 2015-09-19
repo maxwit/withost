@@ -5,27 +5,33 @@ if [ $USER != 'jenkins' ]; then
 	exit 1
 fi
 
-# FIXME
 cd /var/lib/jenkins
-pwd
 
-if [ -d .ssh ]; then
-	rm -rf .ssh/*
-else
-	mkdir .ssh
-	chmod 700 .ssh
+if [ ! -e .ssh/id_rsa ]; then
+	if [ ! -d .ssh ]; then
+		mkdir .ssh
+		chmod 700 .ssh
+	fi
+	ssh-keygen -P '' -f .ssh/id_rsa || exit 1
 fi
 
-ssh-keygen -P '' -f .ssh/id_rsa || exit 1
-
-port=8580
 pid=`jps | awk '$2 == "jenkins.war" {print $1}'`
-if [ -z "$pid"]; then
+if [ -z "$pid" ]; then
 	echo "jenkins is not running!"
 	exit 1
 fi
 
+if [ -e /etc/redhat-release ]; then
+	jenkins_conf=/etc/sysconfig/jenkins
+else
+	jenkins_conf=/etc/default/jenkins
+fi
 
+port=`awk -F '=' '$1 == "HTTP_PORT" {print $2}' $jenkins_conf`
+if [ -z "$port" ]; then
+	echo "invalid '$jenkins_conf'!"
+	exit 1
+fi
 
 for plugin in git gitlab-plugin python perl
 do
