@@ -66,7 +66,7 @@ def get_ip(ifname):
 def get_default_ifx():
 	# FIXME
 	for ifx in os.listdir('/sys/class/net'):
-		if ifx == 'lo' or ifx.startswith('vmnet'):
+		if ifx == 'lo' or ifx.startswith('vmnet') or ifx.startswith('virbr'):
 			continue
 
 		try:

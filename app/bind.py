@@ -62,6 +62,7 @@ def setup(dist, apps, conf):
 	base.render_to_file(domain_conf, 'app/bind/bind-domain.conf', pattern)
 	base.render_to_file(arpa_conf, 'app/bind/bind-arpa.conf', pattern)
 
+	os.system('chmod g+w ' + directory) # FIXME
 	os.system('chmod +r %s/*' % directory)
 
 	fd = open(named_conf)
