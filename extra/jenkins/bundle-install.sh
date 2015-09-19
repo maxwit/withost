@@ -25,7 +25,8 @@ sudo -u jenkins $temp/init-jenkins.sh
 
 JENKINS_HOME=/var/lib/jenkins
 sudo -u jenkins -cp -v $JENKINS_HOME/.ssh/id_rsa.pub $temp
-scp $temp/id_rsa.pub 192.168.3.3:/mnt/witpub/devel/jenkins/
+scp $temp/id_rsa.pub 192.168.3.3:/mnt/witpub/devel/jenkins/authorized_keys || \
+echo "Warning: fail to copy id_rsa.pub to file server!"
 
 # FIXME: restart in jenkins way
 which systemctl > /dev/null 2>&1
