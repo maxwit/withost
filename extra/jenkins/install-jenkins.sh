@@ -38,8 +38,8 @@ if [ ! -e /etc/init.d/jenkins ]; then
 			firewall-cmd --reload
 		else
 			iptables -I INPUT -p tcp --dport $port -j ACCEPT
-			iptables save
-			iptables restart
+			iptables-save
+			# service iptables restart
 		fi
 	else
 		wget -q -O - https://jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
@@ -55,6 +55,7 @@ if [ ! -e /etc/init.d/jenkins ]; then
 
 	[ $port -ne 8080 ] && sed -i "s/^JENKINS_PORT=.*/JENKINS_PORT=\"$port\"/" $jenkins_conf || exit 1
 fi
+echo
 
 which systemctl > /dev/null 2>&1
 if [ $? -eq 0 ]; then

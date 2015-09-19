@@ -5,7 +5,7 @@ if [ $USER != 'jenkins' ]; then
 	exit 1
 fi
 
-cd /var/lib/jenkins
+cd /var/lib/jenkins || exit 1
 
 if [ ! -e .ssh/id_rsa ]; then
 	if [ ! -d .ssh ]; then
@@ -17,23 +17,68 @@ fi
 
 pid=`jps | awk '$2 == "jenkins.war" {print $1}'`
 if [ -z "$pid" ]; then
-	echo "jenkins is not running!"
+	echo "Jenkins is not running!"
 	exit 1
 fi
 
+count=1
+info="Waiting for Jenkins ready ..."
+while [ "$info" != "INFO: Jenkins is fully up and running" ]
+do
+	curr=`grep ^INFO /var/log/jenkins/jenkins.log | tail -n 1`
+	if [ "$info" != "$curr" ]; then
+		info=$curr
+		echo $curr
+	fi
+
+	((count++))
+	if [ $count -eq 60 ]; then
+		echo "Jenkins service timeount!"
+		exit 1
+	fi
+
+	sleep 1
+done
+echo
+
+# FIXME
 port=8580
 
-for plugin in git gitlab-plugin python perl
-do
-	echo "Installing plugin '$plugin' ..."
-	for ((i=0; i<5; i++))
-	do
-		java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:$port/ install-plugin $plugin
-		if [ $? -eq 0 ]; then
-			break;
-		fi
+plugins=(git gitlab-plugin python perl)
 
-		sleep 1
-		echo "try again ..."
-	done
+len=${#plugins[@]}
+max=$((len*2))
+try=1
+cur=0
+loop=1
+
+while [ ${#plugins[@]} -gt 0 -a $try -le $max ]
+do
+	plugin=${plugins[$cur]}
+	echo "[$try/$max ($loop.$cur)] installing $plugin ... "
+	java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar \
+		-s http://localhost:$port/ install-plugin $plugin
+	if [ $? -eq 0 ]; then
+		unset plugins[$cur]
+	else
+		((cur++))
+	fi
+
+	if [ $cur -ge ${#plugins[@]} ]; then
+		cur=0
+		((loop++))
+	fi
+
+	((try++))
+	echo
+
+	sleep 1
 done
+
+if [ ${#plugins[@]} -eq $len ]; then
+	exit 1
+elif [ ${#plugins[@]} -gt 0 ]; then
+	echo "plugins failed to be installed: ${plugins[@]}"
+else
+	echo "all plugins installed successfully!"
+fi
