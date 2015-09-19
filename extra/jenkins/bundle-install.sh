@@ -1,5 +1,7 @@
 #!/bin/sh
 
+cd `dirname $0`
+
 function restart_jenkins
 {
 	# FIXME: restart in jenkins way
@@ -16,27 +18,25 @@ if [ $UID -eq 0 ]; then
 	exit 1
 fi
 
-port=8580
+sudo ./install-jenkins.sh 8580 || exit 1
 
-sudo ./install-jenkins.sh $port || exit 1
-
+sudo -H -u jenkins ./genkey.sh || echo "Warning: fail to generate ssh key!"
 temp=`mktemp -d`
 sudo chgrp jenkins $temp
 chmod g+rwx $temp
-
 src="/var/lib/jenkins/.ssh/id_rsa.pub"
 dst="192.168.3.3:/mnt/witpub/devel/jenkins/authorized_keys"
-echo "copy $src -> $dst"
-sudo -u jenkins cp -v $src $temp && \
+echo "copying $src -> $dst"
+sudo -u jenkins cp $src $temp && \
 scp $temp/id_rsa.pub $dst || \
 echo "Warning: fail to copy id_rsa.pub to file server!"
 echo
 
-cp init-jenkins.sh $temp && \
-sudo -u jenkins $temp/init-jenkins.sh
+sudo -u jenkins ./jenkins-plugin.sh
 if [ $? -ne 0 ]; then
 	restart_jenkins
-	sudo -u jenkins $temp/init-jenkins.sh || exit 1
+	sudo truncate --size 0 /var/log/jenkins/jenkins.log
+	sudo -u jenkins ./jenkins-plugin.sh || exit 1
 fi
 
 restart_jenkins

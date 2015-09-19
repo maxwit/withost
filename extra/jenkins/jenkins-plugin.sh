@@ -5,17 +5,6 @@ if [ $USER != 'jenkins' ]; then
 	exit 1
 fi
 
-cd /var/lib/jenkins || exit 1
-
-if [ ! -e .ssh/id_rsa ]; then
-	if [ ! -d .ssh ]; then
-		mkdir .ssh
-		chmod 700 .ssh
-	fi
-	ssh-keygen -P '' -f .ssh/id_rsa || exit 1
-	echo
-fi
-
 pid=`jps | awk '$2 == "jenkins.war" {print $1}'`
 if [ -z "$pid" ]; then
 	echo "Jenkins is not running!"
@@ -49,7 +38,7 @@ port=8580
 plugins=(git gitlab-plugin python perl)
 
 len=${#plugins[@]}
-max=$((len*2))
+max=$((len*3))
 try=1
 cur=0
 loop=1

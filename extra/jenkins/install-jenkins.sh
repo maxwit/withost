@@ -26,7 +26,7 @@ if [ ! -e /etc/init.d/jenkins ]; then
 		done
 		[ $err -ne 0 ] && exit 1
 
-		jenkins_conf=/etc/sysconfig/jenkins
+		[ $port -ne 8080 ] && sed -i "s/^JENKINS_PORT=.*/JENKINS_PORT=\"$port\"/" /etc/sysconfig/jenkins || exit 1
 
 		usermod -a -G root jenkins
 		chmod g+r /etc/shadow
@@ -42,18 +42,24 @@ if [ ! -e /etc/init.d/jenkins ]; then
 			# service iptables restart
 		fi
 	else
-		wget -q -O - https://jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
-		echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list
-		apt-get update
+		if [ ! -e /etc/apt/sources.list.d/jenkins.list ]; then
+			wget -q -O - https://jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
+			echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list
+			apt-get update
+		fi
 
-		apt-get install -y jenkins openjdk-7-jdk || exit 1
+		for ((i=0; i<5; i++))
+		do
+			apt-get install -y jenkins openjdk-7-jdk || exit 1
+			err=$?
+			[ $err -eq 0 ] && break
+		done
+		[ $err -ne 0 ] && exit 1
 
-		jenkins_conf=/etc/default/jenkins
+		[ $port -ne 8080 ] && sed -i "s/^HTTP_PORT=.*/HTTP_PORT=\"$port\"/" /etc/default/jenkins || exit 1
 
 		usermod -a -G shadow jenkins
 	fi
-
-	[ $port -ne 8080 ] && sed -i "s/^JENKINS_PORT=.*/JENKINS_PORT=\"$port\"/" $jenkins_conf || exit 1
 fi
 echo
 
