@@ -21,17 +21,7 @@ if [ -z "$pid" ]; then
 	exit 1
 fi
 
-if [ -e /etc/redhat-release ]; then
-	jenkins_conf=/etc/sysconfig/jenkins
-else
-	jenkins_conf=/etc/default/jenkins
-fi
-
-port=`awk -F '=' '$1 == "HTTP_PORT" {print $2}' $jenkins_conf`
-if [ -z "$port" ]; then
-	echo "invalid '$jenkins_conf'!"
-	exit 1
-fi
+port=8580
 
 for plugin in git gitlab-plugin python perl
 do

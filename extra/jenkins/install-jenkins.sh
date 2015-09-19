@@ -52,9 +52,9 @@ if [ ! -e /etc/init.d/jenkins ]; then
 
 		usermod -a -G shadow jenkins
 	fi
-fi
 
-[ $port -ne 8080 ] && sed -i "s/^JENKINS_PORT=.*/JENKINS_PORT=\"$port\"/" $jenkins_conf || exit 1
+	[ $port -ne 8080 ] && sed -i "s/^JENKINS_PORT=.*/JENKINS_PORT=\"$port\"/" $jenkins_conf || exit 1
+fi
 
 which systemctl > /dev/null 2>&1
 if [ $? -eq 0 ]; then

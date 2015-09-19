@@ -20,11 +20,15 @@ temp=`mktemp -d`
 sudo chgrp jenkins $temp
 chmod g+rwx $temp
 
-cp init-jenkins.sh $temp
+cp init-jenkins.sh $temp && \
 sudo -u jenkins $temp/init-jenkins.sh
+if [ $? -ne 0 ]; then
+	echo "fail to init jenkins!"
+	exit !
+fi
 
 JENKINS_HOME=/var/lib/jenkins
-sudo -u jenkins -cp -v $JENKINS_HOME/.ssh/id_rsa.pub $temp
+sudo -u jenkins cp -v $JENKINS_HOME/.ssh/id_rsa.pub $temp && \
 scp $temp/id_rsa.pub 192.168.3.3:/mnt/witpub/devel/jenkins/authorized_keys || \
 echo "Warning: fail to copy id_rsa.pub to file server!"
 
