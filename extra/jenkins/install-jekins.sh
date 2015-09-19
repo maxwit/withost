@@ -1,55 +1,59 @@
 #!/bin/sh
 
 if [ $UID -ne 0 ]; then
-	echo -e "must run as root!"
+	echo "must run as root!"
 	exit 1
 fi
 
-if [ -e /etc/redhat-release ]; then
-	wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
-	rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
-	yum install -y jenkins java-1.7.0-openjdk || exit 1
-
-	usermod -a -G root jenkins
-	chmod g+r /etc/shadow
+if [ $# -eq 1 ]; then
+	port=$1
 else
-	wget -q -O - https://jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
-	echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list
-	apt-get update
-	apt-get install -y jenkins openjdk-7-jdk || exit 1
-
-	usermod -a -G shadow jenkins
+	port=8080
 fi
 
-sleep 5
-
-for plugin in git gitlab-plugin python perl
-do
-	echo "Installing plugin '$plugin' ..."
-	for ((i=0; i<5; i++))
-	do
-		sudo -u jenkins java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080/ install-plugin $plugin
-		if [ $? -eq 0 ]; then
-			break;
+if [ ! -e /etc/init.d/jenkins ]; then
+	if [ -e /etc/redhat-release ]; then
+		if [ ! -e /etc/yum.repos.d/jenkins.repo ]; then
+			wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
+			rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
 		fi
-		sleep 1
-		echo "try again ..."
-	done
-done
+	
+		for ((i=0; i<5; i++))
+		do
+			yum install -y jenkins java-1.7.0-openjdk
+			err=$?
+			[ $err -eq 0 ] && break
+		done
+		[ $err -ne 0 ] && exit 1
+	
+		jenkins_conf=/etc/sysconfig/jenkins
 
-service jenkins restart
+		usermod -a -G root jenkins
+		chmod g+r /etc/shadow
+	
+		firewall-cmd --zone=public --add-port=$port/tcp --permanent
+		firewall-cmd --zone=public --add-service=http --permanent
+		firewall-cmd --reload
+	else
+		wget -q -O - https://jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
+		echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list
+		apt-get update
+	
+		apt-get install -y jenkins openjdk-7-jdk || exit 1
 
-JENKINS_HOME=/var/lib/jenkins
-tmpf=`mktemp -u`
-sudo -i -u $SUDO_USER tar cf $tmpf .ssh
-sudo -u jenkins rm -rf ${JENKINS_HOME}/.ssh
-sudo -u jenkins tar xf $tmpf -C ${JENKINS_HOME}/
-sudo -u jenkins rm -f ${JENKINS_HOME}/.ssh/known_hosts ${JENKINS_HOME}/.ssh/authorized_keys
-sudo -u jenkins ls -al ${JENKINS_HOME}/.ssh
-rm $tmpf
+		jenkins_conf=/etc/default/jenkins
+	
+		usermod -a -G shadow jenkins
+	fi
+fi
 
-##if [ ! -e ~/.ssh/id_rsa ]; then
-##	sudo -u jenkins ssh-keygen -P '' -f ~/.ssh/id_rsa
-##fi
-##
-##sudo -u jenkins cp -v ~/.ssh/id_rsa.pub /tmp/jenkins_id_rsa.pub
+[ $port -ne 8080 ] && sed -i "s/^JENKINS_PORT=.*/JENKINS_PORT=\"$port\"/" $jenkins_conf || exit 1
+
+which systemctl > /dev/null 2>&1
+if [ $? -eq 0 ]; then
+	systemctl enable jenkins || exit 1
+	systemctl start jenkins || exit 1
+else
+	which chkconfig && chkconfig jenkins on || exit 1
+	service jenkins start  || exit 1
+fi
