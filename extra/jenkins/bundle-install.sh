@@ -28,12 +28,6 @@ cp init-jenkins.sh $temp && \
 sudo -u jenkins $temp/init-jenkins.sh
 if [ $? -ne 0 ]; then
 	restart_jenkins
-	for ((i=10;i>=1;i--))
-	do
-		echo $i
-		sleep 3
-	done
-
 	sudo -u jenkins $temp/init-jenkins.sh || exit 1
 fi
 

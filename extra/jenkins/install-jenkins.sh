@@ -62,6 +62,8 @@ if [ $? -eq 0 ]; then
 	systemctl enable jenkins || exit 1
 	systemctl start jenkins || exit 1
 else
-	which chkconfig && chkconfig jenkins on || exit 1
+	which chkconfig > /dev/null 2>&1 && chkconfig jenkins on || exit 1
 	service jenkins start  || exit 1
 fi
+
+echo "Jenkins installed successfully, port=$port."

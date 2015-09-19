@@ -21,14 +21,15 @@ if [ -z "$pid" ]; then
 	exit 1
 fi
 
-count=1
 info="Waiting for Jenkins ready ..."
+echo $info
+count=1
 while [ "$info" != "INFO: Jenkins is fully up and running" ]
 do
 	curr=`grep ^INFO /var/log/jenkins/jenkins.log | tail -n 1`
 	if [ "$info" != "$curr" ]; then
-		info=$curr
-		echo $curr
+		info="$curr"
+		echo $info
 	fi
 
 	((count++))
@@ -55,7 +56,7 @@ loop=1
 while [ ${#plugins[@]} -gt 0 -a $try -le $max ]
 do
 	plugin=${plugins[$cur]}
-	echo "[$try/$max ($loop.$cur)] installing $plugin ... "
+	echo "[$try/$max][$loop.$((cur+1))] installing $plugin ... "
 	java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar \
 		-s http://localhost:$port/ install-plugin $plugin
 	if [ $? -eq 0 ]; then
