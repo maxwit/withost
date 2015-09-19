@@ -1,33 +1,47 @@
+if [ $UID != 0 ]; then
+	echo "must run as root!"
+	exit 1
+fi
+
+ip='192.168.3.5'
+domain='maxwit.com'
+
 if [ -e /etc/redhat-release ]; then
-	sudo yum install -y bind
+	which named || yum install -y bind
 	s=named
 else
-	sudo apt-get install -y bind9
+	which named || apt-get install -y bind9
 	s=bind9
 fi
 
-sudo python << EOF
+python << EOF
 from app import bind
-bind.setup(9, 18, {'net.domain':'maxwit.com'})
+bind.setup(9, 18, {'net.domain':'$domain'})
 EOF
 
 which systemctl > /dev/null
 if [ $? -eq 0 ]; then
-	sudo systemctl restart $s
+	systemctl enable $s || exit 1
+	systemctl start $s || exit 1
 else
-	sudo service $s restart
+	which chkconfig > /dev/null && chkconfig $s on || exit 1
+	service $s start || exit 1
 fi
-
-code=192.168.3.5
 
 nsupdate << EOF
 server 127.0.0.1
-update add code.maxwit.com 3600 IN A $code
-update add git.maxwit.com 3600 IN A $code
-update add bug.maxwit.com 3600 IN A $code
-update add ci.maxwit.com 3600 IN A $code
+update add code.$domain 3600 IN A $ip
+update add git.$domain 3600 IN A $ip
+update add bug.$domain 3600 IN A $ip
+update add ci.$domain 3600 IN A $ip
 show
 send
 EOF
 
-#grep 127.0.0.1 /etc/resolv.conf || sudo cp resolv.conf /etc/resolv.conf
+if [ $? -ne 0 ]; then
+	echo "fail to install bind!"
+	exit 1
+fi
+
+echo "bind installed successfully!"
+echo "pls insert 'nameserver 127.0.0.1' to /etc/resolv.conf if necessary for testing."
