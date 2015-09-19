@@ -1,3 +1,10 @@
+#!/bin/sh
+
+if [ $UID -eq 0 ]; then
+	echo "do NOT run as root!"
+	exit 1
+fi
+
 port=8580
 
 sudo ./install-jenkins.sh $port
