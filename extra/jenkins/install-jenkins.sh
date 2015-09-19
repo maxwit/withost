@@ -67,3 +67,4 @@ else
 fi
 
 echo "Jenkins installed successfully, port=$port."
+echo

@@ -84,3 +84,5 @@ elif [ ${#plugins[@]} -gt 0 ]; then
 else
 	echo "all plugins installed successfully!"
 fi
+
+echo
