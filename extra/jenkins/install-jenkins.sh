@@ -31,9 +31,16 @@ if [ ! -e /etc/init.d/jenkins ]; then
 		usermod -a -G root jenkins
 		chmod g+r /etc/shadow
 
-		firewall-cmd --zone=public --add-port=$port/tcp --permanent
-		firewall-cmd --zone=public --add-service=http --permanent
-		firewall-cmd --reload
+		which firewall-cmd
+		if [ $? -eq 0 ]; then
+			firewall-cmd --zone=public --add-port=$port/tcp --permanent
+			firewall-cmd --zone=public --add-service=http --permanent
+			firewall-cmd --reload
+		else
+			iptables -I INPUT -p tcp --dport $port -j ACCEPT
+			iptables save
+			iptables restart
+		fi
 	else
 		wget -q -O - https://jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
 		echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list
