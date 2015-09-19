@@ -24,6 +24,14 @@ temp=`mktemp -d`
 sudo chgrp jenkins $temp
 chmod g+rwx $temp
 
+src="/var/lib/jenkins/.ssh/id_rsa.pub"
+dst="192.168.3.3:/mnt/witpub/devel/jenkins/authorized_keys"
+echo "copy $src -> $dst"
+sudo -u jenkins cp -v $src $temp && \
+scp $temp/id_rsa.pub $dst || \
+echo "Warning: fail to copy id_rsa.pub to file server!"
+echo
+
 cp init-jenkins.sh $temp && \
 sudo -u jenkins $temp/init-jenkins.sh
 if [ $? -ne 0 ]; then
@@ -31,11 +39,5 @@ if [ $? -ne 0 ]; then
 	sudo -u jenkins $temp/init-jenkins.sh || exit 1
 fi
 
-src="/var/lib/jenkins/.ssh/id_rsa.pub"
-dst="192.168.3.3:/mnt/witpub/devel/jenkins/authorized_keys"
-echo "copy $src -> $dst"
-sudo -u jenkins cp -v $src $temp && \
-scp $temp/id_rsa.pub $dst || \
-echo "Warning: fail to copy id_rsa.pub to file server!"
-
 restart_jenkins
+echo
