@@ -62,6 +62,7 @@ do
 		-s http://localhost:$port/ install-plugin $plugin
 	if [ $? -eq 0 ]; then
 		unset plugins[$cur]
+		plugins=(${plugins[@]})
 	else
 		((cur++))
 	fi
