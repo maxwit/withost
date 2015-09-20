@@ -65,6 +65,12 @@ def setup(dist, apps, conf):
 	os.system('chmod g+w ' + directory) # FIXME
 	os.system('chmod +r %s/*' % directory)
 
+	# FIXME
+	if os.path.exists('/etc/redhat-release'):
+		group = 'named'
+		os.system('chgrp %s %s/named.*' % (group, named_path))
+		os.system('chgrp %s %s/db.*' % (group, directory))
+
 	fd = open(named_conf)
 	lines = fd.readlines()
 	fd.close()
