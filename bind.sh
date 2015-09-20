@@ -3,8 +3,9 @@ if [ $UID != 0 ]; then
 	exit 1
 fi
 
-ip='192.168.3.5'
 domain='maxwit.com'
+repo='192.168.3.3'
+code='192.168.3.5'
 
 if [ -e /etc/redhat-release ]; then
 	which named || yum install -y bind
@@ -30,10 +31,11 @@ fi
 
 nsupdate << EOF
 server 127.0.0.1
-update add code.$domain 3600 IN A $ip
-update add git.$domain 3600 IN A $ip
-update add bug.$domain 3600 IN A $ip
-update add ci.$domain 3600 IN A $ip
+update add repo.$domain 3600 IN A $repo
+update add code.$domain 3600 IN A $code
+update add git.$domain  3600 IN A $code
+update add bug.$domain  3600 IN A $code
+update add ci.$domain   3600 IN A $code
 show
 send
 EOF
