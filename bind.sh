@@ -29,16 +29,27 @@ else
 	service $s start || exit 1
 fi
 
+function add_ns
+{
+dn=$1.$domain
+rip=`echo $2 | awk -F '.' '{print $4"."$3"."$2"."$1}'`
+
 nsupdate << EOF
 server 127.0.0.1
-update add repo.$domain 3600 IN A $repo
-update add code.$domain 3600 IN A $code
-update add git.$domain  3600 IN A $code
-update add bug.$domain  3600 IN A $code
-update add ci.$domain   3600 IN A $code
+update add ${dn} 3600 IN A $2
+show
+send
+update add ${rip}.in-addr.arpa 3600 IN PTR ${dn}
 show
 send
 EOF
+}
+
+add_ns repo  $repo
+add_ns ci    $code
+add_ns git   $code
+add_ns code  $code
+add_ns issue $code
 
 if [ $? -ne 0 ]; then
 	echo "fail to install bind!"
