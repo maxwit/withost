@@ -17,8 +17,6 @@ def setup(dist, apps, conf):
 	#	del tmp_dn[0]
 	#	domain_name = '.'.join(tmp_dn)
 
-	mail_server = 'mail.' + domain_name
-
 	if conf.has_key('net.ip'):
 		domain_addr = conf['net.ip']
 	else:
@@ -55,8 +53,7 @@ def setup(dist, apps, conf):
 	domain_conf = directory + '/db.' + domain_name
 	arpa_conf = directory + '/db.' + arpa_addr
 
-	pattern = { '__DOMAINNAME__':domain_name, '__MAILSERVER__':mail_server,
-				'__DOMAINADDR__':domain_addr, '__ARPAADDR__':arpa_addr }
+	pattern = { '__DOMAINNAME__':domain_name, '__DOMAINADDR__':domain_addr, '__ARPAADDR__':arpa_addr }
 
 	base.render_to_file(zone_conf, 'app/bind/bind.zones', pattern)
 	base.render_to_file(domain_conf, 'app/bind/bind-domain.conf', pattern)

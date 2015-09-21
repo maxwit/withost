@@ -46,10 +46,11 @@ EOF
 }
 
 add_ns repo  $repo
-add_ns ci    $code
-add_ns git   $code
+
 add_ns code  $code
+add_ns git   $code
 add_ns issue $code
+add_ns ci    $code
 
 if [ $? -ne 0 ]; then
 	echo "fail to install bind!"
