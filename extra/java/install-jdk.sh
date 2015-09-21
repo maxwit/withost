@@ -12,10 +12,11 @@ else
 	exit 1
 fi
 
+echo "Installing JDK ..."
 JAVA_HOME=`tar -tf $JDK | head -n 1`
 JAVA_HOME=${JAVA_HOME%%/*}
-echo "Installing $JAVA_HOME ..."
 JAVA_HOME=$DIR/$JAVA_HOME
+echo "JAVA_HOME = $JAVA_HOME ..."
 
 if [ ! -x $JAVA_HOME/bin/javac ]; then
 	tar xf $JDK -C $DIR || exit 1
@@ -32,4 +33,4 @@ EOF
 #source ~/.profile
 #javac -version || exit 1
 
-#echo "JDK successfully installed to $JAVA_HOME"
+echo "JDK successfully installed"

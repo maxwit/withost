@@ -19,7 +19,17 @@ fi
 ename="eclipse-${version[2]}-${version[1]}"
 epath=$HOME/$ename
 temp=`mktemp -d`
-tar xvf $eclipse -C $temp
+
+count=0
+tar xvf $eclipse -C $temp | while read x
+do
+	((count++))
+	if [ $count -gt 900 ]; then
+		echo -n -e "extracting $bn ... $(((count-980)/9))%\r"
+	fi
+done
+echo
+
 rm -rf $epath
 mv $temp/eclipse $epath
 
