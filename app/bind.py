@@ -27,9 +27,11 @@ def setup(dist, apps, conf):
 
 	forward = base.get_gateway(domain_addr)
 
-	arpa_addr = domain_addr.split('.')[0:3]
+	ip = domain_addr.split('.')
+	arpa_addr = ip[0:3]
 	arpa_addr.reverse()
 	arpa_addr = '.'.join(arpa_addr)
+	ip4 = ip[3]
 
 	named_path = None
 	for dir in ['/etc', '/etc/bind']:
@@ -53,7 +55,8 @@ def setup(dist, apps, conf):
 	domain_conf = directory + '/db.' + domain_name
 	arpa_conf = directory + '/db.' + arpa_addr
 
-	pattern = { '__DOMAINNAME__':domain_name, '__DOMAINADDR__':domain_addr, '__ARPAADDR__':arpa_addr }
+	pattern = { '__DOMAINNAME__':domain_name, '__DOMAINADDR__':domain_addr,
+			'__ARPAADDR__':arpa_addr, '__IP4__':ip4 }
 
 	base.render_to_file(zone_conf, 'app/bind/bind.zones', pattern)
 	base.render_to_file(domain_conf, 'app/bind/bind-domain.conf', pattern)
