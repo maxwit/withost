@@ -32,11 +32,11 @@ scp $temp/id_rsa.pub $dst || \
 echo "Warning: fail to copy id_rsa.pub to file server!"
 echo
 
-#sudo -u jenkins ./jenkins-plugin.sh
+#sudo -u jenkins ./install-plugin.sh
 #if [ $? -ne 0 ]; then
 #	restart_jenkins
 #	sudo truncate --size 0 /var/log/jenkins/jenkins.log
-#	sudo -u jenkins ./jenkins-plugin.sh || exit 1
+#	sudo -u jenkins ./install-plugin.sh || exit 1
 #fi
 #
 #restart_jenkins
