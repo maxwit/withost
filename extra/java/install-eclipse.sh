@@ -25,9 +25,10 @@ tar xvf $eclipse -C $temp | while read x
 do
 	((count++))
 	if [ $count -gt 900 ]; then
-		echo -n -e "extracting $bn ... $(((count-980)/9))%\r"
+		echo -n -e "extracting $bn ... $(((count-600)/30))%\r"
 	fi
 done
+#echo -n -e "extracting $bn ... 100%"
 echo
 
 rm -rf $epath
