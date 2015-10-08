@@ -1,15 +1,50 @@
 #!/bin/sh
 
+function usage
+{
+	echo "usage: `basename $0` [-d <dir>] <jdk>"
+}
+
 function get_version
 {
 	ver=(`basename ${versions[$1]} | awk -F'-' '{print $2}' | awk -F'u' '{print $1}'`)
 	echo $ver
 }
 
-versions=(`ls /mnt/witpub/devel/java/jdk/jdk-*-linux-*.tar.* 2>/dev/null`)
+dst_dir=$HOME
 
-s=${#versions[@]}
-if [ $s -gt 0 ]; then
+while [ $# -gt 0 ]
+do
+	case $1 in
+	-d|--dir)
+		dst_dir=$2
+		shift
+		;;
+	-*)
+		echo -e "Invalid option '$'\n"
+		exit 1
+		;;
+	*)
+		if [ -n "$jdk_tar" ]; then
+			usage
+			exit 1
+		fi
+		jdk_tar=$1
+		;;
+	esac
+
+	shift
+done
+
+if [ -z "$jdk_tar" ]; then
+	versions=(`ls /mnt/witpub/devel/java/jdk/jdk-*-linux-*.tar.* 2>/dev/null`)
+
+	s=${#versions[@]}
+	if [ $s -eq 0 ]; then
+		usage
+		exit 1
+	fi
+
 	m=0
 	ver_m=`get_version 0`
 
@@ -23,32 +58,6 @@ if [ $s -gt 0 ]; then
 	done
 
 	jdk_tar=${versions[$m]}
-fi
-
-dst_dir=$HOME
-
-while [ $# -gt 0 ]
-do
-	case $1 in
-	-j|--jdk)
-		jdk_tar=$2
-		shift
-		;;
-	-d|--dir)
-		dst_dir=$2
-		shift
-		;;
-	*)
-		echo -e "Invalid option '$opt'\n"
-		exit 1
-	esac
-
-	shift
-done
-
-if [ -z "$jdk_tar" ]; then
-	echo "usage: `basename $0` [-d <dir>] -j <jdk>"
-	exit 1
 elif [ ! -e "$jdk_tar" ]; then
 	echo -e "'$jdk_tar' does NOT exist!\n"
 	exit 1
