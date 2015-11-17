@@ -12,7 +12,8 @@ function get_version
 }
 
 if [ $UID != 0 ]; then
-	dst_dir=$HOME
+	dst_dir=$HOME/apps
+	mkdir -p $dst_dir
 	if [ -e /etc/redhat-release ]; then
 		profile=$HOME/.bash_profile
 	else

@@ -1,7 +1,8 @@
 #!/bin/sh
 
 if [ $# = 1 ]; then
-	DIR=~
+	DIR=$HOME/apps
+	mkdir -p $DIR
 	MVN=$1
 elif [ $# = 3 ]; then
 	# FIXME
