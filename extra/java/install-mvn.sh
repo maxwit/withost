@@ -21,14 +21,20 @@ if [ ! -x $MAVEN_HOME/bin/mvn ]; then
 	tar xf $MVN -C $DIR || exit 1
 fi
 
-sed -i '/MAVEN_HOME/d' $HOME/.profile
+if [ -e /etc/redhat-release ]; then
+	profile=$HOME/.bash_profile
+else
+	profile=$HOME/.profile
+fi
 
-cat >> $HOME/.profile << EOF
+sed -i '/MAVEN_HOME/d' $profile
+
+cat >> $profile << EOF
 export MAVEN_HOME=$MAVEN_HOME
 export PATH=\$MAVEN_HOME/bin:\$PATH
 EOF
 
-source ~/.profile
+source $profile
 mvn -version || exit 1
 
 echo "MVN successfully installed to $MAVEN_HOME"
