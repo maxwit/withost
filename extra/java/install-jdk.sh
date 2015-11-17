@@ -11,7 +11,17 @@ function get_version
 	echo $ver
 }
 
-dst_dir=$HOME
+if [ $UID != 0 ]; then
+	dst_dir=$HOME
+	if [ -e /etc/redhat-release ]; then
+		profile=$HOME/.bash_profile
+	else
+		profile=$HOME/.profile
+	fi
+else
+	dst_dir=/opt
+	profile=/etc/profile
+fi
 
 while [ $# -gt 0 ]
 do
@@ -91,11 +101,6 @@ done < $temp
 
 javac -version
 if [ $? -eq 0 ]; then
-	if [ -e /etc/redhat-release ]; then
-		profile="$HOME/.bash_profile"
-	else
-		profile="$HOME/.profile"
-	fi
 	sed -i '/JAVA_HOME/d' $profile
 	cat $temp >> $profile
 	rm $temp
