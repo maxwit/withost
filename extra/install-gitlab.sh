@@ -1,5 +1,16 @@
 #!/bin/sh
 
+if [ $UID -ne 0 ]; then
+	echo "must run as root!"
+	exit 1
+fi
+
+#if [ $# -eq 1 ]; then
+#	port=$1
+#else
+#	port=8180
+#fi
+
 if [ -e /etc/redhat-release ]; then
 	yum install -y curl openssh-server postfix cronie
 	service postfix start
