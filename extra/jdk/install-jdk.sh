@@ -104,6 +104,7 @@ javac -version
 if [ $? -eq 0 ]; then
 	if [ $profile = '/etc/profile.d/jdk.sh' ]; then
 		cp $temp $profile
+		chmod a+r $profile
 	else
 		sed -i '/JAVA_HOME/d' $profile
 		cat $temp >> $profile
