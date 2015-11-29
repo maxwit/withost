@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/sh
 
 # user
 # port
@@ -9,23 +9,47 @@
 # JIRA_HOME?
 # source jdk
 
-JIRA_APP=atlassian-jira-6.3.6
-#JIRA_APP=atlassian-jira-software-7.0.2
-
 JIRA_HOME=/var/lib/jira 
 JIRA_PARENT=/opt
-JIRA_BASE=$JIRA_PARENT/$JIRA_APP-standalone
 
 if [ $UID -ne 0 ]; then
 	echo "pls run as root!"
 	exit 1
 fi
 
+if [ $# -eq 1 ]; then
+	TARBALL=$1
+else
+	TARBALL=/mnt/witpub/devel/jira/atlassian-jira-6.3.6.tar.gz
+fi
+
+if [ ! -e $TARBALL ]; then
+	echo "'$TARBALL' does NOT exist!"
+	exit 1
+fi
+
+JIRA_APP=`basename $TARBALL`
+JIRA_APP=${JIRA_APP%.tar.gz}
+JIRA_BASE=$JIRA_PARENT/$JIRA_APP-standalone
+
+JIRA_MAJOR=`echo $JIRA_APP | sed "s/.*-\([0-9]\+\)\..*/\1/g"`
+if [ $JIRA_MAJOR -le 6 ]; then
+	JAVA_MAJOR=7
+else
+	JAVA_MAJOR=8
+fi
+
+if [ -e /etc/redhat-release ]; then
+	yum install -y java-1.${JAVA_MAJOR}.0-openjdk-devel
+else
+	apt-get install -y openjdk-${JAVA_MAJOR}-jdk
+fi
+
 useradd -m -d $JIRA_HOME jira
 
 echo -n "Installing JIRA ."
 count=0
-tar xvf /mnt/witpub/devel/jira/$JIRA_APP.tar.gz -C $JIRA_PARENT | while read line
+tar xvf $TARBALL -C $JIRA_PARENT | while read line
 do
 	((count++))
 	if [ $((count % 200)) -eq 0 ]; then
@@ -50,7 +74,8 @@ cat > /etc/init.d/jira << EOF
 # chkconfig: - 85 15 
 # description: Jira Issue Track System
 
-source /etc/profile.d/jdk.sh
+# for 7.x
+# source /etc/profile.d/jdk.sh
 
 export JIRA_HOME=$JIRA_HOME
 
@@ -73,5 +98,7 @@ chmod +x /etc/init.d/jira
 if [ -e /etc/redhat-release ]; then
 	chkconfig jira on
 fi
+
+service jira start
 
 echo
