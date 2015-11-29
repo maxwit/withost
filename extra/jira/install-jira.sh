@@ -43,6 +43,7 @@ cat > /etc/init.d/jira << EOF
 #!/bin/sh
 
 # chkconfig: - 85 15 
+# description: Jira Issue Track System
 
 source /etc/profile.d/jdk.sh
 
