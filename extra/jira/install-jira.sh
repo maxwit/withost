@@ -24,7 +24,17 @@ INSTALL_PATH=/opt/atlassian-jira-software-7.0.2-standalone
 rm -rf $INSTALL_PATH
 cd  `dirname $INSTALL_PATH`
 
-tar xf /mnt/witpub/devel/pm/jira/atlassian-jira-software-7.0.2-jira-7.0.2.tar.gz || exit 1
+echo -n "Installing JIRA ."
+count=0
+tar xvf /mnt/witpub/devel/jira/atlassian-jira-software-7.0.2-jira-7.0.2.tar.gz | while read line
+do
+	((count++))
+	if [ $((count % 200)) -eq 0 ]; then
+		 echo -n .
+	fi
+done || exit 1
+echo " Done."
+
 sed -i 's/JIRA_USER=".*/JIRA_USER="jira"/' $INSTALL_PATH/bin/user.sh
 chown jira.jira -R $INSTALL_PATH
 
@@ -55,3 +65,5 @@ chmod +x /etc/init.d/jira
 if [ -e /etc/redhat-release ]; then
 	chkconfig jira on
 fi
+
+echo
