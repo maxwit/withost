@@ -13,6 +13,8 @@ tar xf /mnt/witpub/devel/pm/jira/atlassian-jira-software-7.0.2-jira-7.0.2.tar.gz
 cat > /etc/init.d/jira << EOF
 #!/bin/sh
 
+source /etc/profile.d/jdk.sh
+
 export JIRA_HOME=$JIRA_HOME
 
 EOF
