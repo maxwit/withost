@@ -21,7 +21,7 @@ if [ $UID != 0 ]; then
 	fi
 else
 	dst_dir=/opt
-	profile=/etc/profile
+	profile=/etc/profile.d/jdk.sh
 fi
 
 while [ $# -gt 0 ]
@@ -102,8 +102,12 @@ done < $temp
 
 javac -version
 if [ $? -eq 0 ]; then
-	sed -i '/JAVA_HOME/d' $profile
-	cat $temp >> $profile
+	if [ $profile = '/etc/profile.d/jdk.sh' ]; then
+		cp $temp $profile
+	else
+		sed -i '/JAVA_HOME/d' $profile
+		cat $temp >> $profile
+	fi
 	rm $temp
 	echo "JAVA_HOME = $JAVA_HOME"
 	echo "JDK installed successfully!"
