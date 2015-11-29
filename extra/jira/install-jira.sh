@@ -1,6 +1,7 @@
 #! /bin/sh
 
 # user
+# port
 # chkconfig
 # different versions (i.e 6.x) support
 # crack
