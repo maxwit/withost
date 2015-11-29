@@ -31,6 +31,7 @@ chown jira.jira -R $INSTALL_PATH
 cat > /etc/init.d/jira << EOF
 #!/bin/sh
 
+# chkconfig: - 85 15 
 source /etc/profile.d/jdk.sh
 
 export JIRA_HOME=$JIRA_HOME
