@@ -9,7 +9,12 @@
 # JIRA_HOME?
 # source jdk
 
+JIRA_APP=atlassian-jira-6.3.6
+#JIRA_APP=atlassian-jira-software-7.0.2
+
 JIRA_HOME=/var/lib/jira 
+JIRA_PARENT=/opt
+JIRA_BASE=$JIRA_PARENT/$JIRA_APP-standalone
 
 if [ $UID -ne 0 ]; then
 	echo "pls run as root!"
@@ -18,15 +23,9 @@ fi
 
 useradd -m -d $JIRA_HOME jira
 
-# FIXME
-INSTALL_PATH=/opt/atlassian-jira-software-7.0.2-standalone
-
-rm -rf $INSTALL_PATH
-cd  `dirname $INSTALL_PATH`
-
 echo -n "Installing JIRA ."
 count=0
-tar xvf /mnt/witpub/devel/jira/atlassian-jira-software-7.0.2-jira-7.0.2.tar.gz | while read line
+tar xvf /mnt/witpub/devel/jira/$JIRA_APP.tar.gz -C $JIRA_PARENT | while read line
 do
 	((count++))
 	if [ $((count % 200)) -eq 0 ]; then
@@ -35,9 +34,15 @@ do
 done || exit 1
 echo " Done."
 
-sed -i -e 's/\([pP]ort\)="8/\1="9/g' $INSTALL_PATH/conf/server.xml
-sed -i 's/JIRA_USER=".*/JIRA_USER="jira"/' $INSTALL_PATH/bin/user.sh
-chown jira.jira -R $INSTALL_PATH
+if [ ! -d $JIRA_BASE ]; then
+	# BUG
+	echo "'$JIRA_BASE' not found!"
+	exit 1
+fi
+
+sed -i -e 's/\([pP]ort\)="8/\1="9/g' $JIRA_BASE/conf/server.xml
+sed -i 's/JIRA_USER=".*/JIRA_USER="jira"/' $JIRA_BASE/bin/user.sh
+chown jira.jira -R $JIRA_BASE
 
 cat > /etc/init.d/jira << EOF
 #!/bin/sh
@@ -50,14 +55,14 @@ export JIRA_HOME=$JIRA_HOME
 
 case \$1 in
 start)
-	$INSTALL_PATH/bin/start-jira.sh
+	$JIRA_BASE/bin/start-jira.sh
 	;;
 stop)
-	$INSTALL_PATH/bin/stop-jira.sh
+	$JIRA_BASE/bin/stop-jira.sh
 	;;
 restart)
-	$INSTALL_PATH/bin/stop-jira.sh
-	$INSTALL_PATH/bin/start-jira.sh
+	$JIRA_BASE/bin/stop-jira.sh
+	$JIRA_BASE/bin/start-jira.sh
 	;;
 esac
 EOF

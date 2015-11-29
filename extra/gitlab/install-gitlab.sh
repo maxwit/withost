@@ -8,7 +8,7 @@ fi
 #if [ $# -eq 1 ]; then
 #	port=$1
 #else
-#	port=8180
+#	port=10080
 #fi
 
 if [ -e /etc/redhat-release ]; then
