@@ -1,5 +1,7 @@
 #!/bin/sh
 
+edition="gitlab-ee"
+
 if [ $UID -ne 0 ]; then
 	echo "must run as root!"
 	exit 1
@@ -20,8 +22,16 @@ else
 	exit 1
 fi
 
-curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | bash
-yum install -y gitlab-ce
+curl https://packages.gitlab.com/install/repositories/gitlab/$edition/script.rpm.sh | bash
+
+err=0
+for ((i=0; i<5; i++))
+do
+	yum install -y $edition
+	err=$?
+	[ $err -eq 0 ] && break
+done
+[ $err -ne 0 ] && exit 1
 
 sed -i -e "s#external_url .*#external_url 'http://code.maxwit.com'#" \
 	-e "s/# gitlab_rails\['gitlab_email_from'\] =.*/gitlab_rails['gitlab_email_from'] = 'no-reply@maxwit.com'/" \
