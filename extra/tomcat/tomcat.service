@@ -1,0 +1,17 @@
+#!/bin/sh
+
+case $1 in
+start)
+	su -s /bin/sh tomcat -c "/opt/apache-tomcat-7.0.47/bin/catalina.sh start"
+	;;
+stop)
+	su -s /bin/sh tomcat -c "/opt/apache-tomcat-7.0.47/bin/catalina.sh stop"
+	;;
+restart)
+	su -s /bin/sh tomcat -c "/opt/apache-tomcat-7.0.47/bin/catalina.sh stop"
+	su -s /bin/sh tomcat -c "/opt/apache-tomcat-7.0.47/bin/catalina.sh start"
+	;;
+*)
+	echo "usage: xxx"
+	;;
+esac
