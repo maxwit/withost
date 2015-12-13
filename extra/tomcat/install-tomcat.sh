@@ -23,4 +23,6 @@ mkdir -p /opt/share
 useradd -m -d /opt/share/tomcat tomcat
 chown -R tomcat.tomcat -R /opt/$tc
 
+sed -i '/<tomcat-users>/r tomcat-users' /opt/$tc/conf/tomcat-users.xml
+
 cp tomcat.service /etc/init.d/tomcat
