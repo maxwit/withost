@@ -29,6 +29,7 @@ rm -rf $env
 cp -rv $src $env
 
 cat > $dst/bin/setenv.sh << EOF
+JAVA_OPTS="\$JAVA_OPTS -Xms1024m -Xmx1024m -XX:MaxNewSize=512m -XX:MaxPermSize=512m -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8"
 JAVA_OPTS="\$JAVA_OPTS -Dglobal.config.path=$env"
 EOF
 
