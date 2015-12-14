@@ -25,15 +25,11 @@ fi
 
 env="$dst/env"
 
-sudo -u tomcat rm -rf $env
-sudo -u tomcat cp -r $src $env
+rm -rf $env
+cp -rv $src $env
 
-temp=`mktemp`
-chmod a+r $temp
-cat > $temp << EOF
+cat > $dst/bin/setenv.sh << EOF
 JAVA_OPTS="\$JAVA_OPTS -Dglobal.config.path=$env"
 EOF
 
-sudo -u tomcat cp $temp $dst/bin/setenv.sh
-
-rm $temp
+echo
