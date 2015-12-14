@@ -71,16 +71,18 @@ sed -i "/<tomcat-users>/r $temp" $tomcat_home/conf/tomcat-users.xml
 cat > $temp << EOF
 #!/bin/sh
 
+# chkconfig:   - 86 16
+
 case \$1 in
 start)
-	sudo -i -u $tomcat_user $tomcat_home/bin/catalina.sh start
+	su - $tomcat_user -c "$tomcat_home/bin/catalina.sh start"
 	;;
 stop)
-	sudo -i -u $tomcat_user $tomcat_home/bin/catalina.sh stop
+	su - $tomcat_user -c "$tomcat_home/bin/catalina.sh stop"
 	;;
 restart)
-	sudo -i -u $tomcat_user $tomcat_home/bin/catalina.sh stop
-	sudo -i -u $tomcat_user $tomcat_home/bin/catalina.sh start
+	su - $tomcat_user -c "$tomcat_home/bin/catalina.sh stop"
+	su - $tomcat_user -c "$tomcat_home/bin/catalina.sh start"
 	;;
 *)
 	echo "usage: xxx"
