@@ -26,4 +26,4 @@ url_path=${id[1]}
 host_name="www.${id[1]}.com"
 
 ./tomcat-setup.sh --tomcat-home $tomcat_home --port-base $port_base || exit 1
-sudo ./httpd-admin.sh --host-name $host_name --cluster-list 127.0.0.1:${port_base}080 --url-path $url_path
+sudo ./httpd-setup.sh --host-name $host_name --cluster-list 127.0.0.1:${port_base}080 --url-path $url_path
