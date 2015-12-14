@@ -12,19 +12,18 @@ fi
 
 cd `dirname $0`
 
-id=$1
+tomcat_home=${1%/}
 
-tomcat_home=/opt/tomcat-$id
-if [ $id = witweb ]; then
-	port_base=11
-elif [ $id = renwoxing ]; then
-	port_base=12
-else
-	port_base=13
+id=(`basename $tomcat_home | sed 's/-/ /g'`)
+
+if [ ${#id[@]} -ne 3 -o "${id[0]}" != tomcat ]; then
+	echo "'$tomcat_home' is invalid!"
+	exit 1
 fi
-url_path=$id
 
-host_name="www.${id}.com"
+port_base=${id[2]}
+url_path=${id[1]}
+host_name="www.${id[1]}.com"
 
 ./tomcat-setup.sh --tomcat-home $tomcat_home --port-base $port_base || exit 1
 sudo ./httpd-admin.sh --host-name $host_name --cluster-list 127.0.0.1:${port_base}080 --url-path $url_path
