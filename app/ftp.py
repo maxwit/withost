@@ -28,7 +28,7 @@ def setup(dist, apps, conf):
 	exist = {}
 	exist['local_root'] = pub
 	#exist['anon_root'] = pub
-	exist['anonymous_enable'] = 'NO'
+	exist['anonymous_enable'] = 'YES'
 	exist['write_enable'] = 'YES'
 	exist['local_umask'] = '022'
 
@@ -53,3 +53,9 @@ def setup(dist, apps, conf):
 	fdst.close()
 
 	shutil.copyfile(dst, src)
+
+if __name__ == '__main__':
+	pub = '/opt/vsftp'
+	if not os.path.exists(pub):
+		os.mkdir(pub)
+	setup(None, None, {'pub.path': pub})
