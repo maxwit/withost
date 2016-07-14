@@ -28,7 +28,7 @@ def setup(dist, apps, conf):
 	exist = {}
 	exist['local_root'] = pub
 	#exist['anon_root'] = pub
-	exist['anonymous_enable'] = 'YES'
+	exist['anonymous_enable'] = 'NO'
 	exist['write_enable'] = 'YES'
 	exist['local_umask'] = '022'
 
