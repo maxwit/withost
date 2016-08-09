@@ -17,11 +17,12 @@ if [ $UID -ne 0 ]; then
 	exit 1
 fi
 
-if [ $# -eq 1 ]; then
-	TARBALL=$1
-else
-	TARBALL=/mnt/witpub/devel/jira/atlassian-jira-6.3.6.tar.gz
+if [ $# -ne 1 ]; then
+	echo "usage: $0 <path/to/jira/tarball>"
+	exit 1
 fi
+
+TARBALL=$1
 
 if [ ! -e $TARBALL ]; then
 	echo "'$TARBALL' does NOT exist!"
