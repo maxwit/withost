@@ -8,8 +8,8 @@ fi
 while [ $# -gt 0 ]
 do
 	case $1 in
-	-n|--nodes)
-		nodes=$2
+	-e|--env)
+		env=$2
 		shift
 		;;
 	-s|--server)
@@ -21,7 +21,8 @@ do
 		exit 1
 		;;
 	*)
-		env=$1
+		node_list=($@)
+		break
 		;;
 	esac
 
@@ -84,22 +85,9 @@ balancer=$server-nodes
 
 echo "upstream $balancer {" > $conf
 
-index=1
-
-while [ $index -le $nodes ]
+for ip in ${node_list[@]}
 do
-	case $env in
-	production)
-		url="$server$index.2dupay.com"
-		;;
-	*)
-		url="$server$index.$env.debug.live"
-		;;
-	esac
-
-	echo -e "\tserver $url:$port;" >> $conf
-
-	((index++))
+	echo -e "\tserver $ip:$port;" >> $conf
 done
 
 cat >> $conf << _EOF_

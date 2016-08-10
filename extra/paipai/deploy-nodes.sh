@@ -3,6 +3,10 @@
 while [ $# -gt 0 ]
 do
 	case $1 in
+	-e|--env)
+		env=$2
+		shift
+		;;
 	-j|--jdk)
 		jdk=$2
 		shift
@@ -15,12 +19,9 @@ do
 		server=$2
 		shift
 		;;
-	-*)
+	*)
 		echo -e "Invalid option '$1'\n"
 		exit 1
-		;;
-	*)
-		env=$1
 		;;
 	esac
 
