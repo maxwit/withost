@@ -87,7 +87,7 @@ if [ ! -d /opt/$edition ]; then
 	$installer $edition || exit 1
 fi
 
-sed -i -e "s#external_url .*#external_url 'http://code.maxwit.com'#" \
+sed -i -e "s#external_url .*#external_url 'http://git.debug.live'#" \
 	-e "s/# gitlab_rails\['gitlab_email_from'\] =.*/gitlab_rails['gitlab_email_from'] = 'no-reply@maxwit.com'/" \
 	-e "s/# gitlab_rails\['gitlab_email_display_name'\] =.*/gitlab_rails['gitlab_email_display_name'] = 'MaxWit SCM'/" \
 	-e "s/# gitlab_rails\['smtp_enable'\] =.*/gitlab_rails['smtp_enable'] = true/" \
