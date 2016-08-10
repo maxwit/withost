@@ -28,7 +28,7 @@ do
 	shift
 done
 
-dir=`dirname $TOP`
+dir=`dirname $0`
 jar=web-upgrade/target/web-upgrade-1.0-SNAPSHOT.jar
 
 if [ ! -e $dir/nginx-local.sh ]; then
