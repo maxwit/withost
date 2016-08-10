@@ -4,7 +4,7 @@ env=devel
 nodes=2
 server=dm
 
-dir=`dirname $TOP`
+dir=`dirname $0`
 
 while [ $# -gt 0 ]
 do
@@ -64,18 +64,22 @@ while [ $index -le $nodes ]
 do
 	case $env in
 	production)
-		url="$server$index.2dupay.com"
+		url_tmp="$server$index.2dupay.com"
 		;;
 	*)
-		url="$server$index.$env.debug.live"
+		url_tmp="$server$index.$env.debug.live"
 		;;
 	esac
 
-	#ip=$url
-	scp $dir/get-ip.sh $url:$dst
-	ip=`ssh $url $dst/get-ip.sh`
+	#ip=$url_tmp
+	dst_tmp=`ssh $url_tmp mktemp -d`
+	scp $dir/get-ip.sh $url_tmp:$dst_tmp
+	ip=`ssh $url_tmp $dst_tmp/get-ip.sh`
+	ssh $url_tmp rm -rf $dst_tmp
 
 	node_list="$node_list $ip"
+
+	((index++))
 done
 
 scp $dir/nginx-local.sh $url:$dst
