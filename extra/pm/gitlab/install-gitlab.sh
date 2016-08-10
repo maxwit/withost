@@ -1,6 +1,6 @@
 #!/bin/sh
 
-edition="gitlab-ee"
+edition="gitlab-ce"
 
 if [ $UID -ne 0 ]; then
 	echo "must run as root!"
@@ -14,20 +14,24 @@ fi
 #fi
 
 if [ -e /etc/redhat-release ]; then
-	yum install -y curl openssh-server postfix cronie
+	installer="yum install -y"
+	$installer curl openssh-server postfix cronie
 	service postfix start
 	chkconfig postfix on
 	lokkit -s http -s ssh
+	curl -sS https://packages.gitlab.com/install/repositories/gitlab/$edition/script.rpm.sh | bash
+elif [ -e /etc/debian_version ]; then
+	installer="apt install -y"
+	$installer curl openssh-server ca-certificates postfix
+	curl -sS https://packages.gitlab.com/install/repositories/gitlab/$edition/script.deb.sh | bash
 else
 	exit 1
 fi
 
-curl https://packages.gitlab.com/install/repositories/gitlab/$edition/script.rpm.sh | bash
-
 err=0
 for ((i=0; i<5; i++))
 do
-	yum install -y $edition
+	$installer $edition
 	err=$?
 	[ $err -eq 0 ] && break
 done
