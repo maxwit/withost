@@ -85,6 +85,8 @@ fi
 
 if [ ! -d /opt/$edition ]; then
 	$installer $edition || exit 1
+	firewall-cmd --permanent --add-service=http
+	systemctl reload firewalld
 fi
 
 sed -i -e "s#external_url .*#external_url 'http://git.debug.live'#" \
