@@ -1,4 +1,6 @@
-if [ $UID -eq 0 ]; then
+#!/bin/sh
+
+if [ $UID -ne 0 ]; then
 	echo "pls run as root"
 	exit 1
 fi
@@ -10,11 +12,9 @@ PPM_ROOT=/var/www/html/ppm
 
 apt install -y nginx
 grep autoindex $CONF || sed -i '/sendfile/i autoindex on;' $CONF
-systemctl restart nginx
+#systemctl restart nginx
 
 groupadd inspiry
 useradd -g inspiry $HUSER
 mkdir -p $PPM_ROOT
 chown $HUSER $PPM_ROOT
-
-apt install -y openssh-server
