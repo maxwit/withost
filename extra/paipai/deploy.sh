@@ -41,7 +41,7 @@ production)
 	url="$server.2dupay.com"
 	;;
 devel|testing|staging)
-	url="$server.$env.debug.live"
+	url="$server.$env.2dupay.com"
 	;;
 *)
 	echo "invalid environment '$env'!"
@@ -67,11 +67,10 @@ do
 		url_tmp="$server$index.2dupay.com"
 		;;
 	*)
-		url_tmp="$server$index.$env.debug.live"
+		url_tmp="$server$index.$env.2dupay.com"
 		;;
 	esac
 
-	#ip=$url_tmp
 	dst_tmp=`ssh $url_tmp mktemp -d`
 	scp $dir/get-ip.sh $url_tmp:$dst_tmp
 	ip=`ssh $url_tmp $dst_tmp/get-ip.sh`

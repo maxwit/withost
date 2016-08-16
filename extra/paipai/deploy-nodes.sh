@@ -45,7 +45,7 @@ do
 		url="$server$index.2dupay.com"
 		;;
 	*)
-		url="$server$index.$env.debug.live"
+		url="$server$index.$env.2dupay.com"
 		;;
 	esac
 
