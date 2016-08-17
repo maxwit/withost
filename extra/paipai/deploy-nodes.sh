@@ -15,10 +15,10 @@ do
 		nodes=$2
 		shift
 		;;
-	-p|--ppm-path)
-		ppm_path=$2
-		shift
-		;;
+#	-p|--ppm-path)
+#		ppm_path=$2
+#		shift
+#		;;
 	-s|--server)
 		server=$2
 		shift
@@ -69,7 +69,7 @@ do
 
 	scp $jar $url:$dst
 	scp $dir/node-local.sh $url:$dst/
-	ssh $url sudo $dst/node-local.sh --server $server --jar $dst/`basename $jar` --ppm-path $ppm_path --env $env
+	ssh $url sudo $dst/node-local.sh --server $server --jar $dst/`basename $jar` --env $env
 
 	ssh $url rm -rf $dst
 

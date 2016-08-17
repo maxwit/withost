@@ -3,7 +3,6 @@
 env='local'
 server='dm'
 nodes=1
-ppm_path='/var/www/html/ppm'
 
 dir=`dirname $0`
 
@@ -68,8 +67,7 @@ while [ $index -le $nodes ]
 do
 	case $env in
 	local)
-		node_list="127.0.0.1"
-		break
+		node="127.0.0.1"
 		;;
 	production)
 		node="$server$index.2dupay.com"
@@ -88,6 +86,10 @@ do
 
 	node_list="$node_list $node"
 
+	if [ $index = 1 ]; then
+		ppm_url=$node
+	fi
+
 	((index++))
 done
 
@@ -95,15 +97,17 @@ scp $dir/nginx-local.sh $url:$dst
 ssh $url sudo $dst/nginx-local.sh --server $server --env $env \
 	--server-name $url $node_list
 
-scp $dir/ppm-local.sh $url:$dst
-ssh $url sudo $dst/ppm-local.sh --ppm-path $ppm_path
-
 ssh $url rm -rf $dst
 
 if [ -n "$jdk" ]; then
 	jdk_opt="--jdk $jdk"
 fi
 
-$dir/deploy-nodes.sh --server $server --nodes $nodes --env $env --ppm-path $ppm_path $jdk_opt
+$dir/deploy-nodes.sh --server $server --nodes $nodes --env $env $jdk_opt
+
+dst=`ssh $ppm_url mktemp -d`
+scp $dir/ppm-local.sh $ppm_url:$dst
+ssh $ppm_url sudo $dst/ppm-local.sh
+ssh $ppm_url rm -rf $dst
 
 echo

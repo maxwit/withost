@@ -16,10 +16,10 @@ do
 		jar=$2
 		shift
 		;;
-	-p|--ppm-path)
-		ppm_path=$2
-		shift
-		;;
+#	-p|--ppm-path)
+#		ppm_path=$2
+#		shift
+#		;;
 	-s|--server)
 		server=$2
 		shift
@@ -72,7 +72,7 @@ production)
 	;;
 esac
 
-grep $ppm_path /etc/fstab || {
-	mkdir -p /mnt/ppm
-	echo "$url:$ppm_path /mnt/ppm nfs defaults 0 0" >> /etc/fstab
-}
+#grep $ppm_path /etc/fstab || {
+#	mkdir -p /mnt/ppm
+#	echo "$url:$ppm_path /mnt/ppm nfs defaults 0 0" >> /etc/fstab
+#}
