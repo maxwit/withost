@@ -22,7 +22,7 @@ do
 		;;
 	*)
 		echo "Invalid option '$1'"
-		echo "Usage: $0 [options] <env>"
+		echo "Usage: $0 [options]"
 		echo
 		exit 1
 		;;
