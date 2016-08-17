@@ -96,7 +96,16 @@ server {
 
 	location / {
 		proxy_pass http://$balancer/;
+
+		proxy_http_version 1.1;
+		proxy_set_header Upgrade \$http_upgrade;
+		proxy_set_header Connection \$connection_upgrade;
 	}
+}
+
+map \$http_upgrade \$connection_upgrade {
+    default upgrade;
+    ''      close;
 }
 _EOF_
 
