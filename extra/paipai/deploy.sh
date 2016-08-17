@@ -86,12 +86,12 @@ do
 		;;
 	esac
 
-	if [ $env = production ]; then
-		dst_tmp=`ssh $node mktemp -d`
-		scp $dir/get-ip.sh $node:$dst_tmp
-		node=`ssh $node $dst_tmp/get-ip.sh`
-		ssh $node rm -rf $dst_tmp
-	fi
+	#if [ $env = production ]; then
+	#	dst_tmp=`ssh $node mktemp -d`
+	#	scp $dir/get-ip.sh $node:$dst_tmp
+	#	node=`ssh $node $dst_tmp/get-ip.sh`
+	#	ssh $node rm -rf $dst_tmp
+	#fi
 
 	node_list="$node_list $node"
 

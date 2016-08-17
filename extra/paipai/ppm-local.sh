@@ -7,13 +7,10 @@ if [ $UID -ne 0 ]; then
 	exit 1
 fi
 
-dir=/var/www/html/ppm
-
 while [ $# -gt 0 ]
 do
 	case $1 in
 	-p|--ppm-path)
-		dir=$2
 		shift
 		;;
 	*)
@@ -24,10 +21,7 @@ do
 	shift
 done
 
-CONF=`awk '/^\troot/{print $2}' /etc/nginx/sites-enabled/default`
-CONF=${CONF%;}
-echo $CONF
-exit
+CONF=/etc/nginx/nginx.conf
 
 apt-get install -y nginx
 
@@ -37,18 +31,13 @@ grep autoindex $CONF || sed -i '/sendfile/i autoindex on;' $CONF
 nginx -s reload
 
 PPM_ROOT=`awk '/^\troot/{print $2}' /etc/nginx/sites-enabled/default`
-PPM_ROOT=${PPM_ROOT%;}
-
-mkdir -p $PPM_ROOT
+PPM_ROOT=${PPM_ROOT%;}/ppm
 
 user=ppm
 pass="Inspiry2016"
-
-# FIXME
-useradd -m -g paipai $user
+userdel -r $user
+useradd -m -d $PPM_ROOT -g paipai $user
 echo -e "$pass\n$pass" | passwd $user
-
-chown $user $PPM_ROOT
 
 ####
 #apt-get install -y nfs-kernel-server
