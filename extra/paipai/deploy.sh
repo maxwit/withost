@@ -114,9 +114,11 @@ fi
 
 $dir/deploy-nodes.sh --server $server --nodes $nodes --env $env $jdk_opt
 
-dst=`ssh $ppm_url mktemp -d`
-scp $dir/ppm-local.sh $ppm_url:$dst
-ssh $ppm_url sudo $dst/ppm-local.sh
-ssh $ppm_url rm -rf $dst
+if [ $server = dm ]; then
+	dst=`ssh $ppm_url mktemp -d`
+	scp $dir/ppm-local.sh $ppm_url:$dst
+	ssh $ppm_url sudo $dst/ppm-local.sh
+	ssh $ppm_url rm -rf $dst
+fi
 
 echo
