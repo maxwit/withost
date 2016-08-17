@@ -24,7 +24,10 @@ do
 	shift
 done
 
-CONF=/etc/nginx/nginx.conf
+CONF=`awk '/^\troot/{print $2}' /etc/nginx/sites-enabled/default`
+CONF=${CONF%;}
+echo $CONF
+exit
 
 apt-get install -y nginx
 
