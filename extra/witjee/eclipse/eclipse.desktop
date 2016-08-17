@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding = UTF-8
+Name = _NAME_
+Terminal = false
+StartupNotify = true
+Type = Application
+Categories = Application;Development;
+Comment = Eclipse Integrated Development Environment
+Icon = _EPATH_/icon.xpm
+Exec = _EPATH_/eclipse

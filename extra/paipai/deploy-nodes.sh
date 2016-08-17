@@ -15,6 +15,10 @@ do
 		nodes=$2
 		shift
 		;;
+	-p|--ppm-path)
+		ppm_path=$2
+		shift
+		;;
 	-s|--server)
 		server=$2
 		shift
@@ -41,6 +45,9 @@ index=1
 while [ $index -le $nodes ]
 do
 	case $env in
+	local)
+		url="localhost"
+		;;
 	production)
 		url="$server$index.2dupay.com"
 		;;
@@ -56,13 +63,13 @@ do
 	if [ -n "$jdk" ]; then
 		scp $jdk $url:$dst
 		# FIXME
-		scp $HOME/project/wit/witjee/jdk/install-jdk.sh $url:$dst
+		scp $dir/../witjee/jdk/install-jdk.sh $url:$dst
 		ssh $url sudo $dst/install-jdk.sh $dst/`basename $jdk`
 	fi
 
 	scp $jar $url:$dst
 	scp $dir/node-local.sh $url:$dst/
-	ssh $url sudo $dst/node-local.sh --server $server --jar $dst/`basename $jar` $env
+	ssh $url sudo $dst/node-local.sh --server $server --jar $dst/`basename $jar` --ppm-path $ppm_path --env $env
 
 	ssh $url rm -rf $dst
 

@@ -1,8 +1,9 @@
 #!/bin/sh
 
-env=devel
-nodes=2
-server=dm
+env='local'
+server='dm'
+nodes=1
+ppm_path='/var/www/html/ppm'
 
 dir=`dirname $0`
 
@@ -37,6 +38,9 @@ do
 done
 
 case $env in
+local)
+	url="localhost"
+	;;
 production)
 	url="$server.2dupay.com"
 	;;
@@ -63,26 +67,36 @@ index=1
 while [ $index -le $nodes ]
 do
 	case $env in
+	local)
+		node_list="127.0.0.1"
+		break
+		;;
 	production)
-		url_tmp="$server$index.2dupay.com"
+		node="$server$index.2dupay.com"
 		;;
 	*)
-		url_tmp="$server$index.$env.2dupay.com"
+		node="$server$index.$env.2dupay.com"
 		;;
 	esac
 
-	dst_tmp=`ssh $url_tmp mktemp -d`
-	scp $dir/get-ip.sh $url_tmp:$dst_tmp
-	ip=`ssh $url_tmp $dst_tmp/get-ip.sh`
-	ssh $url_tmp rm -rf $dst_tmp
+	if [ $env = production ]; then
+		dst_tmp=`ssh $node mktemp -d`
+		scp $dir/get-ip.sh $node:$dst_tmp
+		node=`ssh $node $dst_tmp/get-ip.sh`
+		ssh $node rm -rf $dst_tmp
+	fi
 
-	node_list="$node_list $ip"
+	node_list="$node_list $node"
 
 	((index++))
 done
 
 scp $dir/nginx-local.sh $url:$dst
-ssh $url sudo $dst/nginx-local.sh --server $server --env $env $node_list
+ssh $url sudo $dst/nginx-local.sh --server $server --env $env \
+	--server-name $url $node_list
+
+scp $dir/ppm-local.sh $url:$dst
+ssh $url sudo $dst/ppm-local.sh --ppm-path $ppm_path
 
 ssh $url rm -rf $dst
 
@@ -90,6 +104,6 @@ if [ -n "$jdk" ]; then
 	jdk_opt="--jdk $jdk"
 fi
 
-$dir/deploy-nodes.sh --server $server --nodes $nodes --env $env $jdk_opt
+$dir/deploy-nodes.sh --server $server --nodes $nodes --env $env --ppm-path $ppm_path $jdk_opt
 
 echo

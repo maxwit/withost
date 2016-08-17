@@ -12,6 +12,10 @@ do
 		env=$2
 		shift
 		;;
+	-n|--server-name)
+		server_name=$2
+		shift
+		;;
 	-s|--server)
 		server=$2
 		shift
@@ -65,29 +69,22 @@ do
 	((base++))
 done
 
-#upstream dm-server {
-#	server dm1.2dupay.com:8080;
-#	server dm2.2dupay.com:8080;
-#}
-#
-#server {
-#	listen 80;
-#	server_name dm.2dupay.com;
-#
-#	location / {
-#		proxy_pass http://dm-server/;
-#	}
-#}
+# FIXME
+port=8080
 
-conf=$conf_dir/$server-http.conf
-
-balancer=$server-nodes
+if [ $env = production ]; then
+	conf=$conf_dir/$server-http.conf
+	balancer=$server-nodes
+else
+	conf=$conf_dir/$server-$env-http.conf
+	balancer=$server-$env-nodes
+fi
 
 echo "upstream $balancer {" > $conf
 
-for ip in ${node_list[@]}
+for node in ${node_list[@]}
 do
-	echo -e "\tserver $ip:$port;" >> $conf
+	echo -e "\tserver $node:$port;" >> $conf
 done
 
 cat >> $conf << _EOF_
@@ -95,7 +92,7 @@ cat >> $conf << _EOF_
 
 server {
 	listen 80;
-	server_name $server.2dupay.com;
+	server_name $server_name;
 
 	location / {
 		proxy_pass http://$balancer/;
@@ -106,5 +103,7 @@ _EOF_
 if [ -d '/etc/nginx/sites-enabled' ]; then
 	ln -svf $conf /etc/nginx/sites-enabled
 fi
+
+nginx -s reload
 
 echo
