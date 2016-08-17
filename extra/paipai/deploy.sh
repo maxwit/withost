@@ -1,7 +1,6 @@
 #!/bin/sh
 
 env='local'
-server='dm'
 nodes=1
 
 dir=`dirname $0`
@@ -21,10 +20,6 @@ do
 		nodes=$2
 		shift
 		;;
-	-s|--server)
-		server=$2
-		shift
-		;;
 	*)
 		echo "Invalid option '$1'"
 		echo "Usage: $0 [options] <env>"
@@ -35,6 +30,20 @@ do
 
 	shift
 done
+
+if [ ! -e pom.xml ]; then
+	echo "pls run the program inside a maven project!"
+	exit 1
+fi
+
+if grep dm-parent pom.xml > /dev/null; then
+	server=dm
+elif grep sp-parent pom.xml > /dev/null; then
+	server=sp
+else
+	echo "project not supported!"
+	exit 1
+fi
 
 case $env in
 local)

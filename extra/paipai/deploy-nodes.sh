@@ -33,7 +33,20 @@ do
 done
 
 dir=`dirname $0`
-jar=web-upgrade/target/web-upgrade-1.0-SNAPSHOT.jar
+
+# FIXME
+for j in `ls */target/*.jar`
+do
+	if [ -x $j ]; then
+		jar=$j
+		break
+	fi
+done
+
+if [ -z "$jar" ]; then
+	echo "No executable jar found!"
+	exit 1
+fi
 
 if [ ! -e $dir/nginx-local.sh ]; then
 	echo "Invalid server '$server'!"
