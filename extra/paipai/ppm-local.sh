@@ -26,14 +26,15 @@ done
 
 CONF=/etc/nginx/nginx.conf
 
-PPM_ROOT=$dir
-
 apt-get install -y nginx
 
 grep autoindex $CONF || sed -i '/sendfile/i autoindex on;' $CONF
 
 #systemctl restart nginx
 nginx -s reload
+
+PPM_ROOT=`awk '/^\troot/{print $2}' /etc/nginx/sites-enabled/default`
+PPM_ROOT=${PPM_ROOT%;}
 
 mkdir -p $PPM_ROOT
 
