@@ -32,6 +32,8 @@ do
 	shift
 done
 
+alias ssh='ssh -o StrictHostKeyChecking=no'
+
 if [ ! -e pom.xml ]; then
 	echo "pls run the program inside a maven project!"
 	exit 1
@@ -86,12 +88,20 @@ do
 		node_url="$server$index.$domain"
 	fi
 
-	# FIXME
 	if [ $server = dm -a $index = 1 ]; then
+		# FIXME
 		ppm_server=$node_url
+
+		if [ $env != local ]; then
+			dst=`ssh $node_url mktemp -d`
+			scp $cwd/nginx-local.sh $node_url:$dst
+			ssh $node_url sudo $dst/nginx-local.sh --server $server --env $env \
+				--server-name $node_url localhost
+			ssh $node_url rm -rf $dst
+		fi
 	fi
 
-	echo "deploying $node_url ..."
+	echo "Deploying $node_url ..."
 
 	dst=`ssh $node_url mktemp -d`
 
@@ -109,13 +119,15 @@ do
 
 	echo
 
-	#if [ $env = production ]; then
-	#	dst_tmp=`ssh $node_url mktemp -d`
-	#	scp $cwd/get-ip.sh $node_url:$dst_tmp
-	#	node_url=`ssh $node_url $dst_tmp/get-ip.sh`
-	#	ssh $node_url rm -rf $dst_tmp
-	#	echo "Intranet IP = $node_url"
-	#fi
+	if [ $env = production ]; then
+		tmp=`ssh $node_url /sbin/ifconfig | egrep -o "10\.[0-9]+\.[0-9]+\.[0-9]+" | head -1`
+		if [ -z "$tmp" ]; then
+			echo "fail to get Intranet IP!"
+		else
+			node_url=$tmp
+			echo "Intranet IP = $node_url"
+		fi
+	fi
 
 	node_list="$node_list $node_url"
 
