@@ -12,7 +12,7 @@ do
 		env=$2
 		shift
 		;;
-	-j|--jar)
+	-a|--app)
 		jar=$2
 		shift
 		;;

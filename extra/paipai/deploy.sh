@@ -1,8 +1,11 @@
 #!/bin/sh
 
 env='local'
-nodes=1
 domain='2dupay.com'
+nodes=1
+
+setup_http=0
+setup_ppm=0
 
 cwd=`dirname $0`
 
@@ -13,9 +16,19 @@ do
 		env=$2
 		shift
 		;;
+	-a|--app)
+		app=$2
+		shift
+		;;
 	-j|--jdk)
 		jdk=$2
 		shift
+		;;
+	-h|--setup-http)
+		setup_http=1
+		;;
+	-p|--setup-ppm)
+		setup_ppm=1
 		;;
 	-n|--nodes)
 		nodes=$2
@@ -61,18 +74,18 @@ devel|testing|staging)
 	exit 1
 esac
 
-if [ -z "$jar" ]; then
+if [ -z "$app" ]; then
 	# FIXME
 	for j in `ls */target/*.jar`
 	do
 		if [ -x $j ]; then
-			jar=$j
+			app=$j
 			break
 		fi
 	done
 
-	if [ -z "$jar" ]; then
-		echo "no jar found!"
+	if [ -z "$app" ]; then
+		echo "no app found!"
 		exit 1
 	fi
 fi
@@ -92,7 +105,7 @@ do
 		# FIXME
 		ppm_server=$node_url
 
-		if [ $env != local ]; then
+		if [ $env != local -a $setup_http = 1 ]; then
 			dst=`ssh $node_url mktemp -d`
 			scp $cwd/nginx-local.sh $node_url:$dst
 			ssh $node_url sudo $dst/nginx-local.sh --plat $plat --env $env \
@@ -101,7 +114,7 @@ do
 		fi
 	fi
 
-	echo "Deploying $node_url ..."
+	echo "[$index/$nodes] deploying $node_url ..."
 
 	dst=`ssh $node_url mktemp -d`
 
@@ -111,9 +124,9 @@ do
 		ssh $node_url sudo $dst/install-jdk.sh $dst/`basename $jdk`
 	fi
 
-	scp $jar $node_url:$dst
+	scp $app $node_url:$dst
 	scp $cwd/node-local.sh $node_url:$dst/
-	ssh $node_url sudo $dst/node-local.sh --plat $plat --env $env --jar $dst/`basename $jar`
+	ssh $node_url sudo $dst/node-local.sh --plat $plat --env $env --app $dst/`basename $app`
 
 	ssh $node_url rm -rf $dst
 
@@ -137,23 +150,23 @@ do
 done
 
 # FIXME
-if [ $plat = dm ]; then
+if [ $setup_ppm = 1 -a $plat = dm ]; then
 	dst=`ssh $ppm_server mktemp -d`
 	scp $cwd/ppm-local.sh $ppm_server:$dst
 	ssh $ppm_server sudo $dst/ppm-local.sh
 	ssh $ppm_server rm -rf $dst
 fi
 
-if [ $env = local ]; then
-	http_server="localhost"
-else
-	http_server="$plat.$domain"
+if [ $setup_http = 1 ]; then
+	if [ $env = local ]; then
+		http_server="localhost"
+	else
+		http_server="$plat.$domain"
+	fi
+
+	dst=`ssh $http_server mktemp -d`
+	scp $cwd/nginx-local.sh $http_server:$dst
+	ssh $http_server sudo $dst/nginx-local.sh --plat $plat --env $env \
+		--server-name $http_server $node_list
+	ssh $http_server rm -rf $dst
 fi
-
-dst=`ssh $http_server mktemp -d`
-scp $cwd/nginx-local.sh $http_server:$dst
-ssh $http_server sudo $dst/nginx-local.sh --plat $plat --env $env \
-	--server-name $http_server $node_list
-ssh $http_server rm -rf $dst
-
-echo
