@@ -40,38 +40,38 @@ if [ ! -e $home ]; then
 	useradd -r -m -d $home $user
 fi
 
-service="paipai-$server"
+app="paipai-$server"
 if [ $env != 'production' ]; then
-	service="$service-$env"
+	app="$app-$env"
 fi
 
 # FIXME
-if [ -e /etc/init.d/$service ]; then
-	service $service stop
+if [ -e /etc/init.d/$app ]; then
+	service $app stop
 fi
 
-cp $jar /opt/$service.jar || exit 1
-chown $user.$user /opt/$service.jar
+cp $jar /opt/$app.jar || exit 1
+chown $user.$user /opt/$app.jar
 
-if [ ! -e /etc/init.d/$service ]; then
-	ln -sfv /opt/$service.jar /etc/init.d/$service
-	update-rc.d $service defaults 88
+if [ ! -e /etc/init.d/$app ]; then
+	ln -sfv /opt/$app.jar /etc/init.d/$app
+	update-rc.d $app defaults 88
 fi
 
-service $service start
+service $app start
 
-case $env in
-local)
-	url="localhost"
-	;;
-production)
-	url="$server.2dupay.com"
-	;;
-*)
-	url="$server.$env.2dupay.com"
-	;;
-esac
-
+#case $env in
+#local)
+#	url="localhost"
+#	;;
+#production)
+#	url="$server.2dupay.com"
+#	;;
+#*)
+#	url="$server.$env.2dupay.com"
+#	;;
+#esac
+#
 #grep $ppm_path /etc/fstab || {
 #	mkdir -p /mnt/ppm
 #	echo "$url:$ppm_path /mnt/ppm nfs defaults 0 0" >> /etc/fstab
