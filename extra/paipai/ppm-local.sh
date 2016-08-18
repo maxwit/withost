@@ -35,7 +35,8 @@ PPM_ROOT=${PPM_ROOT%;}/ppm
 
 user=ppm
 pass="Inspiry2016"
-userdel -r $user
+#FIXME
+#userdel -r $user
 useradd -m -d $PPM_ROOT -g paipai $user
 echo -e "$pass\n$pass" | passwd $user
 

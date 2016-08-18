@@ -4,8 +4,8 @@ env='local'
 domain='2dupay.com'
 nodes=1
 
-setup_http=0
-setup_ppm=0
+enable_http=0
+enable_ppm=0
 
 cwd=`dirname $0`
 
@@ -24,11 +24,11 @@ do
 		jdk=$2
 		shift
 		;;
-	-h|--setup-http)
-		setup_http=1
+	-h|--enable-http)
+		enable_http=1
 		;;
-	-p|--setup-ppm)
-		setup_ppm=1
+	-p|--enable-ppm)
+		enable_ppm=1
 		;;
 	-n|--nodes)
 		nodes=$2
@@ -123,7 +123,7 @@ do
 		# FIXME
 		ppm_server=$node_url
 
-		if [ $env != local -a $setup_http = 1 ]; then
+		if [ $env != local -a $enable_http = 1 ]; then
 			dst=`ssh $node_url mktemp -d`
 			scp $cwd/nginx-local.sh $node_url:$dst
 			ssh $node_url sudo $dst/nginx-local.sh --plat $plat --env $env \
@@ -168,14 +168,14 @@ do
 done
 
 # FIXME
-if [ $setup_ppm = 1 -a $plat = dm ]; then
+if [ $enable_ppm = 1 -a $plat = dm ]; then
 	dst=`ssh $ppm_server mktemp -d`
 	scp $cwd/ppm-local.sh $ppm_server:$dst
 	ssh $ppm_server sudo $dst/ppm-local.sh
 	ssh $ppm_server rm -rf $dst
 fi
 
-if [ $setup_http = 1 ]; then
+if [ $enable_http = 1 ]; then
 	if [ $env = local ]; then
 		http_server="localhost"
 	else
