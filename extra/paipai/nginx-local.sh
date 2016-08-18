@@ -8,16 +8,20 @@ fi
 while [ $# -gt 0 ]
 do
 	case $1 in
-	-e|--env)
+	--env)
 		env=$2
 		shift
 		;;
-	-s|--server-name)
+	--server-name)
 		server_name=$2
 		shift
 		;;
-	-p|--plat)
+	--plat)
 		plat=$2
+		shift
+		;;
+	--port)
+		port=$2
 		shift
 		;;
 	-*)
@@ -52,25 +56,6 @@ else
 	echo "distribution not supported!"
 	exit 1
 fi
-
-if [ $plat = dm ]; then
-	base=11
-else
-	base=21
-fi
-
-for e in local devel testing staging production
-do
-	if [ $env = $e ]; then
-		port=${base}080
-		break
-	fi
-
-	((base++))
-done
-
-# FIXME
-port=8080
 
 if [ $env = production ]; then
 	conf=$conf_dir/$plat-http.conf

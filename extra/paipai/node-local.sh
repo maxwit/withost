@@ -16,6 +16,10 @@ do
 		jar=$2
 		shift
 		;;
+	--port)
+		port=$2
+		shift
+		;;
 #	-p|--ppm-path)
 #		ppm_path=$2
 #		shift
@@ -45,18 +49,35 @@ if [ $env != 'production' ]; then
 	app="$app-$env"
 fi
 
+app_path=/opt/$app
+mkdir -p $app_path
+
 # FIXME
 if [ -e /etc/init.d/$app ]; then
 	service $app stop
 fi
 
-cp $jar /opt/$app.jar || exit 1
-chown $user.$user /opt/$app.jar
+cp $jar $app_path/$app.jar || exit 1
+chown $user.$user $app_path/$app.jar
 
-if [ ! -e /etc/init.d/$app ]; then
-	ln -sfv /opt/$app.jar /etc/init.d/$app
+if [ -e /etc/init.d/$app ]; then
+	lnk=`readlink /etc/init.d/$app`
+	if [ "$lnk" != $app_path/$app.jar ]; then
+		rm -v $lnk
+		ln -sfv $app_path/$app.jar /etc/init.d/$app
+	fi
+else
+	ln -sv $app_path/$app.jar /etc/init.d/$app
 	update-rc.d $app defaults 88
 fi
+
+cat > $app_path/$app.conf << _EOF_
+JAVA_OPTS=-Xmx512M
+RUN_ARGS="--server.port=$port --spring.profiles.active=$env"
+_EOF_
+
+echo "[$app_path/$app.conf]"
+cat $app_path/$app.conf
 
 service $app start
 

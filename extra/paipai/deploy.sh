@@ -61,6 +61,24 @@ else
 	exit 1
 fi
 
+if [ $plat = dm ]; then
+	base=11
+else
+	base=21
+fi
+
+port=8080
+
+for e in local devel testing staging production
+do
+	if [ $env = $e -a $env != testing -a $env != production ]; then
+		port=${base}080
+		break
+	fi
+
+	((base++))
+done
+
 case $env in
 local)
 	;;
@@ -109,7 +127,7 @@ do
 			dst=`ssh $node_url mktemp -d`
 			scp $cwd/nginx-local.sh $node_url:$dst
 			ssh $node_url sudo $dst/nginx-local.sh --plat $plat --env $env \
-				--server-name $node_url localhost
+				--server-name $node_url --port $port localhost
 			ssh $node_url rm -rf $dst
 		fi
 	fi
@@ -126,7 +144,7 @@ do
 
 	scp $app $node_url:$dst
 	scp $cwd/node-local.sh $node_url:$dst/
-	ssh $node_url sudo $dst/node-local.sh --plat $plat --env $env --app $dst/`basename $app`
+	ssh $node_url sudo $dst/node-local.sh --plat $plat --port $port --env $env --app $dst/`basename $app`
 
 	ssh $node_url rm -rf $dst
 
@@ -167,6 +185,6 @@ if [ $setup_http = 1 ]; then
 	dst=`ssh $http_server mktemp -d`
 	scp $cwd/nginx-local.sh $http_server:$dst
 	ssh $http_server sudo $dst/nginx-local.sh --plat $plat --env $env \
-		--server-name $http_server $node_list
+		--server-name $http_server --port $port $node_list
 	ssh $http_server rm -rf $dst
 fi
