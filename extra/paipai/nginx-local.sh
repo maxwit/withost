@@ -12,12 +12,12 @@ do
 		env=$2
 		shift
 		;;
-	-n|--server-name)
+	-s|--server-name)
 		server_name=$2
 		shift
 		;;
-	-s|--server)
-		server=$2
+	-p|--plat)
+		plat=$2
 		shift
 		;;
 	-*)
@@ -53,7 +53,7 @@ else
 	exit 1
 fi
 
-if [ $server = dm ]; then
+if [ $plat = dm ]; then
 	base=11
 else
 	base=21
@@ -73,11 +73,11 @@ done
 port=8080
 
 if [ $env = production ]; then
-	conf=$conf_dir/$server-http.conf
-	balancer=$server-nodes
+	conf=$conf_dir/$plat-http.conf
+	balancer=$plat-nodes
 else
-	conf=$conf_dir/$server-$env-http.conf
-	balancer=$server-$env-nodes
+	conf=$conf_dir/$plat-$env-http.conf
+	balancer=$plat-$env-nodes
 fi
 
 echo "upstream $balancer {" > $conf

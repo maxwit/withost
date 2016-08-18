@@ -20,8 +20,8 @@ do
 #		ppm_path=$2
 #		shift
 #		;;
-	-s|--server)
-		server=$2
+	-s|--plat)
+		plat=$2
 		shift
 		;;
 	*)
@@ -40,7 +40,7 @@ if [ ! -e $home ]; then
 	useradd -r -m -d $home $user
 fi
 
-app="paipai-$server"
+app="paipai-$plat"
 if [ $env != 'production' ]; then
 	app="$app-$env"
 fi
@@ -65,10 +65,10 @@ service $app start
 #	url="localhost"
 #	;;
 #production)
-#	url="$server.2dupay.com"
+#	url="$plat.2dupay.com"
 #	;;
 #*)
-#	url="$server.$env.2dupay.com"
+#	url="$plat.$env.2dupay.com"
 #	;;
 #esac
 #

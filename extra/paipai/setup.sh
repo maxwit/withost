@@ -40,9 +40,9 @@ if [ ! -e pom.xml ]; then
 fi
 
 if grep dm-parent pom.xml > /dev/null; then
-	server=dm
+	plat=dm
 elif grep sp-parent pom.xml > /dev/null; then
-	server=sp
+	plat=sp
 else
 	echo "project not supported!"
 	exit 1
@@ -85,17 +85,17 @@ do
 	if [ $env = local ]; then
 		node_url="localhost"
 	else
-		node_url="$server$index.$domain"
+		node_url="$plat$index.$domain"
 	fi
 
-	if [ $server = dm -a $index = 1 ]; then
+	if [ $plat = dm -a $index = 1 ]; then
 		# FIXME
 		ppm_server=$node_url
 
 		if [ $env != local ]; then
 			dst=`ssh $node_url mktemp -d`
 			scp $cwd/nginx-local.sh $node_url:$dst
-			ssh $node_url sudo $dst/nginx-local.sh --server $server --env $env \
+			ssh $node_url sudo $dst/nginx-local.sh --plat $plat --env $env \
 				--server-name $node_url localhost
 			ssh $node_url rm -rf $dst
 		fi
@@ -113,7 +113,7 @@ do
 
 	scp $jar $node_url:$dst
 	scp $cwd/node-local.sh $node_url:$dst/
-	ssh $node_url sudo $dst/node-local.sh --server $server --env $env --jar $dst/`basename $jar`
+	ssh $node_url sudo $dst/node-local.sh --plat $plat --env $env --jar $dst/`basename $jar`
 
 	ssh $node_url rm -rf $dst
 
@@ -137,7 +137,7 @@ do
 done
 
 # FIXME
-if [ $server = dm ]; then
+if [ $plat = dm ]; then
 	dst=`ssh $ppm_server mktemp -d`
 	scp $cwd/ppm-local.sh $ppm_server:$dst
 	ssh $ppm_server sudo $dst/ppm-local.sh
@@ -147,12 +147,12 @@ fi
 if [ $env = local ]; then
 	http_server="localhost"
 else
-	http_server="$server.$domain"
+	http_server="$plat.$domain"
 fi
 
 dst=`ssh $http_server mktemp -d`
 scp $cwd/nginx-local.sh $http_server:$dst
-ssh $http_server sudo $dst/nginx-local.sh --server $server --env $env \
+ssh $http_server sudo $dst/nginx-local.sh --plat $plat --env $env \
 	--server-name $http_server $node_list
 ssh $http_server rm -rf $dst
 
