@@ -45,8 +45,11 @@ if [ ! -e $home ]; then
 fi
 
 app="paipai-$plat"
-if [ $env != 'production' ]; then
+if [ $env = 'production' ]; then
+	mem=2G
+else
 	app="$app-$env"
+	mem=512M
 fi
 
 app_path=/opt/$app
@@ -72,7 +75,7 @@ else
 fi
 
 cat > $app_path/$app.conf << _EOF_
-JAVA_OPTS=-Xmx512M
+JAVA_OPTS=-Xmx$mem
 RUN_ARGS="--server.port=$port --spring.profiles.active=$env"
 _EOF_
 

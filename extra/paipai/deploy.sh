@@ -150,14 +150,12 @@ do
 
 	echo
 
-	if [ $env = production ]; then
-		tmp=`ssh $node_url /sbin/ifconfig | egrep -o "10\.[0-9]+\.[0-9]+\.[0-9]+" | head -1`
-		if [ -z "$tmp" ]; then
-			echo "fail to get Intranet IP!"
-		else
-			node_url=$tmp
-			echo "Intranet IP = $node_url"
-		fi
+	tmp=`ssh $node_url /sbin/ifconfig | egrep -o "10\.[0-9]+\.[0-9]+\.[0-9]+" | head -1`
+	if [ -z "$tmp" ]; then
+		echo "fail to get Intranet IP!"
+	else
+		node_url=$tmp
+		echo "Intranet IP = $node_url"
 	fi
 
 	node_list="$node_list $node_url"
