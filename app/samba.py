@@ -8,6 +8,9 @@ def setup(dist, apps, conf):
 	dst = '/tmp/smb.conf'
 	pub = conf['pub.path']
 
+	# if os.path.exists(pub):
+	# 	os.mkdirs(pub)
+
 	fsrc = open(src)
 	fdst = open(dst, 'w+')
 
