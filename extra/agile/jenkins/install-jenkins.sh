@@ -20,7 +20,7 @@ if [ ! -e /etc/init.d/jenkins ]; then
 
 		for ((i=0; i<5; i++))
 		do
-			yum install -y jenkins java-1.7.0-openjdk-devel
+			yum install -y jenkins # java-1.7.0-openjdk-devel
 			err=$?
 			[ $err -eq 0 ] && break
 		done
@@ -50,7 +50,7 @@ if [ ! -e /etc/init.d/jenkins ]; then
 
 		for ((i=0; i<5; i++))
 		do
-			apt-get install -y jenkins openjdk-7-jdk || exit 1
+			apt-get install -y jenkins # openjdk-7-jdk
 			err=$?
 			[ $err -eq 0 ] && break
 		done
