@@ -150,7 +150,8 @@ do
 
 	echo
 
-	tmp=`ssh $node_url /sbin/ifconfig | egrep -o "10\.[0-9]+\.[0-9]+\.[0-9]+" | head -1`
+	#tmp=`ssh $node_url /sbin/ifconfig | egrep -o "10\.[0-9]+\.[0-9]+\.[0-9]+" | head -1`
+	tmp=`ssh $node_url /sbin/ifconfig | egrep -o "192\.168\.79\.13[0-9]" | head -1`
 	if [ -z "$tmp" ]; then
 		echo "fail to get Intranet IP!"
 	else
@@ -165,6 +166,9 @@ do
 	((index++))
 done
 
+
+	echo "$node_list"
+
 # FIXME
 if [ $enable_ppm = 1 -a $plat = dm ]; then
 	dst=`ssh $ppm_server mktemp -d`
@@ -172,17 +176,21 @@ if [ $enable_ppm = 1 -a $plat = dm ]; then
 	ssh $ppm_server sudo $dst/ppm-local.sh
 	ssh $ppm_server rm -rf $dst
 fi
-
 if [ $enable_http = 1 ]; then
-	if [ $env = local ]; then
-		http_server="localhost"
-	else
-		http_server="$plat.$domain"
-	fi
-
-	dst=`ssh $http_server mktemp -d`
-	scp $cwd/nginx-local.sh $http_server:$dst
-	ssh $http_server sudo $dst/nginx-local.sh --plat $plat --env $env \
-		--server-name $http_server --port $port $node_list
-	ssh $http_server rm -rf $dst
+node_temp=1
+	while [ $node_temp -le $nodes ]
+	do
+		if [ $env = local ]; then
+			http_server="localhost"
+		else
+			http_server="$plat$node_temp.$domain"
+		fi
+	
+		dst=`ssh $http_server mktemp -d`
+		scp $cwd/nginx-local.sh $http_server:$dst
+		ssh $http_server sudo bash $dst/nginx-local.sh --plat $plat --env \
+			$env --server-name $http_server --port $port $node_list
+		ssh $http_server rm -rf $dst
+		((node_temp++))
+	done
 fi
