@@ -62,22 +62,22 @@ else
 fi
 
 if [ $plat = dm ]; then
-	base=11
+	base=8
 else
-	base=21
+	base=9
 fi
 
 port=8080
 
-for e in local devel testing staging production
-do
-	if [ $env = $e -a $env != testing -a $env != production ]; then
-		port=${base}080
-		break
-	fi
-
-	((base++))
-done
+#for e in local devel testing staging production
+#do
+#	if [ $env = $e -a $env != testing -a $env != production ]; then
+#		port=${base}080
+#		break
+#	fi
+#
+#	((base++))
+#done
 
 case $env in
 local)
