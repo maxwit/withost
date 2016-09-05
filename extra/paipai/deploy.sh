@@ -126,7 +126,7 @@ do
 		if [ $env != local -a $enable_http = 1 ]; then
 			dst=`ssh $node_url mktemp -d`
 			scp $cwd/nginx-local.sh $node_url:$dst
-			ssh $node_url sudo $dst/nginx-local.sh --plat $plat --env $env \
+			ssh $node_url sudo bash $dst/nginx-local.sh --plat $plat --env $env \
 				--server-name $node_url --port $port localhost
 			ssh $node_url rm -rf $dst
 		fi
@@ -139,12 +139,12 @@ do
 	if [ -n "$jdk" ]; then
 		scp $jdk $node_url:$dst
 		scp $cwd/../witjee/jdk/install-jdk.sh $node_url:$dst
-		ssh $node_url sudo $dst/install-jdk.sh $dst/`basename $jdk`
+		ssh $node_url sudo bash $dst/install-jdk.sh $dst/`basename $jdk`
 	fi
 
 	scp $app $node_url:$dst
 	scp $cwd/node-local.sh $node_url:$dst/
-	ssh $node_url sudo $dst/node-local.sh --plat $plat --port $port --env $env --app $dst/`basename $app`
+	ssh $node_url sudo bash $dst/node-local.sh --plat $plat --port $port --env $env --app $dst/`basename $app`
 
 	ssh $node_url rm -rf $dst
 
@@ -189,7 +189,7 @@ node_temp=1
 		dst=`ssh $http_server mktemp -d`
 		scp $cwd/nginx-local.sh $http_server:$dst
 		ssh $http_server sudo bash $dst/nginx-local.sh --plat $plat --env \
-			$env --server-name $http_server --port $port $node_list
+			$env --server-name $plat.$domain --port $port $node_list
 		ssh $http_server rm -rf $dst
 		((node_temp++))
 	done
