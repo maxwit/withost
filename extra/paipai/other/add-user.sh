@@ -24,4 +24,4 @@ do
 	    echo "$user exists"
 	fi
 	echo "$user:Inspiry2016" | /usr/sbin/chpasswd
-done < $1
+done < account-list.csv
