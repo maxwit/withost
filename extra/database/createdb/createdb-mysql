@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ $# == 1 ]; then
 	user="admin" # or $USER
@@ -13,12 +13,24 @@ else
 	exit 1
 fi
 
-release=`lsb_release -sc`
-if [ "$release" = xenial -o "$release" = Core ]; then
-	mysqlroot="sudo mysql"
-else
-	mysqlroot="mysql -uroot -pmaxwit"
-fi
+os=`uname -s`
+
+case $os in
+    'Linux')
+        release=`lsb_release -sc`
+        if [ "$release" = xenial -o "$release" = Core ]; then
+	          mysqlroot="sudo mysql"
+        else
+	          mysqlroot="mysql -uroot -pmaxwit"
+        fi
+        ;;
+    'Darwin')
+	      mysqlroot="mysql -uroot"
+        ;;
+    *)
+        echo "OS '$os' not supported!"
+        ;;
+esac
 
 dbms=(${0//-/ })
 dbms=${dbms[1]}
