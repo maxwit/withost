@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # user
 # port
@@ -70,7 +70,7 @@ sed -i 's/JIRA_USER=".*/JIRA_USER="jira"/' $JIRA_BASE/bin/user.sh
 chown jira.jira -R $JIRA_BASE
 
 cat > /etc/init.d/jira << EOF
-#!/bin/sh
+#!/bin/bash
 
 # chkconfig: - 85 15 
 # description: Jira Issue Track System

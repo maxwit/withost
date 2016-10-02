@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ $UID == 0 ]; then
 	echo  "do NOT run as root!"
