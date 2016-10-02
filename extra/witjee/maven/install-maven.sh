@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 dst_dir=/opt/maven
 profile=/etc/profile.d/maven.sh

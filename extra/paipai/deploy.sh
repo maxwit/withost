@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 env='local'
 domain='2dupay.com'

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ $UID -eq 0 ]; then
 	echo "do NOT run as root!"
@@ -77,7 +77,7 @@ EOF
 sed -i "/<tomcat-users>/r $temp" $tomcat_home/conf/tomcat-users.xml
 
 cat > $temp << EOF
-#!/bin/sh
+#!/bin/bash
 
 # chkconfig:   - 86 16
 

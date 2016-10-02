@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 dst_dir=/opt/jdk
 profile=/etc/profile.d/jdk.sh

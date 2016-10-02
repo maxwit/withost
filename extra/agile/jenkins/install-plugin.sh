@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ $USER != 'jenkins' ]; then
 	echo "must run as jenkins!"

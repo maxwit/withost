@@ -22,7 +22,7 @@ def setup(dist, apps, conf):
 		open('/etc/rc.local', 'w').writelines(lines)
 	else:
 		f = open('/etc/rc.local', 'w')
-		f.write('#!/bin/sh\n')
+		f.write('#!/bin/bash\n')
 		f.write('uwsgi --uid nginx --ini %s\n' % uwsgi_conf)
 		f.write('exit 0')
 		f.close()

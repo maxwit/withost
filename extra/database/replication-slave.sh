@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 
 sed -i "s/^.*server-id.*$/server-id = 10/" /etc/mysql/my.cnf
