@@ -15,22 +15,26 @@ fi
 
 os=`uname -s`
 
+# FIXME
 case $os in
     'Linux')
         release=`lsb_release -sc`
         if [ "$release" = xenial -o "$release" = Core ]; then
-	          mysqlroot="sudo mysql"
+	          mysql_root="sudo mysql"
         else
-	          mysqlroot="mysql -uroot -pmaxwit"
+	          mysql_root="mysql -uroot -pmaxwit"
         fi
         ;;
     'Darwin')
-	      mysqlroot="mysql -uroot"
+	      mysql_root="mysql -uroot"
         ;;
     *)
         echo "OS '$os' not supported!"
         ;;
 esac
+
+mysql_root="$mysql_root -e"
+pgsql_root="psql -Upostgres -c"
 
 dbms=(${0//-/ })
 dbms=${dbms[1]}
@@ -40,28 +44,29 @@ tmp=$(mktemp).sql
 
 case $dbms in
 	mysql|mariadb)
-# FIXME
-# create user IF NOT EXISTS $user identified by '$pass';
-	$mysqlroot -e "drop database if exists $dbname; create database $dbname character set=utf8; grant all on $dbname.* to $user@'localhost' identified by '$pass'"
+		$mysql_root "drop database if exists $dbname"
+		$mysql_root "create database $dbname character set=utf8"
+		$mysql_root "grant all on $dbname.* to $user@'%' identified by '$pass'"
 
-	echo "status" | mysql -u$user -p$pass -D$dbname
-	;;
+		mysql -u$user -p$pass -D$dbname -e "status"
+		;;
 
 	psql|pgsql|postgresql)
-	psql -Upostgres -c "drop database $dbname"
+		# FIXME
+		$pgsql_root "drop database $dbname"
 
-	psql -Upostgres -c "create user $user with password '$pass'"
-	psql -Upostgres -c "create database $dbname encoding='utf8' owner=$user"
+		$pgsql_root "create user $user with password '$pass'"
+		$pgsql_root "create database $dbname encoding='utf8' owner=$user"
 
-	echo '----------------------'
-	psql -U$user -d$dbname -c "\conninfo"
-	psql -U$user -d$dbname -c "\encoding"
-	;;
+		echo '----------------------'
+		psql -U$user -d$dbname -c "\conninfo"
+		psql -U$user -d$dbname -c "\encoding"
+		;;
 
 	*)
-	echo "$dbms not supported yet!"
-	exit 1
-	;;
+		echo "$dbms not supported yet!"
+		exit 1
+		;;
 esac
 
 echo
