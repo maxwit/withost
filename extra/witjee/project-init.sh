@@ -20,7 +20,7 @@ do
 	shift
 done
 
-for module in base-iface base-service web-ui web-api
+for module in base-iface base-service back-web back-openapi web-ui
 do
 	name=(${module//-/ })
 
@@ -28,10 +28,10 @@ do
 	smod=${name[1]}
 
 	case $smod in
-		ui)
-			dep="web,websocket,freemarker,security,jdbc,mysql"
+		web)
+			dep="web,websocket,security,jdbc,mysql"
 			;;
-		api)
+		openapi)
 			dep="web,websocket"
 			;;
 		service)
