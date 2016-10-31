@@ -20,22 +20,24 @@ do
 	shift
 done
 
-for module in base-iface base-service back-web back-openapi web-ui
+for module in base-iface base-service back-web back-openapi
 do
 	name=(${module//-/ })
 
 	cate=${name[0]}
 	smod=${name[1]}
 
-	case $smod in
-		web)
-			dep="web,websocket,security,jdbc,mysql"
-			;;
-		openapi)
+	case $cate in
+		back)
 			dep="web,websocket"
+			if [ $smod == 'openapi' ]; then
+				dep="$dep,security,jdbc,mysql"
+			fi
 			;;
-		service)
-			dep="mysql,mybatis"
+		base)
+			if [ $smod == 'service' ]; then
+				dep="mysql,mybatis"
+			fi
 			;;
 		*)
 			;;
@@ -67,14 +69,15 @@ _EOF_
 		spring init -a=$art -g=$group --package-name=$group.$smod -v=$version $dep $art
 	fi
 
-	if [ $cate = web ]; then
-		touch $art/src/main/resources/static/index.js
-		touch $art/src/main/resources/templates/index.ftl
-	fi
+	#if [ $cate = web ]; then
+	#	touch $art/src/main/resources/static/index.js
+	#	touch $art/src/main/resources/templates/index.ftl
+	#fi
 
 	cd $art || continue
 	git init
-	git remote add origin git@git.debug.live:inspiry-platform/$art.git
+	#git remote add origin git@git.debug.live:inspiry-platform/$art.git
+	git remote add origin git@git.debug.live:maxwit-demo/$art.git
 	git add .
 	git commit -asm "init"
 	git push -u origin master
