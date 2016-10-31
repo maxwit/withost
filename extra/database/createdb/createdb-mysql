@@ -42,41 +42,20 @@ case $dbms in
 	mysql|mariadb)
 # FIXME
 # create user IF NOT EXISTS $user identified by '$pass';
-cat > $tmp << _EOF_
-create user $user@'localhost' identified by '$pass';
-_EOF_
-	cat $tmp
-	$mysqlroot -Dmysql < $tmp
-
-cat > $tmp << _EOF_
-drop database if exists $dbname;
-create database $dbname character set=utf8;
-grant all on $dbname.* to $user@'localhost';
-_EOF_
-	cat $tmp
-	$mysqlroot -Dmysql < $tmp
+	$mysqlroot -e "drop database if exists $dbname; create database $dbname character set=utf8; grant all on $dbname.* to $user@'localhost' identified by '$pass'"
 
 	echo "status" | mysql -u$user -p$pass -D$dbname
 	;;
 
 	psql|pgsql|postgresql)
-cat > $tmp << _EOF_
-drop database $dbname;
-_EOF_
-	psql -Upostgres < $tmp
+	psql -Upostgres -c "drop database $dbname"
 
-cat > $tmp << _EOF_
-create user $user with password '$pass';
-create database $dbname encoding='utf8' owner=$user;
-_EOF_
-	psql -Upostgres < $tmp
+	psql -Upostgres -c "create user $user with password '$pass'"
+	psql -Upostgres -c "create database $dbname encoding='utf8' owner=$user"
 
 	echo '----------------------'
-cat > $tmp << _EOF_
-\conninfo
-\encoding
-_EOF_
-	psql -U$user -d$dbname < $tmp
+	psql -U$user -d$dbname -c "\conninfo"
+	psql -U$user -d$dbname -c "\encoding"
 	;;
 
 	*)
