@@ -46,21 +46,12 @@ config()
 	master_port=$2
 	master_passwd="maxwit"
 
-	tmp_name="/tmp/___redis"`date +%N`".conf";
+	redis_cfg="/etc/redis.conf"
 
-	#scp $master_ip:/etc/redis.conf $tmp_name;
-	ssh $master_ip touch $tmp_name;
-	ssh $master_ip sudo cat /etc/redis.conf \> $tmp_name;
-	scp $master_ip:$tmp_name $tmp_name;
 
-	sed -i "s/^#\s*requirepass foobared/requirepass $master_passwd/" $tmp_name
+	ssh $master_ip sudo sed -i "'s/^#\s*requirepass foobared/requirepass $master_passwd/'" $redis_cfg
 	# FIXME: bind to internal ip address
-	sed -i "s/^\(bind .*\)/#\1 /" $tmp_name
-
-	scp $tmp_name $master_ip:$tmp_name
-	ssh $master_ip sudo cp $tmp_name /etc/redis.conf
-	ssh $master_ip rm $tmp_name
-	rm $tmp_name
+	ssh $master_ip sudo sed -i "'s/^\(bind .*\)/#\1/'" $redis_cfg
 
 	ssh $master_ip sudo firewall-cmd --zone=public --add-port=$master_port/tcp --permanent
 	ssh $master_ip sudo firewall-cmd --reload
@@ -69,16 +60,8 @@ config()
 
 	for slave_ip in $3
 	do
-		ssh $slave_ip touch $tmp_name;
-		ssh $slave_ip sudo cat /etc/redis.conf \> $tmp_name;
-		scp $slave_ip:$tmp_name $tmp_name;
-		sudo sed -i "s/^#\s*slaveof.*masterip.*masterport.*/slaveof $master_ip $master_port/" $tmp_name
-		sudo sed -i "s/^#\s*masterauth.*/masterauth $master_passwd/" $tmp_name
-
-		scp $tmp_name $slave_ip:$tmp_name
-		ssh $slave_ip sudo cp $tmp_name /etc/redis.conf
-		ssh $slave_ip rm $tmp_name
-		rm $tmp_name
+		ssh $slave_ip sudo sed -i "'s/^#\s*slaveof.*masterip.*masterport.*/slaveof $master_ip $master_port/'" $redis_cfg
+		ssh $slave_ip sudo sed -i "'s/^#\s*masterauth.*/masterauth $master_passwd/'" $redis_cfg
 
 		ssh $slave_ip sudo systemctl enable redis
 		ssh $slave_ip sudo systemctl restart redis
@@ -96,5 +79,5 @@ do
 	install $slave
 done
 
-master_ip=`ssh $master /usr/sbin/ifconfig | egrep -o "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+" |head -1`
+master_ip=`ssh $master /usr/sbin/ip addr |egrep -o "[0-9]+\.[0-9]+\.[0-9]+\.[1-9][0-9]*" |grep "127.0.0.1|.*\..*\..*\.255" -vE|head -1`
 config $master_ip $MASTER_PORT $slaves
