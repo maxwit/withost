@@ -64,6 +64,7 @@ config()
 
 	ssh $master_ip sudo firewall-cmd --zone=public --add-port=$master_port/tcp --permanent
 	ssh $master_ip sudo firewall-cmd --reload
+	ssh $master_ip sudo systemctl enable redis
 	ssh $master_ip sudo systemctl restart redis
 
 	for slave_ip in $3
@@ -79,6 +80,7 @@ config()
 		ssh $slave_ip rm $tmp_name
 		rm $tmp_name
 
+		ssh $slave_ip sudo systemctl enable redis
 		ssh $slave_ip sudo systemctl restart redis
 
 		echo "-------------------------------------------------"
