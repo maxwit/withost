@@ -1,0 +1,21 @@
+---
+- hosts: db-nodes
+
+  vars:
+    http_port: 80
+    max_clients: 200
+  remote_user: root
+
+  tasks:
+  - name: mariadb install
+    yum: name=mariadb state=latest
+    notify: mariadb start
+  - name: redis install
+    yum: name=redis state=latest
+    notify: redis start
+
+  handlers:
+  - name: mariadb start
+    service: name=mariadb state=started
+  - name: redis start
+    service: name=redis state=started
