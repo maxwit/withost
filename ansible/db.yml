@@ -8,7 +8,7 @@
 
   tasks:
   - name: mariadb install
-    yum: name=mariadb state=latest
+    yum: name=mariadb-server state=latest
     notify: mariadb start
   - name: redis install
     yum: name=redis state=latest
