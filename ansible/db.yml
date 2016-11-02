@@ -16,6 +16,6 @@
 
   handlers:
   - name: mariadb start
-    service: name=mariadb state=started
+    service: name=mariadb state=started enabled=true
   - name: redis start
-    service: name=redis state=started
+    service: name=redis state=started enabled=true
