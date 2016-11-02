@@ -1,5 +1,5 @@
 ---
-- hosts: db-nodes
+- hosts: dbnodes
 
   vars:
     http_port: 80
@@ -13,6 +13,7 @@
     notify: mariadb start
   - name: redis install
     yum: name=redis state=latest
+    template: src=redis.j2 dest=/etc/redis.conf owner=redis mode=640
     notify: redis start
 
   handlers:
