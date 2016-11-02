@@ -12,6 +12,7 @@
     notify: mariadb start
   - name: redis install
     yum: name=redis state=latest
+  - name: redis config
     template: src=redis.j2 dest=/etc/redis.conf owner=redis mode=640
     notify: redis start
 
