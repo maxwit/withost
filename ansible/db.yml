@@ -2,8 +2,7 @@
 - hosts: dbnodes
 
   vars:
-    http_port: 80
-    max_clients: 200
+    redis_port: 6379
 
   remote_user: root
 
