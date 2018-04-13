@@ -39,6 +39,8 @@ scripts/bootstrap-ansible.sh || exit 1
 sed -i '/^lxc_image_cache_server_mirrors:/a \ \ - https://mirrors.tuna.tsinghua.edu.cn/lxc-images' \
     /etc/ansible/roles/lxc_hosts/defaults/main.yml || exit 1
 
+# mkdir -vp /etc/openstack_deploy/conf.d/
+# cp -v etc/openstack_deploy/conf.d/ceph.yml.aio /etc/openstack_deploy/conf.d/ceph.yml
 # export SCENARIO='ceph'
 scripts/bootstrap-aio.sh || exit 1
 
@@ -48,4 +50,4 @@ openstack-ansible setup-hosts.yml || exit 1
 openstack-ansible setup-infrastructure.yml || exit 1
 openstack-ansible setup-openstack.yml || exit 1
 
-openstack-ansible -e galera_ignore_cluster_state=true galera-install.yml || exit 1
+# openstack-ansible -e galera_ignore_cluster_state=true galera-install.yml || exit 1
