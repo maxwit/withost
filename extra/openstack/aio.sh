@@ -8,6 +8,8 @@ fi
 cd /opt/openstack-ansible && \
 git checkout stable/queens || exit 1
 
+sed -i '/PasswordAuthentication/d' tests/bootstrap-aio.yml
+
 # # FIXME
 # disks=(`fdisk -l | grep '^Disk /dev' | awk '{print $2}'`)
 # rootd=`awk '$2=="/" {print $1}' /proc/mounts`
