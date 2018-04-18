@@ -48,13 +48,15 @@ scripts/bootstrap-aio.sh || exit 1
 
 cd /opt/openstack-ansible/playbooks || exit 1
 
+retries=3
 for y in hosts infrastructure openstack; do
 	i=0
-	while [ $i -lt 5 ]; do
+	while [ $i -lt $retries ]; do
+		echo "openstack-ansible setup-$y.yml ($i/$retries)"
 		openstack-ansible setup-$y.yml && break
 		((i++))
 	done
-	[ $i -eq 5 ] && exit 1
+	[ $i -eq $retries ] && exit 1
 done
 
 # openstack-ansible -e galera_ignore_cluster_state=true galera-install.yml || exit 1
