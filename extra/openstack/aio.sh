@@ -50,7 +50,7 @@ cd /opt/openstack-ansible/playbooks || exit 1
 
 for y in hosts infrastructure openstack; do
 	i=0
-	while [ $i -lt 5; ]; do
+	while [ $i -lt 5 ]; do
 		openstack-ansible setup-$y.yml && break
 		((i++))
 	done
