@@ -48,8 +48,13 @@ scripts/bootstrap-aio.sh || exit 1
 
 cd /opt/openstack-ansible/playbooks || exit 1
 
-openstack-ansible setup-hosts.yml || exit 1
-openstack-ansible setup-infrastructure.yml || exit 1
-openstack-ansible setup-openstack.yml || exit 1
+for y in hosts infrastructure openstack; do
+	i=0
+	while [ $i -lt 5; ]; do
+		openstack-ansible setup-$y.yml && break
+		((i++))
+	done
+	[ $i -eq 5 ] && exit 1
+done
 
 # openstack-ansible -e galera_ignore_cluster_state=true galera-install.yml || exit 1
