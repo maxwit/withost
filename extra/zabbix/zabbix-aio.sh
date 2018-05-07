@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# install zabbix server
 wget http://repo.zabbix.com/zabbix/3.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_3.4-1+xenial_all.deb
 dpkg -i zabbix-release_3.4-1+xenial_all.deb
 apt update
@@ -21,5 +22,6 @@ sed -i 's/# php_value date.timezone Europe\/Riga/php_value date.timezone Asia\/S
 
 systemctl restart apache2
 
+# install zabbix agent
 apt-get install -y zabbix-agent
 systemctl start zabbix-agent
