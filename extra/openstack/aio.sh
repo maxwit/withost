@@ -6,7 +6,7 @@ if [ ! -d /opt/openstack-ansible ]; then
 fi
 
 cd /opt/openstack-ansible && \
-git checkout stable/queens || exit 1
+git checkout stable/stein || exit 1
 
 sed -i '/PasswordAuthentication/d' tests/bootstrap-aio.yml
 
@@ -33,7 +33,7 @@ index-url = http://mirrors.aliyun.com/pypi/simple/
 trusted-host = mirrors.aliyun.com
 _EOF_
 
-export BOOTSTRAP_OPTS="bootstrap_host_ubuntu_repo=http://mirrors.aliyun.com/ubuntu/"
+export BOOTSTRAP_OPTS="$BOOTSTRAP_OPTS bootstrap_host_ubuntu_repo=http://mirrors.aliyun.com/ubuntu/"
 # export ANSIBLE_ROLE_FETCH_MODE='galaxy'
 
 scripts/bootstrap-ansible.sh || exit 1
