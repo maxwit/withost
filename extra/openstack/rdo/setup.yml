@@ -1,0 +1,16 @@
+---
+- hosts: all
+
+  remote_user: root
+
+  tasks:
+  - name: install updates
+    yum: name=* state=latest
+  - name: environment setup 
+    copy: src=env dest=/etc/environment
+  - name: disable firewall
+    service: name=firewalld state=stopped enabled=false
+  - name: disable NetworkManager 
+    service: name=NetworkManager state=stopped enabled=false
+  - name: start network
+    service: name=network state=started enabled=true
