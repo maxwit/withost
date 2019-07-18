@@ -15,15 +15,15 @@ fi
 
 os=`uname -s`
 
-# FIXME
 case $os in
     'Linux')
-        release=`lsb_release -sc`
-        if [ "$release" = bionic -o "$release" = Core ]; then
+		# FIXME
+        if [ $UID -eq 0 ]; then
+	          mysql_root="mysql"
+		else
 	          mysql_root="sudo mysql"
-        else
-	          mysql_root="mysql -uroot -pmaxwit"
-        fi
+		fi
+	    # mysql_root="mysql -uroot -pmaxwit"
         ;;
     'Darwin')
 	      mysql_root="mysql -uroot"
