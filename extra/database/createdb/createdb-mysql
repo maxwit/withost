@@ -19,7 +19,7 @@ os=`uname -s`
 case $os in
     'Linux')
         release=`lsb_release -sc`
-        if [ "$release" = xenial -o "$release" = Core ]; then
+        if [ "$release" = bionic -o "$release" = Core ]; then
 	          mysql_root="sudo mysql"
         else
 	          mysql_root="mysql -uroot -pmaxwit"
@@ -38,9 +38,6 @@ pgsql_root="psql -Upostgres -c"
 
 dbms=(${0//-/ })
 dbms=${dbms[1]}
-#host='localhost'
-
-tmp=$(mktemp).sql
 
 case $dbms in
 	mysql|mariadb)
