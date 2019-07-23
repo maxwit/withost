@@ -41,9 +41,10 @@ dbms=${dbms[1]}
 
 case $dbms in
 	mysql|mariadb)
+		$mysql_root "create user if not exists $user identified by '$pass'";
 		$mysql_root "drop database if exists $dbname"
 		$mysql_root "create database $dbname character set=utf8"
-		$mysql_root "grant all on $dbname.* to $user@'%' identified by '$pass'"
+		$mysql_root "grant all on $dbname.* to $user@'%'"
 
 		mysql -u$user -p$pass -D$dbname -e "status"
 		;;
