@@ -135,8 +135,10 @@ kolla-ansible post-deploy || exit 1
 
 grep -q OpenStack ~/.bashrc || cat >> ~/.bashrc << EOF
 # OpenStack
-source $ENVPATH/bin/activate
 . /etc/kolla/admin-openrc.sh
 EOF
 
-echo 'Done!'
+echo
+echo "Done!"
+echo "pls 'source $ENVPATH/bin/activate' before running openstack CLI"
+echo
