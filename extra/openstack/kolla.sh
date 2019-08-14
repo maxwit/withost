@@ -78,25 +78,27 @@ pipelining=True
 forks=100
 EOF
 
-# FIXME
-interface_list=(`ip a | grep -owe "\s[ew][0-9a-zA-Z]\+:" | sed 's/://g'`)
-if [ ${#interface_list[@]} == 0 ]; then
-  echo "no NIC found!"
-  exit 1
+if [ -z "$network_interface" -o -z "$neutron_external_interface" ]; then
+	# FIXME
+	interface_list=(`ip a | grep -owe "\s[ew][0-9a-zA-Z]\+:" | sed 's/://g'`)
+	if [ ${#interface_list[@]} == 0 ]; then
+	  echo "no NIC found!"
+	  exit 1
+	fi
+
+	for ifx in ${interface_list[@]}; do
+	    ipv4=`get_ip $ifx`
+	    if [ -z "$ipv4" -a -z "$neutron_external_interface" ]; then
+	        neutron_external_interface=$ifx
+	    elif [ ! -z "$ipv4" -a -z "$network_interface" ]; then
+	        network_interface=$ifx
+	    fi
+
+		if [ ! -z "$network_interface" -a ! -z "$neutron_external_interface" ]; then
+			break
+		fi
+	done
 fi
-
-for ifx in ${interface_list[@]}; do
-    if [ ! -z "$network_interface" -a ! -z "$neutron_external_interface" ]; then
-        break
-    fi
-
-    ipv4=`get_ip $ifx`
-    if [ -z "$ipv4" -a -z "$neutron_external_interface" ]; then
-        neutron_external_interface=$ifx
-    elif [ ! -z "$ipv4" -a -z "$network_interface" ]; then
-        network_interface=$ifx
-    fi
-done
 
 if [ -z "$network_interface" -o -z "$neutron_external_interface" ]; then
     echo "network interface error:"
@@ -105,8 +107,13 @@ if [ -z "$network_interface" -o -z "$neutron_external_interface" ]; then
     exit 1
 fi
 
-ipv4=`get_ip $network_interface`
-kolla_internal_vip_address=${ipv4%.*}.111  # FIXME
+ipv4=(`get_ip $network_interface | sed '/./ /'`)
+if [ ${#ipv4[@]} -eq 0 ]; then
+	echo "No IP assigned for '$network_interface'"
+	exit 1
+fi
+ipv4[3]=$(((ipv4[3]+100)%200))
+kolla_internal_vip_address=${ipv4[0]}.${ipv4[1]}.${ipv4[2]}.${ipv4[3]}
 
 sed -i -e "s/^#*\s*\(network_interface:\).*/\1 \"$network_interface\"/" \
     -e "s/^#*\s*\(neutron_external_interface:\).*/\1 \"$neutron_external_interface\"/" \
@@ -120,8 +127,8 @@ sed -i -e "s/^#*\s*\(network_interface:\).*/\1 \"$network_interface\"/" \
 inventory=$kolla_home/ansible/inventory/all-in-one
 
 for task in bootstrap-servers prechecks deploy; do
+    # TODO: add exception handler here
     kolla-ansible -i $inventory $task
-    # FIXME: add exception handler here
 done
 
 kolla-ansible post-deploy || exit 1
