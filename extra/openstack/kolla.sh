@@ -107,7 +107,7 @@ if [ -z "$network_interface" -o -z "$neutron_external_interface" ]; then
     exit 1
 fi
 
-ipv4=(`get_ip $network_interface | sed '/./ /'`)
+ipv4=(`get_ip $network_interface | sed 's/\./ /g'`)
 if [ ${#ipv4[@]} -eq 0 ]; then
 	echo "No IP assigned for '$network_interface'"
 	exit 1
