@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-# function pip_safe_install
-# {
-#     while [ true ]; do
-#         pip install -U $@ && break
-#     done
-# }
-
 if [ $UID == 0 ]; then
     echo "do NOT run as root!"
     exit 1
@@ -116,7 +109,7 @@ for task in bootstrap-servers prechecks deploy; do
     # FIXME: add exception handler here
 done
 
-kolla-ansible post-deploy
+kolla-ansible post-deploy || exit 1
 
 grep -q OpenStack ~/.bashrc || cat >> ~/.bashrc << EOF
 # OpenStack
@@ -124,36 +117,4 @@ source $ENVPATH/bin/activate
 . /etc/kolla/admin-openrc.sh
 EOF
 
-source ~/.bashrc
-$kolla_home/init-runonce
-
-# cat > /etc/systemd/system/docker.service.d/kolla.conf << _EOF_
-# [Service]
-# MountFlags=shared
-# ExecStart=
-# ExecStart=/usr/bin/docker daemon \
-#  -H fd:// \
-#  --mtu 1400
-# _EOF_
-
-# cat > /etc/systemd/system/docker.service.d/kolla.conf << _EOF_
-# [Service]
-# MountFlags=shared
-# ExecStart=
-# ExecStart=/usr/bin/dockerd --mtu 1400
-# _EOF_
-
-# systemctl daemon-reload && \
-# systemctl restart docker || exit 1
-
-# kolla-ansible pull -i $inventory || exit 1
-
-# kolla-build || exit 1
-
-# while [ true ]; do
-#     netstat -nptl | grep "$kolla_internal_vip_address:80" && break
-#     sleep 1
-# done
-#
-# . /etc/kolla/admin-openrc.sh || exit 1
-# init-runonce
+echo 'Done!'
