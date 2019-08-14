@@ -5,29 +5,14 @@ if [ $UID == 0 ]; then
     exit 1
 fi
 
+function get_ip {
+    ip a s dev $1 | grep -e "inet\s.*brd" | awk '{print $2}' | awk -F '/' '{print $1}'
+}
+
 # FIXME
 kolla_mode='pip' # or git
 
 openstack_release=${openstack_release:-stein}
-
-# FIXME
-ifx=(`ip a | grep -owe "\s[ew][0-9a-zA-Z]\+:" | sed 's/://g'`)
-if [ ${#ifx[@]} == 0 ]; then
-  echo "no NIC found!"
-  exit 1
-fi
-
-network_interface="${ifx[0]}"
-if [ ${#ifx[@]} == 1 ]; then
-  neutron_external_interface="${ifx[0]}"
-else
-  neutron_external_interface="${ifx[1]}"
-fi
-
-if [ -z "$kolla_internal_vip_address" ]; then
-    ip0=`ip a s dev $network_interface | grep -e "inet\s.*brd" | awk '{print $2}' | awk -F '/' '{print $1}'`
-    kolla_internal_vip_address=${ip0%.*}.111
-fi
 
 if [ -e /etc/os-release ]; then
     . /etc/os-release
@@ -92,6 +77,36 @@ host_key_checking=False
 pipelining=True
 forks=100
 EOF
+
+# FIXME
+interface_list=(`ip a | grep -owe "\s[ew][0-9a-zA-Z]\+:" | sed 's/://g'`)
+if [ ${#interface_list[@]} == 0 ]; then
+  echo "no NIC found!"
+  exit 1
+fi
+
+for ifx in ${interface_list[@]}; do
+    if [ ! -z "$network_interface" -a ! -z "$neutron_external_interface" ]; then
+        break
+    fi
+
+    ipv4=`get_ip $ifx`
+    if [ -z "$ipv4" -a -z "$neutron_external_interface" ]; then
+        neutron_external_interface=$ifx
+    elif [ ! -z "$ipv4" -a -z "$network_interface" ]; then
+        network_interface=$ifx
+    fi
+done
+
+if [ -z "$network_interface" -o -z "$neutron_external_interface" ]; then
+    echo "network interface error:"
+    echo "    network_interface='$network_interface'"
+    echo "    neutron_external_interface='$neutron_external_interface'"
+    exit 1
+fi
+
+ipv4=`get_ip $network_interface`
+kolla_internal_vip_address=${ipv4%.*}.111  # FIXME
 
 sed -i -e "s/^#*\s*\(network_interface:\).*/\1 \"$network_interface\"/" \
     -e "s/^#*\s*\(neutron_external_interface:\).*/\1 \"$neutron_external_interface\"/" \
