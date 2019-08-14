@@ -1,23 +1,29 @@
 #!/usr/bin/env bash
 
-function pip_safe_install
-{
-    while [ true ]; do
-        pip install -U $@ && break
-    done
-}
+# function pip_safe_install
+# {
+#     while [ true ]; do
+#         pip install -U $@ && break
+#     done
+# }
+
+if [ $UID == 0 ]; then
+    echo "do NOT run as root!"
+    exit 1
+fi
 
 # FIXME
-# kolla_mode='pip' # or git
-openstack_release="pike"
+kolla_mode='pip' # or git
 
-ifx=(`ip a | grep -owe "ens[0-9]\+:" | sed 's/://g'`)
+openstack_release=${openstack_release:-stein}
+
+# FIXME
+ifx=(`ip a | grep -owe "\s[ew][0-9a-zA-Z]\+:" | sed 's/://g'`)
 if [ ${#ifx[@]} == 0 ]; then
-  echo "error: NIC count = ${#ifx[@]}!"
+  echo "no NIC found!"
   exit 1
 fi
 
-# FIXME: customization
 network_interface="${ifx[0]}"
 if [ ${#ifx[@]} == 1 ]; then
   neutron_external_interface="${ifx[0]}"
@@ -25,13 +31,9 @@ else
   neutron_external_interface="${ifx[1]}"
 fi
 
-vip=`ip a s dev $network_interface | grep -e "inet\s.*brd" | awk '{print $2}' | awk -F '/' '{print $1}'`
-vip=${vip%.*}.234
-kolla_internal_vip_address="$vip"
-
-if [ $UID != 0 ]; then
-    echo "pls run as root!"
-    exit 1
+if [ -z "$kolla_internal_vip_address" ]; then
+    ip0=`ip a s dev $network_interface | grep -e "inet\s.*brd" | awk '{print $2}' | awk -F '/' '{print $1}'`
+    kolla_internal_vip_address=${ip0%.*}.111
 fi
 
 if [ -e /etc/os-release ]; then
@@ -51,30 +53,33 @@ fi
 
 case "$os_type" in
 centos)
-    yum install -y epel-release && \
-    yum install -y python-pip python-devel libffi-devel gcc git openssl-devel libselinux-python || exit 1
+    sudo yum install -y epel-release && \
+    sudo yum install -y python-pip python-devel libffi-devel gcc git openssl-devel libselinux-python python-virtualenv || exit 1
     ;;
 ubuntu)
-    apt-get install -y python-pip python-dev libffi-dev gcc git libssl-dev python-selinux || exit 1
+    sudo apt install -y python-pip python-dev libffi-dev gcc git libssl-dev python-selinux python-virtualenv || exit 1
     ;;
 *)
     echo "unknown linux distribution '$os_type'!"
     exit 1
 esac
 
-pip_safe_install pip
-pip_safe_install ansible
-pip_safe_install python-openstackclient python-glanceclient python-neutronclient
+ENVPATH=$HOME/envs/envos
+
+virtualenv $ENVPATH
+source $ENVPATH/bin/activate
+
+for p in pip ansible kolla-ansible python-openstackclient; do
+	pip install -U $p
+done
 
 if [ "$kolla_mode" == 'pip' ]; then
-    pip_safe_install kolla-ansible
-    if [ $os_type == 'centos' ]; then
-        kolla_home=/usr/share/kolla-ansible
-    else
-        kolla_home=/usr/local/share/kolla-ansible
-    fi
-    [ -d /etc/kolla ] || cp -r $kolla_home/etc_examples/kolla /etc/kolla || exit 1
-    grep 'BEGIN PRIVATE KEY' /etc/kolla/passwords.yml > /dev/null || kolla-genpwd || exit 1
+    kolla_home=$ENVPATH/share/kolla-ansible
+    sudo rm -rf /etc/kolla
+    sudo cp -r $kolla_home/etc_examples/kolla /etc/
+    sudo chown -R $USER.$USER /etc/kolla
+    kolla-genpwd
+    # grep 'BEGIN PRIVATE KEY' /etc/kolla/passwords.yml > /dev/null || kolla-genpwd || exit 1
 else
     for repo in kolla kolla-ansible; do
         if [ ! -d $repo ]; then
@@ -87,25 +92,40 @@ else
     grep 'BEGIN PRIVATE KEY' /etc/kolla/passwords.yml > /dev/null || generate_passwords.py || exit 1
 fi
 
+sudo mkdir -p /etc/ansible
+sudo tee /etc/ansible/ansible.cfg <<- 'EOF'
+[defaults]
+host_key_checking=False
+pipelining=True
+forks=100
+EOF
+
 sed -i -e "s/^#*\s*\(network_interface:\).*/\1 \"$network_interface\"/" \
     -e "s/^#*\s*\(neutron_external_interface:\).*/\1 \"$neutron_external_interface\"/" \
     -e "s/^#*\s*\(kolla_internal_vip_address:\).*/\1 \"$kolla_internal_vip_address\"/" \
     -e "s/^#*\s*\(openstack_release:\).*/\1 \"$openstack_release\"/" \
+    -e "s/^#*\s*\(kolla_base_distro:\).*/\1 \"$os_type\"/" \
+    -e "s/^#*\s*\(kolla_install_type:\).*/\1 \"source\"/" \
     /etc/kolla/globals.yml
 
-    # -e "s/\(kolla_base_distro:\).*/\1 \"$os_type\"/" \
-
-# [defaults]
-# host_key_checking=False
-# pipelining=True
-# forks=100
-
-# cp -v $kolla_home/ansible/inventory/* .
+# FIXME: add multinode support
 inventory=$kolla_home/ansible/inventory/all-in-one
 
-for ((i=0; i<3; i++)); do
-    kolla-ansible -i $inventory bootstrap-servers && break
-done || exit 1
+for task in bootstrap-servers prechecks deploy; do
+    kolla-ansible -i $inventory $task
+    # FIXME: add exception handler here
+done
+
+kolla-ansible post-deploy
+
+grep -q OpenStack ~/.bashrc || cat >> ~/.bashrc << EOF
+# OpenStack
+source $ENVPATH/bin/activate
+. /etc/kolla/admin-openrc.sh
+EOF
+
+source ~/.bashrc
+$kolla_home/init-runonce
 
 # cat > /etc/systemd/system/docker.service.d/kolla.conf << _EOF_
 # [Service]
@@ -129,18 +149,6 @@ done || exit 1
 # kolla-ansible pull -i $inventory || exit 1
 
 # kolla-build || exit 1
-
-for ((i=0; i<3; i++)); do
-    kolla-ansible -i $inventory prechecks && break
-done || exit 1
-
-for ((i=0; i<3; i++)); do
-    kolla-ansible -i $inventory deploy && break
-done || exit 1
-
-for ((i=0; i<3; i++)); do
-    kolla-ansible post-deploy && break
-done || exit 1
 
 # while [ true ]; do
 #     netstat -nptl | grep "$kolla_internal_vip_address:80" && break
