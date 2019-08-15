@@ -42,6 +42,16 @@ ubuntu)
     exit 1
 esac
 
+sudo systemctl disable --now libvirtd
+
+#sudo mkdir -p /etc/systemd/system/docker.service.d
+#sudo tee /etc/systemd/system/docker.service.d/kolla.conf << 'EOF'
+#[Service]
+#MountFlags=shared
+#EOF
+#
+#sudo systemctl restart docker || exit 1
+
 ENVPATH=$HOME/envs/envos
 
 virtualenv $ENVPATH
@@ -107,13 +117,16 @@ if [ -z "$network_interface" -o -z "$neutron_external_interface" ]; then
     exit 1
 fi
 
-ipv4=(`get_ip $network_interface | sed 's/\./ /g'`)
-if [ ${#ipv4[@]} -eq 0 ]; then
-	echo "No IP assigned for '$network_interface'"
-	exit 1
-fi
-ipv4[3]=$(((ipv4[3]+100)%200))
-kolla_internal_vip_address=${ipv4[0]}.${ipv4[1]}.${ipv4[2]}.${ipv4[3]}
+#ipv4=(`get_ip $network_interface | sed 's/\./ /g'`)
+#if [ ${#ipv4[@]} -eq 0 ]; then
+#	echo "No IP assigned for '$network_interface'"
+#	exit 1
+#fi
+#
+#ipv4[3]=$(((ipv4[3]+100)%200))
+#kolla_internal_vip_address=${ipv4[0]}.${ipv4[1]}.${ipv4[2]}.${ipv4[3]}
+
+kolla_internal_vip_address=`get_ip $network_interface`
 
 sed -i -e "s/^#*\s*\(network_interface:\).*/\1 \"$network_interface\"/" \
     -e "s/^#*\s*\(neutron_external_interface:\).*/\1 \"$neutron_external_interface\"/" \
@@ -121,6 +134,7 @@ sed -i -e "s/^#*\s*\(network_interface:\).*/\1 \"$network_interface\"/" \
     -e "s/^#*\s*\(openstack_release:\).*/\1 \"$openstack_release\"/" \
     -e "s/^#*\s*\(kolla_base_distro:\).*/\1 \"$os_type\"/" \
     -e "s/^#*\s*\(kolla_install_type:\).*/\1 \"source\"/" \
+    -e "s/^#*\s*\(enable_haproxy:\).*/\1 \"no\"/" \
     /etc/kolla/globals.yml
 
 # FIXME: add multinode support
@@ -133,12 +147,12 @@ done
 
 kolla-ansible post-deploy || exit 1
 
-grep -q OpenStack ~/.bashrc || cat >> ~/.bashrc << EOF
-# OpenStack
-. /etc/kolla/admin-openrc.sh
-EOF
+#grep -q OpenStack ~/.bashrc || cat >> ~/.bashrc << EOF
+## OpenStack
+#. /etc/kolla/admin-openrc.sh
+#EOF
 
 echo
 echo "Done!"
-echo "pls 'source $ENVPATH/bin/activate' before running openstack CLI"
+#echo "pls 'source $ENVPATH/bin/activate' before running openstack CLI"
 echo
