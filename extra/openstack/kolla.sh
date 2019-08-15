@@ -42,8 +42,6 @@ ubuntu)
     exit 1
 esac
 
-sudo systemctl disable --now libvirtd
-
 #sudo mkdir -p /etc/systemd/system/docker.service.d
 #sudo tee /etc/systemd/system/docker.service.d/kolla.conf << 'EOF'
 #[Service]
@@ -58,7 +56,7 @@ virtualenv $ENVPATH
 source $ENVPATH/bin/activate
 
 for p in pip ansible kolla-ansible python-openstackclient; do
-	pip install -U $p
+    pip install -U $p
 done
 
 if [ "$kolla_mode" == 'pip' ]; then
@@ -89,25 +87,25 @@ forks=100
 EOF
 
 if [ -z "$network_interface" -o -z "$neutron_external_interface" ]; then
-	# FIXME
-	interface_list=(`ip a | grep -owe "\s[ew][0-9a-zA-Z]\+:" | sed 's/://g'`)
-	if [ ${#interface_list[@]} == 0 ]; then
-	  echo "no NIC found!"
-	  exit 1
-	fi
+    # FIXME
+    interface_list=(`ip a | grep -owe "\s[ew][0-9a-zA-Z]\+:" | sed 's/://g'`)
+    if [ ${#interface_list[@]} == 0 ]; then
+      echo "no NIC found!"
+      exit 1
+    fi
 
-	for ifx in ${interface_list[@]}; do
-	    ipv4=`get_ip $ifx`
-	    if [ -z "$ipv4" -a -z "$neutron_external_interface" ]; then
-	        neutron_external_interface=$ifx
-	    elif [ ! -z "$ipv4" -a -z "$network_interface" ]; then
-	        network_interface=$ifx
-	    fi
+    for ifx in ${interface_list[@]}; do
+        ipv4=`get_ip $ifx`
+        if [ -z "$ipv4" -a -z "$neutron_external_interface" ]; then
+            neutron_external_interface=$ifx
+        elif [ ! -z "$ipv4" -a -z "$network_interface" ]; then
+            network_interface=$ifx
+        fi
 
-		if [ ! -z "$network_interface" -a ! -z "$neutron_external_interface" ]; then
-			break
-		fi
-	done
+        if [ ! -z "$network_interface" -a ! -z "$neutron_external_interface" ]; then
+            break
+        fi
+    done
 fi
 
 if [ -z "$network_interface" -o -z "$neutron_external_interface" ]; then
@@ -119,8 +117,8 @@ fi
 
 #ipv4=(`get_ip $network_interface | sed 's/\./ /g'`)
 #if [ ${#ipv4[@]} -eq 0 ]; then
-#	echo "No IP assigned for '$network_interface'"
-#	exit 1
+#    echo "No IP assigned for '$network_interface'"
+#    exit 1
 #fi
 #
 #ipv4[3]=$(((ipv4[3]+100)%200))
