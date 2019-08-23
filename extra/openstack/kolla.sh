@@ -87,8 +87,13 @@ forks=100
 EOF
 
 if [ -z "$network_interface" -o -z "$neutron_external_interface" ]; then
-    # FIXME
-    interface_list=(`ip a | grep -owe "\s[ew][0-9a-zA-Z]\+:" | sed 's/://g'`)
+    interface_list=()
+    for ifx in `ls /sys/class/net/`; do
+        if [ -e /sys/class/net/$ifx/device ]; then
+            interface_list+=($ifx)
+        fi
+    done
+
     if [ ${#interface_list[@]} == 0 ]; then
       echo "no NIC found!"
       exit 1
@@ -96,13 +101,15 @@ if [ -z "$network_interface" -o -z "$neutron_external_interface" ]; then
 
     for ifx in ${interface_list[@]}; do
         ipv4=`get_ip $ifx`
-        if [ -z "$ipv4" -a -z "$neutron_external_interface" ]; then
-            neutron_external_interface=$ifx
-        elif [ ! -z "$ipv4" -a -z "$network_interface" ]; then
-            network_interface=$ifx
+        if [ -z "$ipv4" ]; then
+            continue
         fi
 
-        if [ ! -z "$network_interface" -a ! -z "$neutron_external_interface" ]; then
+        if [ -z "$network_interface" ]; then
+            network_interface=$ifx
+        elif [ -z "$neutron_external_interface" ]; then
+            neutron_external_interface=$ifx
+        else
             break
         fi
     done
