@@ -151,6 +151,12 @@ sed -i -e "s/^#*\s*\(network_interface:\).*/\1 \"$network_interface\"/" \
     -e "s/^#*\s*\(enable_haproxy:\).*/\1 \"$enable_haproxy\"/" \
     /etc/kolla/globals.yml
 
+cat >> /etc/kolla/globals.yml << __EOF__
+enable_ceph: "yes"
+enable_cinder: "yes"
+cinder_backend_ceph: "{{ enable_ceph }}"
+__EOF__
+
 # FIXME: add multinode support
 inventory=$kolla_home/ansible/inventory/all-in-one
 
