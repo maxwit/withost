@@ -38,7 +38,7 @@ ubuntu)
     sudo apt install -y python-pip python-dev libffi-dev gcc git libssl-dev python-selinux python-virtualenv || exit 1
     ;;
 *)
-    echo "unknown linux distribution '$os_type'!"
+    echo "Unsupported linux distribution: '$os_type'!"
     exit 1
 esac
 
@@ -122,16 +122,25 @@ if [ -z "$network_interface" -o -z "$neutron_external_interface" ]; then
     exit 1
 fi
 
-#ipv4=(`get_ip $network_interface | sed 's/\./ /g'`)
-#if [ ${#ipv4[@]} -eq 0 ]; then
-#    echo "No IP assigned for '$network_interface'"
-#    exit 1
-#fi
-#
-#ipv4[3]=$(((ipv4[3]+100)%200))
-#kolla_internal_vip_address=${ipv4[0]}.${ipv4[1]}.${ipv4[2]}.${ipv4[3]}
+ipv4=`get_ip $network_interface`
+if [ -z "$ipv4" ]; then
+   echo "No IP assigned for '$network_interface'"
+   exit 1
+fi
 
-kolla_internal_vip_address=`get_ip $network_interface`
+if [ "$kolla_internal_vip_address" == $ipv4 ]; then
+    enable_haproxy=no
+else
+    enable_haproxy=yes
+    if [ -z "$kolla_internal_vip_address" ]; then
+        vip=(`echo $ipv4 | sed 's/\./ /g'`)
+        ((vip[3]-=1)) # FIXME
+        kolla_internal_vip_address=${vip[0]}.${vip[1]}.${vip[2]}.${vip[3]}
+    fi
+fi
+
+eip=`ip a s dev $neutron_external_interface | grep -e "inet\s.*brd" | awk '{print $2}'`
+sudo ip addr del $eip dev $neutron_external_interface || exit 1
 
 sed -i -e "s/^#*\s*\(network_interface:\).*/\1 \"$network_interface\"/" \
     -e "s/^#*\s*\(neutron_external_interface:\).*/\1 \"$neutron_external_interface\"/" \
@@ -139,7 +148,7 @@ sed -i -e "s/^#*\s*\(network_interface:\).*/\1 \"$network_interface\"/" \
     -e "s/^#*\s*\(openstack_release:\).*/\1 \"$openstack_release\"/" \
     -e "s/^#*\s*\(kolla_base_distro:\).*/\1 \"$os_type\"/" \
     -e "s/^#*\s*\(kolla_install_type:\).*/\1 \"source\"/" \
-    -e "s/^#*\s*\(enable_haproxy:\).*/\1 \"no\"/" \
+    -e "s/^#*\s*\(enable_haproxy:\).*/\1 \"$enable_haproxy\"/" \
     /etc/kolla/globals.yml
 
 # FIXME: add multinode support
@@ -147,17 +156,14 @@ inventory=$kolla_home/ansible/inventory/all-in-one
 
 for task in bootstrap-servers prechecks deploy; do
     # TODO: add exception handler here
-    kolla-ansible -i $inventory $task
+    kolla-ansible -i $inventory $task || exit 1 # FIXME: kolla-ansible throws exception/error?
 done
 
 kolla-ansible post-deploy || exit 1
 
-#grep -q OpenStack ~/.bashrc || cat >> ~/.bashrc << EOF
-## OpenStack
-#. /etc/kolla/admin-openrc.sh
-#EOF
+sudo ip addr add $eip dev br-ex && sudo ip link set br-ex up
 
 echo
 echo "Done!"
-#echo "pls 'source $ENVPATH/bin/activate' before running openstack CLI"
+echo "pls 'source $ENVPATH/bin/activate' and 'source /etc/kolla/admin-openrc.sh' before running openstack CLI"
 echo
