@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -e
 
 if [ $# == 1 ]; then
 	user="admin" # or $USER
@@ -23,10 +24,10 @@ case $os in
 		else
 	          mysql_root="sudo mysql"
 		fi
-	    # mysql_root="mysql -uroot -pmaxwit"
+	    # mysql_root="mysql -h127.0.0.1 -uroot -pmaxwit"
         ;;
     'Darwin')
-	      mysql_root="mysql -uroot"
+	      mysql_root="mysql -h127.0.0.1 -uroot"
         ;;
     *)
         echo "OS '$os' not supported!"
@@ -46,7 +47,7 @@ case $dbms in
 		$mysql_root "create database $dbname character set=utf8"
 		$mysql_root "grant all on $dbname.* to $user@'%'"
 
-		mysql -u$user -p$pass -D$dbname -e "status"
+		mysql -h127.0.0.1 -u$user -p$pass -D$dbname -e "status"
 		;;
 
 	psql|pgsql|postgresql)
