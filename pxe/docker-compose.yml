@@ -1,0 +1,17 @@
+services:
+  pxe:
+    build:
+      context: .
+
+    image: pxe-server:alpine
+    pull_policy: never
+
+    network_mode: host
+
+    volumes:
+      - ./dnsmasq.conf:/etc/dnsmasq.conf:ro
+      - ${TFTP_ROOT:-/srv/tftp}:/srv/tftp:ro
+
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
