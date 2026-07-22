@@ -2,3 +2,4 @@
 .config
 .idea
 *~
+pxe/dnsmasq.conf
